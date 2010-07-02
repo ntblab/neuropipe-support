@@ -1,0 +1,14 @@
+  |--README
+  |--scaffold
+  |--scripts
+  |--analysis
+  |--results
+  |--subjects
+  `--subject-template
+     |--copy
+     |  |--data
+     |  |--results
+     |  `--scripts
+     `--link
+        |--README
+        `--scripts

@@ -1,0 +1,58 @@
+README
+  describes how to customize your project. start by reading this
+
+PROTOCOL
+  initially empty. describe your data collection procedure here
+
+scaffold
+  a command that sets up the 'scaffolding' for analyzing a new subject's data
+
+scripts
+  holds scripts that support your across-subject analyses
+
+analysis
+  holds intermediary files made by your across-subject analyses, such as those
+  produced by FSL
+
+results
+  holds the results of your across-subject analyses, such as plots and tables
+  of statistical test results
+
+subjects
+  holds a directory for each of the subjects run in your experiment. see the
+  description of the subject-template dir for more details
+
+subject-template
+  holds the 'scaffolding' on which each subject's directory is based
+
+subject-template/copy
+  holds files and directories that must exist in all subjects' directories, but
+  that may differ from between subjects see subdirectory descriptions below for
+  more details
+    all files and directories under this one will will be copied into the new
+  subject's directory. any text files in this directory that contain the text
+  <<SUBJ_ID>> will have that replaced by the subject's ID before they are copied
+  into the subject's directory
+
+subject-template/copy/data
+  initially empty. provides a place for data to go when the subject is set up
+
+subject-template/copy/results
+  initially empty. provides a place for plots and statistical results to go when
+  the subject is set up
+
+subject-template/copy/scripts
+  initially empty. provides a home for scripts that may need to be tweaked for
+  each subject. see the README
+
+subject-template/link
+  holds files and directories that must exist in all subjects' directories, and
+  that must be the same for all subjects, such as scripts that define your
+  analysis at a high-level. all files under this directory will be linked in to
+  the new subject's directory, which means that if they are changed in any
+  subject's directory, the changes will simultaneously occur to those files in
+  all other subject's directories
+
+subject-template/link/README
+  describes how to customize the subject's directory. read this after setting
+  up a new subject
