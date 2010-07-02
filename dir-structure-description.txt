@@ -27,8 +27,8 @@ subject-template
 
 subject-template/copy
   holds files and directories that must exist in all subjects' directories, but
-  that may differ from between subjects see subdirectory descriptions below for
-  more details
+  that may differ between subjects. see subdirectory descriptions below for more
+  details
     all files and directories under this one will will be copied into the new
   subject's directory. any text files in this directory that contain the text
   <<SUBJ_ID>> will have that replaced by the subject's ID before they are copied
