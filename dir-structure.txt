@@ -1,4 +1,5 @@
   |--README
+  |--PROTOCOL
   |--scaffold
   |--scripts
   |--analysis
