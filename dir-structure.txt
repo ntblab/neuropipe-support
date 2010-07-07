@@ -1,15 +1,16 @@
-  |--README
-  |--PROTOCOL
+  |--README.txt
+  |--PROTOCOL.txt
   |--scaffold
-  |--scripts
-  |--analysis
-  |--results
-  |--subjects
-  `--subject-template
-     |--copy
-     |  |--data
-     |  |--results
-     |  `--scripts
-     `--link
-        |--README
-        `--scripts
+  |--scripts/
+  |--analysis/
+  |--results/
+  |--subjects/
+  `--subject-template/
+     |--copy/
+     |  |--runorder.txt
+     |  |--data/
+     |  |--results/
+     |  `--scripts/
+     `--link/
+        |--README/
+        `--scripts/
