@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # np (short for neuropipe) sets up the scaffolding for a new project.
-# Copyright (C) 2010 mason simon (masonsimon@gmail.com)
+# Copyright (C) 2010 mason simon (mgsimon@princeton.edu)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
