@@ -41,6 +41,7 @@ skeleton scripts must start with this header::
   # original author: AUTHOR NAME (AUTHOR EMAIL ADDRESS)
   # this script was provided by NeuroPipe. modify it to suit your needs
 
+- leave exactly 1 blank line after the header, before any code starts
 - variables that are set once and don't change (constants) are named in ALL_CAPS
 - $var syntax is used wherever possible, because ${var} is ugly
 - inside of if [] blocks, "$var" is used instead of $var
