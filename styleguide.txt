@@ -37,7 +37,7 @@ skeleton scripts must start with this header::
 
   #!/bin/bash
   #
-  # ONE LINE DESCRIPTION OF WHAT THIS SCRIPT DOES
+  # SCRIPTNAME does... (ONE LINE DESCRIPTION OF WHAT THIS SCRIPT DOES)
   # original author: AUTHOR NAME (AUTHOR EMAIL ADDRESS)
   # this script was provided by NeuroPipe. modify it to suit your needs
 
