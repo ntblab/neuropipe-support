@@ -12,7 +12,8 @@ documentation style
 BASH script style
 =================
 
-every script must start with the following header::
+every script, except for skeleton scripts provided for the user, must start with
+the following header::
 
   #!/bin/bash
   #
@@ -31,6 +32,13 @@ every script must start with the following header::
   #
   # You should have received a copy of the GNU General Public License
   # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+skeleton scripts must start with this header::
+
+  #!/bin/bash
+  #
+  # ONE LINE DESCRIPTION OF WHAT THIS SCRIPT DOES
+  # original author: AUTHOR NAME (AUTHOR EMAIL ADDRESS)
 
 - variables that are set once and don't change (constants) are named in ALL_CAPS
 - $var syntax is used wherever possible, because ${var} is ugly
