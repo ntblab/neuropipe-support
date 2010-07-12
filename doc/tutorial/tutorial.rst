@@ -8,7 +8,7 @@ using NeuroPipe for within-subjects analyses in FSL
 
 
 
-by Mason Simon
+:author: Mason Simon
 
 
 
