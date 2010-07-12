@@ -1,0 +1,17 @@
+18-35 year old subjects with normal or corrected-to-normal vision participated
+in an fMRI experiment to locate their FFA and PPA brain areas. they lay in a
+Siemens Allegra 3T head-only scanner with a mirror on the head coil reflecting
+projected stimuli. TR length was 1.5s. 6s of rest were allotted at the start of
+the experiment, to allow the scanner signal to settle.
+
+subjects fixated on a dot in the center of the screen, and viewed blocks of
+either human faces or scenes. each block consisted of 12 trials. on each trial,
+subjects were shown a face photo or scene photo, depending on the block type,
+for 0.5s. subjects had 1.3s from the time the photo was shown to indicate
+whether the photo was male or female--in face blocks, or indoor or outdoor--in
+scene blocks. the next trial began 0.2s later, with the start of the next TR.
+
+blocks alternated between scene and face types, starting with scene, and with
+12s rest between blocks (SrFrSrF...).
+
+
