@@ -31,7 +31,7 @@ Conventions used in this tutorial
 
 - Commands that must be executed on the command line will look like this::
 
-  $ *command-to-run*
+  $ command-to-run
 
 - Files will be written like this: *path/to/filename.ext*.
 - Text that must be copied exactly as specified will be written inside of double quotes, like this: "text to copy".
