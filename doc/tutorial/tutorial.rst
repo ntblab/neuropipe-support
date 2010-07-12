@@ -245,19 +245,27 @@ Click File>Open... and select *analysis/firstlevel/localizer_hrf.feat/mean_func.
 Repeating the analysis for a new subject
 ========================================
 
-Now lets see how to perform this analysis on a new subject. Copy the file *analysis/firstlevel/localizer_hrf.feat/design.fsf* to *fsfs/localizer_hrf.fsf*. This fsf file contains all the information needed to re-run exactly the analysis we just did. Typing *feat localizer_hrf.fsf* would do that. But we want to run that analysis on different data, and we want to put the output in a different place. So that we don't have to redo this step for each new subject, our approach will be to turn this fsf file into a template that we fill-in (automatically) for each new subject.
+Now let's perform this analysis on a new subject. FEAT records all of the parameters of analyses you run with it in a file called *design.fsf* in its output directory. Our approach will be to take that file, replace any subject-specific settings with placeholders, and then for each new subject, substitute in appropriate values for the placeholders. Start by copying the *design.fsf* file for the analysis we just ran to a more central location::
 
-1. Open localizer_hrf.fsf in your text editor.
+  $ mv analysis/firstlevel/localizer_hrf.feat/design.fsf fsfs/localizer_hrf.fsf
+
+Now, open *fsfs/localizer_hrf.fsf* in your favorite text editor. If you don't have a favorite, try this::
+
+  $ nedit fsfs/localizer_hrf.fsf
+
+Make the following replacements:
  
-  #. on the line starting with "set fmri(outputdir)", replace all of the text inside the quotes with "<?= $OUTPUT_DIR ?>", if you're familiar with PHP, this syntax will be familiar
+  #. on the line starting with "set fmri(outputdir)", replace all of the text inside the quotes with "<?= $OUTPUT_DIR ?>"
   #. on the line starting with "set fmri(regstandard) ", replace all of the text inside the quotes with "<?= $STANDARD_BRAIN ?>"
   #. on the line starting with "set feat_files(1)", replace all of the text inside the quotes with "<?= $DATA_FILE_PREFIX ?>"
   #. on the line starting with "set initial_highres_files(1) ", replace all of the text inside the quotes with "<?= $INITIAL_HIGHRES_FILE ?>"
   #. on the line starting with "set highres_files(1)", replace all of the text inside the quotes with "<?= $HIGHRES_FILE ?>"
 
-2. save that file as localizer_hrf.fsf.template
+Save that file as *fsfs/localizer_hrf.fsf.template*.
 
-Now we have a template. To use it, we'll need a script that fills it in appropriately for each subject. This filling-in process is called rendering, and a script that does most of the work for you has already been provided at *scripts/render-fsf-templates.sh*. Open that in your text editor.
+Now we have a template. To use it, we'll need a script that fills it in appropriately for each subject. This filling-in process is called rendering, and a script that does most of the work for you has already been provided at *scripts/render-fsf-templates.sh*. Open that in your text editor::
+
+  $ nedit scripts/render-fsf-templates.sh
 
 It has a function called render_firstlevel. we'll use that to render the localizer template we just made. Add these lines to the end of the file::
 
@@ -275,17 +283,19 @@ It has a function called render_firstlevel. we'll use that to render the localiz
   source globals.sh
   feat $FSF_DIR/localizer_hrf.fsf
 
-Open *analyze.sh* in your text editor. After the line that runs *prep.sh*, add this line::
+Open *analyze.sh* in your text editor::
+
+  $ nedit analyze.sh
+
+After the line that runs *prep.sh*, add this line::
   
   bash hrf.sh
 
-That should do it! Let's test this on a new subject.
+That should do it! Let's test this on a new subject. Change directory back to your project folder, then run these commands::
 
-#. cd back to your project folder.
-#. run ./scaffold 0608102_conatt02.
-#. cd into that new subject's directory.
-#. `download data for this subject`_, and put it at *data/raw.tar.gz*.
-#. run ./analyze.sh, and watch everything go.
+  $ ./scaffold 0608102_conatt02.
+  $ cd 0608102_conatt02
+  $ curl http://www.princeton.edu/ntblab/resources/0608102_conatt02.tar.gz > data/raw.tar.gz
+  $ ./analyze.sh
 
-.. _download data for this subject: https://docs.google.com/leaf?id=0B5IAU_xL24AmYzlkYWUzMzQtODkzMy00OTFiLWIzYTMtN2FiNDhjM2IyN2Jk&hl=en&authkey=COrG4NkM
-
+FEAT should be churning away on the new data you gave it.
