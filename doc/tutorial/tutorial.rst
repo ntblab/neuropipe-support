@@ -101,7 +101,7 @@ The Data tab
 
 select the data file data/nifti/localizer01.nii.gz. set the output directory to analysis/firstlevel/localizer_hrf. FEAT should have detected 244 volumes, but it may have mis-detected the TR length as 3.0s. if so, change that to 1.5s. because protocol.txt indicated there were 6s of disdaqs, and TR length is 1.5s, tell FEAT to delete 4 volumes. set the high pass filter cutoff to 128.
 
-.. image:: feat-data.png
+.. image:: http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/feat-data.png
 
 go to the Pre-stats tab.
 
@@ -111,7 +111,7 @@ The Pre-stats tab
 
 change Slice timing correction to Interleaved. leave the rest of the settings at their defaults.
 
-.. image:: feat-pre-stats.png
+.. image:: http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/feat-pre-stats.png
 
 go to the Stats tab.
 
@@ -125,19 +125,19 @@ click the Model setup wizard button. it has an option for rArBrArB..., which isn
 
 first, set EV name to "scene". FSL calls regressors EV's, short for Explanatory Variables. the wizard set the regressor shape to Square, which is right. Skip is 0. Off period is 42s, because after the wave is on, there are 12s of rest, then 18s for the other wave to go on (other block type), then another 12s of rest. On period is 18s, like we set it to be. Hover over the "Phase" text, and FEAT will explain that the wave starts with a full off period (42s in our case), and Phase can be used to adjust this; FEAT set it to 30s so that there was a 12s rest period before this wave comes on, but we don't want that, so set Phase to 42 to eliminate the off period at the start. Leave Stop after at -1, so the wave continues as long as necessary. because we don't believe the fMRI signal will actually look like a square wave, we convolve it with a function that's intended to model the hemodynamic response; change Convolution to Double-Gamma HRF. now we need to set up the face regressor. click tab 2.
 
-.. image:: feat-stats-ev1.png
+.. image:: http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/feat-stats-ev1.png
 
 change EV name to face. look at the Phase setting. FEAT set it to 0, which means that there will be a full 42s of rest before this wave gets going. but, because we have no rest at the start, there will only be 18s for the scene wave + 12s rest = 30s before we want the face wave to start. so adjust Phase to be 12. change Convolution to Double-Gamma HRF, like we did for the scene regressor.
 
-.. image:: feat-stats-ev2.png
+.. image:: http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/feat-stats-ev2.png
 
 now go to the Contrasts & F-tests tab. we don't care to run any F-tests, so decrease that from 1 to 0. FEAT already has the contrasts set up that we'd want. in each of the Title fields, replace "A" with "scene" and "B" with "face".
 
-.. image:: feat-stats-contrasts-and-f-tests.png
+.. image:: http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/feat-stats-contrasts-and-f-tests.png
 
 close that window, and FEAT should show you a graph of your model. if it doesn't look like the one below, you've done something wrong.
 
-.. image:: feat-model-graph.png
+.. image:: http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/feat-model-graph.png
 
 go to the Registration tab.
 
@@ -147,7 +147,7 @@ The Registration tab
 
 it should already have a Standard space image selected; leave it with the default, but change the drop-down menu from Normal search to No search. check Initial structural image, and select the file subjects/0608101_conatt02/data/nifti/0608101_conatt02_t1_flash01.nii.gz. check Main structural image, and select the file subjects/0608101_conatt02/data/nifti/0608101_conatt02_t1_mprage_sag01.nii.gz.
 
-.. image:: feat-registration.png
+.. image:: http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/feat-registration.png
 
 that's it! hit Go. a web page should open in your browser showing FEAT's progress. once it's done, this webpage provides a useful summary of the analysis you just ran with FEAT. let's add it to the subject's webpage.
 
