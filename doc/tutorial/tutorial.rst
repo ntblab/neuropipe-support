@@ -1,10 +1,6 @@
-============
-find the PPA
-============
-
----------------------------------------------------
-using NeuroPipe for within-subjects analyses in FSL
----------------------------------------------------
+==================
+NeuroPipe Tutorial
+==================
 
 
 
@@ -16,12 +12,19 @@ using NeuroPipe for within-subjects analyses in FSL
 
 
 
-introduction
+------------------------------------
+Chapter 1 - Within-Subjects Analysis
+------------------------------------
+
+
+Introduction
 ============
 
+NeuroPipe is a framework for reproducible fMRI research projects. It's optimized for projects composed of within-subjects analyses that are mainly identical, which are combined into an across-subject analysis. If this describes the structure of your project, using NeuroPipe will make it simple for you to run complex analyses that can be reproduced entirely by running a single command. This simplifies the task of ensuring your analysis is bug-free, by letting you easily make a fix and test it. And, it allows others to re-run your analysis to verify your work is correct, or to build upon your project once you've finished it.
 
-conventions
------------
+
+Conventions used in this tutorial
+---------------------------------
 
 - commands that must be executed on the command line will look like this: *command-to-run*
 - files will be written like this: *filename.ext*
@@ -29,7 +32,7 @@ conventions
 
 
 
-setting up NeuroPipe
+Installing NeuroPipe
 --------------------
 
 requirements:
@@ -45,14 +48,14 @@ requirements:
 
 
 
-setting up your NeuroPipe project
+Setting up your NeuroPipe project
 =================================
 
 1. run *neuropipe/np ppa-hunt*
 
 
 
-creating a subject
+Creating a subject
 ==================
 
 1. cd to that ppa-hunt directory
@@ -66,7 +69,7 @@ creating a subject
 
 
 
-preparing for analysis
+Preparing for analysis
 ======================
 
 run ./analyze.sh
@@ -93,7 +96,7 @@ to set the parameters of the analysis, you'll need to know the experimental desi
 launch FEAT. it opens to the Data tab. 
 
 
-the Data tab
+The Data tab
 ------------
 
 select the data file data/nifti/localizer01.nii.gz. set the output directory to analysis/firstlevel/localizer_hrf. FEAT should have detected 244 volumes, but it may have mis-detected the TR length as 3.0s. if so, change that to 1.5s. because protocol.txt indicated there were 6s of disdaqs, and TR length is 1.5s, tell FEAT to delete 4 volumes. set the high pass filter cutoff to 128.
@@ -103,7 +106,7 @@ select the data file data/nifti/localizer01.nii.gz. set the output directory to 
 go to the Pre-stats tab.
 
 
-the Pre-stats tab
+The Pre-stats tab
 -----------------
 
 change Slice timing correction to Interleaved. leave the rest of the settings at their defaults.
@@ -113,7 +116,7 @@ change Slice timing correction to Interleaved. leave the rest of the settings at
 go to the Stats tab.
 
 
-the Stats tab
+The Stats tab
 -------------
 
 check Add motion parameters to model. now we must use the description of the experimental design from protocol.txt to set up regressors that FEAT will use. protocol.txt tells us that blocks consisted of 12 trials, each 1.5s long, with 12s rest between blocks, and 6s rest at the start to let the scanner settle down. that 6s at the start was taken care of in the Data tab, so we have a design that looks like Scene, rest, Face, rest, Scene, rest, ...
@@ -139,7 +142,7 @@ close that window, and FEAT should show you a graph of your model. if it doesn't
 go to the Registration tab.
 
 
-the Registration tab
+The Registration tab
 --------------------
 
 it should already have a Standard space image selected; leave it with the default, but change the drop-down menu from Normal search to No search. check Initial structural image, and select the file subjects/0608101_conatt02/data/nifti/0608101_conatt02_t1_flash01.nii.gz. check Main structural image, and select the file subjects/0608101_conatt02/data/nifti/0608101_conatt02_t1_mprage_sag01.nii.gz.
@@ -150,7 +153,7 @@ that's it! hit Go. a web page should open in your browser showing FEAT's progres
 
 
 
-modifying the subject webpage
+Modifying the subject webpage
 =============================
 
 open subjects/0608101_conatt02/scripts/make-webpage.sh in your favorite text editor. find the line where we make the link to the QA results; we'll base our link to the localizer FEAT analysis on this link. notice that the QA directory isn't referred to with the variable $QA_DIR, rather than by explicitly writing out it's path (data/qa). this is a good habit, because it allows you to change the location of the QA_DIR without changing the make-webpage.sh script itself. but where does that QA_DIR variable come from? subjects/0608101_conatt02/globals.sh. open that script in your text editor. at the bottom of the file, make a new line with the text "LOCALIZER_FIRSTLEVEL_DIR=analysis/firstlevel/localizer_hrf.feat". now switch back to make-webpage.sh. copy the line that makes the link to QA results, paste it below, and change the text '$QA_DIR/index.html' to be '$LOCALIZER_FIRSTLEVEL_DIR/report.html'. change the text "QA", inside the anchor tag to be "localizer HRF analysis".
@@ -164,14 +167,14 @@ now run analyze.sh again from within the subject's directory. don't overwrite th
 .. _W3Schools: http://www.w3schools.com/html/
 
 
-finding the PPA
+Finding the PPA
 ===============
 
 launch fslview. do File>Open... analysis/firstlevel/localizer_hrf.feat/mean_func.nii.gz.  File>Add... analysis/firstlevel/localizer_hrf.feat/stats/zstat3.nii.gz. zstat3.nii.gz is an image of z-statistics for the scene>face contrast being different from 0, so high intensity values in a voxel indicate that the scene regressor caught much more of the variance in fMRI signal at that voxel than the face regressor. to find the PPA, we'll look for regions with really high values in this zstat3 image. set the Min threshold at the top of FSLView to something like 8, then click around in the brain to see what regions had contrast z-stats at that threshold or above. see if you can find a pair of bilateral regions with zstat's at a high threshold, around the middle of the brain; that'll be the PPA.
 
 
-doing it all again
-==================
+Repeating the analysis for a new subject
+========================================
 
 now lets see how to perform this analysis on a new subject. copy the file analysis/firstlevel/localizer_hrf.feat/design.fsf to fsfs/localizer_hrf.fsf. this fsf file contains all the information needed to re-run exactly the analysis we just did. typing "feat localizer_hrf.fsf" would do that. but we want to run that analysis on different data, and we want to put the output in a different place. so that we don't have to redo this step for each new subject, our approach will be to turn this fsf file into a template that we fill-in (automatically) for each new subject.
 
