@@ -247,11 +247,11 @@ Repeating the analysis for a new subject
 
 Now let's perform this analysis on a new subject. FEAT records all of the parameters of analyses you run with it in a file called *design.fsf* in its output directory. Our approach will be to take that file, replace any subject-specific settings with placeholders, and then for each new subject, substitute in appropriate values for the placeholders. Start by copying the *design.fsf* file for the analysis we just ran to a more central location::
 
-  $ mv analysis/firstlevel/localizer_hrf.feat/design.fsf fsfs/localizer_hrf.fsf
+  $ mv analysis/firstlevel/localizer_hrf.feat/design.fsf fsf/localizer_hrf.fsf
 
-Now, open *fsfs/localizer_hrf.fsf* in your favorite text editor. If you don't have a favorite, try this::
+Now, open *fsf/localizer_hrf.fsf* in your favorite text editor. If you don't have a favorite, try this::
 
-  $ nedit fsfs/localizer_hrf.fsf
+  $ nedit fsf/localizer_hrf.fsf
 
 Make the following replacements:
  
@@ -261,7 +261,9 @@ Make the following replacements:
   #. on the line starting with "set initial_highres_files(1) ", replace all of the text inside the quotes with "<?= $INITIAL_HIGHRES_FILE ?>"
   #. on the line starting with "set highres_files(1)", replace all of the text inside the quotes with "<?= $HIGHRES_FILE ?>"
 
-Save that file as *fsfs/localizer_hrf.fsf.template*.
+Save that file as *fsfs/localizer_hrf.fsf.template*. To make it available in new subject directories, do this::
+
+  $ cp fsf/localizer_hrf.fsf.template ../../subject-template/copy/fsf/
 
 Now we have a template. To use it, we'll need a script that fills it in appropriately for each subject. This filling-in process is called rendering, and a script that does most of the work for you has already been provided at *scripts/render-fsf-templates.sh*. Open that in your text editor::
 
@@ -282,6 +284,10 @@ It has a function called render_firstlevel. we'll use that to render the localiz
   #!/bin/bash
   source globals.sh
   feat $FSF_DIR/localizer_hrf.fsf
+
+To make this script available in new subject directories, do this::
+
+  $ cp hrf.sh ../../subject-template/link/
 
 Open *analyze.sh* in your text editor::
 
