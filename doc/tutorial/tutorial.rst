@@ -140,19 +140,27 @@ You should see that it's identical to the one we downloaded before. Hit "q", the
 
   $ less README.txt
 
-It says that we should proceed by doing various transformations on the data, and then running a quality assurance tool to make sure the data is usable. The transformations make the data more palatable to FSL_, which we will use for analysis. As *README.txt* says, you do all that with this command::
+It says that we should proceed by doing various transformations on the data, and then running a quality assurance tool to make sure the data is usable. The transformations make the data more palatable to FSL_, which we will use for analysis. As *README.txt* says, you do all that with the command *analyze.sh*. Before running that, let's take a look at what it does::
 
-  $ ./analyze.sh
+  $ less analyze.sh
 
 .. _FSL: http://www.fmrib.ox.ac.uk/fsl/
 
-Later, we'll flesh out *analyze.sh* to do more than just prepare your data for analysis. Once *analyze.sh* finishes, take a look in data/nifti. There should be a pair of .bxh/.nii.gz files for each pulse sequence listed in run-order.txt (excluding the ones called ERROR_RUN). Open the .nii.gz files with FSLView_, if you'd like, using a command like this::
+Look down to the body of the script, and you'll see that all it does is call another script, *prep.sh*. Hit "q" to quit out of *analyze.sh* and take a look at *prep.sh*::
+
+  $ less prep.sh
+
+*prep.sh* calls three other scripts: one to do those transformations on the data, one to run the quality assurance tools, and one called *render-fsf-templates.sh*. Don't worry about that last one for now--we'll cover it later. If you'd like, you can open up those first two scripts to see what they do in detail. Otherwise, just press on::
+
+  $ ./analyze.sh
+
+Once *analyze.sh* finishes, take a look in *data/nifti*. There should be a pair of .bxh/.nii.gz files for each pulse sequence listed in *run-order.txt* (excluding the ones called ERROR_RUN). Open the .nii.gz files with FSLView_, if you'd like, using a command like this::
 
   $ fslview data/nifti/0608101_conatt02_t1_mprage_sag01.nii.gz
 
 .. _FSLView: http://www.fmrib.ox.ac.uk/fsl/fslview/index.html
 
-There's also a new folder at data/qa. Peek in and you'll see a ton of files. These are organized and presented by an HTML file at *data/qa/index.html*. Open it with this command::
+There's also a new folder at *data/qa*. Peek in and you'll see a ton of files. These are organized and presented by an HTML file at *data/qa/index.html*. Open it with this command::
 
   $ firefox data/qa/index.html
 
@@ -285,9 +293,13 @@ It has a function called render_firstlevel. we'll use that to render the localiz
   source globals.sh
   feat $FSF_DIR/localizer_hrf.fsf
 
+The command *feat* runs FEAT, without the graphical interface.
+
 To make this script available in new subject directories, do this::
 
   $ cp hrf.sh ../../subject-template/link/
+
+The *subject-template/link* directory holds files that should be identical in each subject's directory. Any file in that directory will be linked into each new subject's directory, which means that when any one of the linked files is changed in one subject's directory (or in *subject-template/link*), the change is immediately reflected in all the other links to that file.
 
 Open *analyze.sh* in your text editor::
 
@@ -297,11 +309,12 @@ After the line that runs *prep.sh*, add this line::
   
   bash hrf.sh
 
-That should do it! Let's test this on a new subject. Change directory back to your project folder, then run these commands::
+*analyze.sh* is linked to *subject-template/link/analyze.sh*, so the change you just made to it will be present in all other subject directories, as well as any changes you make to it in the future. Let's test this all out on a new subject. Assuming you're in subjects/0608101_conatt02, run these commands::
 
+  $ cd ../../
   $ ./scaffold 0608102_conatt02.
   $ cd 0608102_conatt02
   $ curl http://www.princeton.edu/ntblab/resources/0608102_conatt02.tar.gz > data/raw.tar.gz
   $ ./analyze.sh
 
-FEAT should be churning away on the new data you gave it.
+FEAT should now be churning away on the new data.
