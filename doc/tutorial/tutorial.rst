@@ -269,7 +269,7 @@ Make the following replacements:
   #. on the line starting with "set initial_highres_files(1) ", replace all of the text inside the quotes with "<?= $INITIAL_HIGHRES_FILE ?>"
   #. on the line starting with "set highres_files(1)", replace all of the text inside the quotes with "<?= $HIGHRES_FILE ?>"
 
-Save that file as *fsfs/localizer_hrf.fsf.template*. To make it available in new subject directories, do this::
+Save that file as *fsf/localizer_hrf.fsf.template*. To make it available in new subject directories, do this::
 
   $ cp fsf/localizer_hrf.fsf.template ../../subject-template/copy/fsf/
 
