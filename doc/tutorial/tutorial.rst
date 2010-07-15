@@ -179,7 +179,7 @@ To set the parameters of the analysis, you'll need to know the experimental desi
 
 Now launch FEAT::
 
-  $ feat
+  $ Feat &
 
 It opens to the Data tab. 
 
@@ -209,21 +209,34 @@ The Stats tab
 
 Check "Add motion parameters to model". Now we must use the description of the experimental design from *protocol.txt* to set up regressors for our GLM. *protocol.txt* tells us that blocks consisted of 12 trials, each 1.5s long, with 12s rest between blocks, and 6s rest at the start to let the scanner settle down. That 6s at the start was taken care of in the Data tab, so we have a design that looks like Scene, rest, Face, rest, Scene, rest, ...
 
-Click the "Model setup wizard" button. It has an option for "rArBrArB...", which isn't quite what we want, but close. Click that button, and set the rest period to 12s, A period to 18s (12 trials * 1.5s each), and B period to 18s. Click "Process" and close the graph that shows up. Now click "Full model setup", so we can eliminate that extra 12s rest at the start that the Model setup wizard gave us.
+We will specify this design precisely using text files in FEAT's 3-column format: we make 1 text file per regressor, each with one line per period of time belonging to that regressor. Each line has 3 numbers, separated by whitespace. The first number indicates the onset time in seconds of the period. The second number indicates the duration of the period. The third number indicates the height of the regressor during the period; always set this to 1 unless you know what you're doing. See `FEAT's documentation`_ for more details.
 
-First, set EV name to "scene". FSL calls regressors EV's, short for Explanatory Variables. The wizard set the regressor shape to Square, which is right. Skip is 0. Off period is 42s, because after the wave is on, there are 12s of rest, then 18s for the other wave to go on (other block type), then another 12s of rest. "On period" is 18s, like we set it to be. Hover over the "Phase" text, and FEAT will explain that the wave starts with a full off period (42s in our case), and "Phase" can be used to adjust this; FEAT set it to 30s so that there was a 12s rest period before this wave comes on, but we don't want that, so set Phase to 42 to eliminate the off period at the start. Leave "Stop after" at -1, so the wave continues as long as necessary. because we don't believe the fMRI signal will actually look like a square wave, we convolve it with a function that's intended to model the hemodynamic response; change Convolution to Double-Gamma HRF. Now we must set up the face regressor. Click tab 2.
+.. _FEAT's documentation: http://www.fmrib.ox.ac.uk/fsl/feat5/detail.html#stats
+
+In your own projects, you should make these files automatically based on the code that runs your experiment. For that reason, I've generated the 3-column files for you. Make a directory to put them in, then download the files::
+
+  $ mkdir design
+  $ curl http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/scene.txt >design/scene.txt
+  $ curl http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/face.txt >design/face.txt
+
+Click the "Full model setup" button. Set EV name to "scene". FSL calls regressors EV's, short for Explanatory Variables. Set "Basic shape" to "Custom (3 column format)" and select *design/scene.txt*. That file on its own describes a square wave, but to account for the shape of the BOLD response, we convolve it with another function. Set "Convolution" to "Double-Gamma HRF". Now we set up the face regressor. Set "Number of original EVs" to 2, then click tab 2.
 
 .. image:: http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/feat-stats-ev1.png
 
-Change EV name to "face". Look at the Phase setting. FEAT set it to 0, which means that there will be a full 42s of rest before this wave gets going. But, because we have no rest at the start, there will only be 18s for the scene wave + 12s rest = 30s before we want the face wave to start. So adjust Phase to be 12. Change Convolution to Double-Gamma HRF, like we did for the scene regressor.
+Set EV name to "face". Set "Basic shape" to "Custom (3 column format)" and select *design/face.txt*. Change Convolution to Double-Gamma HRF, like we did for the scene regressor.
 
 .. image:: http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/feat-stats-ev2.png
 
-Now go to the Contrasts & F-tests tab. We don't care to run any F-tests, so decrease "F-tests" from 1 to 0. FEAT already has the contrasts set up that we'd want, they're just named differently than we want. In each of the Title fields, replace "A" with "scene" and "B" with "face".
+Now go to the Contrasts & F-tests tab. Increase "Contrasts" to 4. We'll make 1 contrast to show the main effect of the face regressor, one for the scene regressor, 1 to show where the scene regressor is greater than the face regressor, and one to show where the face regressor is greater:
+
+* Set the 1st row's title to "scene", it's "EV1" value to 1, and it's "EV2" value to 0.
+* Set the 2nd row's title to "face", it's "EV1" value to 0, and it's "EV2" value to 1.
+* Set the 3rd row's title to "scene>face", it's "EV1" value to 1, and it's "EV2" value to -1.
+* Set the 4th row's title to "face>scene", it's "EV1" value to -1, and it's "EV2" value to 1.
 
 .. image:: http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/feat-stats-contrasts-and-f-tests.png
 
-Close that window, and FEAT should show you a graph of your model. If it doesn't look like the one below, make sure you followed the instructions correctly.
+Close that window, and FEAT should show you a graph of your model. From left to right, the If it doesn't look like the one below, make sure you followed the instructions correctly.
 
 .. image:: http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/feat-model-graph.png
 
