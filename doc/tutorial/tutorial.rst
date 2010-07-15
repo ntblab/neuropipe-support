@@ -5,7 +5,7 @@ NeuroPipe Tutorial
 
 
 :author: Mason Simon
-:Email: mgsimon@princeton.edu
+:email: mgsimon@princeton.edu
 
 
 
