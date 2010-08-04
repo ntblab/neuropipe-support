@@ -26,6 +26,7 @@ NeuroPipe is a framework for reproducible fMRI research projects. It's optimized
 This tutorial will walk you through using NeuroPipe for a within-subjects analysis on one subject, that we will then repeat for a second subject to demonstrate how NeuroPipe facilitates these sorts of analyses with minimal redundant code and effort. For our example analysis, we fit a GLM to data collected while subjects viewed blocks of scene images and face images, in order to locate the PPA region in these subjects.
 
 
+
 Conventions used in this tutorial
 ---------------------------------
 
@@ -35,6 +36,15 @@ Conventions used in this tutorial
 
 - Files will be written like this: *path/to/filename.ext*.
 - Text that must be copied exactly as specified will be written inside of double quotes, like this: "text to copy".
+
+ 
+
+Architecture of NeuroPipe
+-------------------------
+
+If your analysis were guaranteed to be identical for every subject, a set of analysis scripts, parameterized by subject id, would satisfy your needs; you would just run the analysis scripts for each subject. But if one subject differed from the others - say, they had to get out of the scanner, which cut a run short - then your analysis scripts would require conditional logic to deal with this, and other non-standard subjects. At the other extreme, if you made a copy of your analysis scripts for each subject, it would be simple to accomodate a non-standard subject by tweaking their scripts - independent of the rest. But, would complicate making a change in the analysis for subject, because you would have to edit the appropriate scripts for each subject.
+
+NeuroPipe optimizes for both of these cases. Here's how: You make whatever scripts and files are necessary to analyze an ideal subject, then use them as a template that new subjects will be based on. This template is stored in the *subject-template* directory of your project. The files in this template are split into two types: those that may vary between subjects, and those that won't. The ones that may vary go into *subject-template/copy*, and they will be copied into each new subject's directory. The ones that won't vary go into *subject-template/link*, and they will be symlinked into each new subject's directory; that means that changing a linked files in any subject's directory will immediately change that file in all subject's directories. If you have a non-standard subject, you change the (copied) files within that subject's directory, and other subjects are unaffected. If you need to change the analysis for every subject, you change the linked files in the template, and the change is reflected in each subject's (linked) analysis scripts.
 
 
 
