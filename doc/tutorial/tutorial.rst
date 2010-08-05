@@ -355,7 +355,7 @@ Start by copying the *design.fsf* file for the analysis we just ran to a more ce
 
 Now, open *fsf/localizer_hrf.fsf* in your favorite text editor. If you don't have a favorite, try this::
 
-  $ nedit fsf/localizer_hrf.fsf
+  $ nano fsf/localizer_hrf.fsf
 
 Make the following replacements:
  
@@ -381,7 +381,7 @@ Rendering the template
 
 Now, we have a template. To use that template, we'll need a script that fills it in appropriately for each subject. This filling-in process is called rendering, and a script that does most of the work for you is provided at *scripts/render-fsf-templates.sh*. Open that in your text editor::
 
-  $ nedit scripts/render-fsf-templates.sh
+  $ nano scripts/render-fsf-templates.sh
 
 It consists of a function called render_firstlevel. We'll use that function to render the localizer template we just made. Add these lines to the end of the file::
 
@@ -409,7 +409,7 @@ Automating the analysis
 
 *prep.sh* already calls this *render-fsf-templates.sh* script, and *analyze.sh* calls *prep.sh*, so the only thing left to automate is running *feat* on the rendered fsf file from a script that's called by *analyze.sh*. We'll make a new script called *hrf.sh* for that purpose. Make the script with this command::
 
-  $ nedit hrf.sh
+  $ nano hrf.sh
 
 Then fill it with this text::
 
@@ -427,7 +427,7 @@ Remember, the *subject-template/link* directory holds files that should be ident
 
 Now we that we have a script for running the analysis, we'll call it from *analyze.sh* so that the entire analysis, from preprocessing the data to running the GLM, all happens when you run *analyze.sh*. Open *analyze.sh* in your text editor::
 
-  $ nedit analyze.sh
+  $ nano analyze.sh
 
 After the line that runs *prep.sh*, add this line::
   
