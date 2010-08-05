@@ -54,8 +54,8 @@ Installing NeuroPipe
 Requirements:
 
 - unix-based computer (use rondo if you're at princeton)
-- BXH XCEDE tools
-- FSL
+- BXH XCEDE tools (already installed on rondo)
+- FSL (already installed on rondo)
 
 
 First, download neuropipe with the command::
@@ -77,25 +77,25 @@ To set up our new project in NeuroPipe, run this command::
 
   $ neuropipe/np ppa-hunt
 
-That command sets up a rich folder structure at ppa-hunt for you to build your project in. Move into that directory and take a look around::
+That command makes a rich folder structure at *ppa-hunt* for you to build your project in. Move into that directory and look around::
 
   $ cd ppa-hunt
   $ ls
 
-You should see a *README.txt* file, a command called *scaffold*, a file called *protocol.txt*, a directory called *subject-template*, and maybe a few other directories. Let's start by opening *README.txt*::
+You should see at least a *README.txt* file, a command called *scaffold*, a file called *protocol.txt*, and a directory called *subject-template*. Start by reading *README.txt*::
 
   $ less README.txt
 
-The first instruction it has for us in the Getting Started section is to open up *protocol.txt* and follow its instructions. Hit "q" to quit out of *README.txt*, then open *protocol.txt*::
+The first instruction it has for us in the Getting Started section is to open *protocol.txt* and follow its instructions. Hit "q" to quit out of *README.txt*, then open *protocol.txt*::
 
   $ less protocol.txt
 
-It says we need to fill it in with details on the data collection protocol. We'll just download a *protocol.txt* file that describes the ppa-hunt data you're about to analyze. Hit "q" to quit out of *protocol.txt*, then run these commands::
+It says we should fill it in with details on the data collection protocol. We'll just download a *protocol.txt* file that describes the ppa-hunt data you're about to analyze. Hit "q" to quit out of *protocol.txt*, then run these commands::
 
   $ rm protocol.txt
   $ wget http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/protocol.txt
 
-Take a look at the newly downloaded *protocol.txt*::
+Read that newly downloaded *protocol.txt*::
 
   $ less protocol.txt
 
@@ -103,11 +103,11 @@ Hit "q", and open *README.txt* again::
 
   $ less README.txt
 
-The next instruction it gives us is to open *subject-template/copy/run-order.txt*. Hit "q", then open that file::
+The next instruction it gives is to open *subject-template/copy/run-order.txt*. Hit "q", then read that file::
 
   $ less subject-template/copy/run-order.txt
 
-As with *protocol.txt*, a *run-order.txt* file has already been prepared for you. Download that file, and put it where *README.txt* says to put it::
+As with *protocol.txt*, a *run-order.txt* file has already been prepared for you. Download that file, and put it where *README.txt* says::
 
   $ curl http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/run-order.txt > subject-template/copy/run-order.txt
 
@@ -125,7 +125,7 @@ Our subject ID is "0608101_conatt02", so run this command::
 
   $ ./scaffold 0608101_conatt02
 
-*scaffold* tells you that it set up a subject directory at *subjects/0608101_conatt02* and that you should read the README.txt file there if this is your first time setting up a subject. Move into the subject's directory, and do what it says::
+*scaffold* tells you that it made a subject directory at *subjects/0608101_conatt02* and that you should read the README.txt file there if this is your first time setting up a subject. Move into the subject's directory, and do what it says::
 
   $ cd subjects/0608101_conatt02
   $ less README.txt
@@ -156,21 +156,25 @@ It says that we should proceed by doing various transformations on the data, and
 
 .. _FSL: http://www.fmrib.ox.ac.uk/fsl/
 
-Look down to the body of the script, and you'll see that all it does is call another script, *prep.sh*. Hit "q" to quit out of *analyze.sh* and take a look at *prep.sh*::
+Look at the body of the script, and you'll see that it just calls another script, *prep.sh*. Hit "q" to quit reading *analyze.sh* and read *prep.sh*::
 
   $ less prep.sh
 
-*prep.sh* calls three other scripts: one to do those transformations on the data, one to run the quality assurance tools, and one called *render-fsf-templates.sh*. Don't worry about that last one for now--we'll cover it later. If you'd like, you can open up those first two scripts to see what they do in detail. Otherwise, just press on::
+*prep.sh* calls three other scripts: one to do those transformations on the data, one to run the quality assurance tools, and one called *render-fsf-templates.sh*. Don't worry about that last one for now--we'll cover it later. If you'd like, you can open up those first two scripts to see in detail what they do. Otherwise, press on::
 
   $ ./analyze.sh
 
-Once *analyze.sh* finishes, take a look in *data/nifti*. There should be a pair of .bxh/.nii.gz files for each pulse sequence listed in *run-order.txt* (excluding the ones called ERROR_RUN). Open the .nii.gz files with FSLView_, if you'd like, using a command like this::
+Once *analyze.sh* completes, look around *data/nifti*::
+
+  $ ls data/nifti
+
+There should be a pair of .bxh/.nii.gz files for each pulse sequence listed in *run-order.txt*, excluding the sequences called ERROR_RUN. Open the .nii.gz files with FSLView_, if you'd like, using a command like this::
 
   $ fslview data/nifti/0608101_conatt02_t1_mprage_sag01.nii.gz
 
 .. _FSLView: http://www.fmrib.ox.ac.uk/fsl/fslview/index.html
 
-There's also a new folder at *data/qa*. Peek in and you'll see a ton of files. These are organized and presented by an HTML file at *data/qa/index.html*. Open it with this command::
+There's also a new folder at *data/qa*. Peek in and you'll see a ton of files. These are organized by an HTML file at *data/qa/index.html*. Open it with this command::
 
   $ firefox data/qa/index.html
 
@@ -185,7 +189,9 @@ Now that you've got some data, and know its quality is sufficient for analysis, 
 
 .. _FEAT's manual: http://www.fmrib.ox.ac.uk/fsl/feat5/index.html
 
-To set the parameters of the analysis, you'll need to know the experimental design. Open *protocol.txt* in the project directory and read it.
+To set the parameters of the analysis, you must know the experimental design. Open *protocol.txt* in the project directory and read it::
+
+  $ less ../../protocol.txt
 
 Now launch FEAT::
 
@@ -197,7 +203,7 @@ It opens to the Data tab.
 The Data tab
 ------------
 
-Click "Select 4D data" and select the data file *data/nifti/localizer01.nii.gz*. Set "Output directory" to *analysis/firstlevel/localizer_hrf*. FEAT should have detected "Total volumes" as 244, but it may have mis-detected "TR (s)" as 3.0; if so, change that to 1.5. Because *protocol.txt* indicated there were 6s of disdaqs, and TR length is 1.5s, set "Delete volumes" to 4. Set "High pass filter cutoff (s)" to 128.
+Click "Select 4D data" and select the file *data/nifti/localizer01.nii.gz*. Set "Output directory" to *analysis/firstlevel/localizer_hrf*. FEAT should have detected "Total volumes" as 244, but it may have mis-detected "TR (s)" as 3.0; if so, change that to 1.5. Because *protocol.txt* indicated there were 6s of disdaqs, and TR length is 1.5s, set "Delete volumes" to 4. Set "High pass filter cutoff (s)" to 128.
 
 .. image:: http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/feat-data.png
 
@@ -217,7 +223,7 @@ Go to the Stats tab.
 The Stats tab
 -------------
 
-Check "Add motion parameters to model". Now we must use the description of the experimental design from *protocol.txt* to set up regressors for our GLM. *protocol.txt* tells us that blocks consisted of 12 trials, each 1.5s long, with 12s rest between blocks, and 6s rest at the start to let the scanner settle down. That 6s at the start was taken care of in the Data tab, so we have a design that looks like Scene, rest, Face, rest, Scene, rest, ...
+Check "Add motion parameters to model". Now we must use the description of the experimental design from *protocol.txt* to define regressors for our GLM. *protocol.txt* tells us that blocks consisted of 12 trials, each 1.5s long, with 12s rest between blocks, and 6s rest at the start to let the scanner settle down. That 6s at the start was taken care of in the Data tab, so we have a design that looks like Scene, rest, Face, rest, Scene, rest, ...
 
 We will specify this design precisely using text files in FEAT's 3-column format: we make 1 text file per regressor, each with one line per period of time belonging to that regressor. Each line has 3 numbers, separated by whitespace. The first number indicates the onset time in seconds of the period. The second number indicates the duration of the period. The third number indicates the height of the regressor during the period; always set this to 1 unless you know what you're doing. See `FEAT's documentation`_ for more details.
 
@@ -246,7 +252,7 @@ Now go to the Contrasts & F-tests tab. Increase "Contrasts" to 4. We'll make 1 c
 
 .. image:: http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/feat-stats-contrasts-and-f-tests.png
 
-Close that window, and FEAT should show you a graph of your model. From left to right, the If it doesn't look like the one below, make sure you followed the instructions correctly.
+Close that window, and FEAT should show you a graph of your model. If it doesn't look like the one below, check you followed the instructions correctly.
 
 .. image:: http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/feat-model-graph.png
 
