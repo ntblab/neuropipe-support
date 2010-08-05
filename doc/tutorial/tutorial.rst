@@ -26,6 +26,22 @@ NeuroPipe is a framework for reproducible fMRI research projects. It's optimized
 This tutorial will walk you through using NeuroPipe for a within-subjects analysis on one subject, that we will then repeat for a second subject to demonstrate how NeuroPipe facilitates these sorts of analyses with minimal redundant code and effort. For our example analysis, we fit a GLM to data collected while subjects viewed blocks of scene images and face images, in order to locate the PPA region in these subjects.
 
 
+Prerequisites
+-------------
+
+NeuroPipe is built on top of UNIX commands and BASH scripts. If you're unfamiliar with those, you may find this tutorial confusing. Invest some time into learning UNIX and shell scripting; it will yield good returns. A good book to start with is `Unix Third Edition: Visual Quickstart Guide`_, which you can read for free online if you're at Princeton.
+
+.. _`Unix Third Edition: Visual Quickstart Guide`: http://proquest.safaribooksonline.com/0321442458 
+
+You should be ok if you understand:
+
+- how to run programs from the UNIX command line,
+- how to move around the directory tree with *cd*,
+- relative pathnames,
+- symbolic links.
+
+In addition to basic familiarity with the UNIX command line, you'll need access to a unix-based computer, with BXH XCEDE tools and FSL installed. If you're at Princeton, use rondo, which has all of the tools you need already installed.
+
 
 Conventions used in this tutorial
 ---------------------------------
@@ -59,13 +75,6 @@ Installing NeuroPipe
 .. admonition:: you are here
 
    ~/
-
-Requirements:
-
-- unix-based computer (use rondo if you're at princeton)
-- BXH XCEDE tools (already installed on rondo)
-- FSL (already installed on rondo)
-
 
 First, download neuropipe with the command::
 
