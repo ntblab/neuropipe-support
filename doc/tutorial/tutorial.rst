@@ -30,13 +30,18 @@ This tutorial will walk you through using NeuroPipe for a within-subjects analys
 Conventions used in this tutorial
 ---------------------------------
 
+- Text that must be copied exactly as specified will be written inside of double quotes, like this: "text to copy".
 - Commands that must be executed on the command line will look like this::
 
   $ command-to-run
 
 - Files will be written like this: *path/to/filename.ext*.
-- Text that must be copied exactly as specified will be written inside of double quotes, like this: "text to copy".
+- Absolute paths will begin with "~/" to indicate the directory that contains your project folder.
+- At the beginning of each section, and after changing directory, you will be reminded of where in the directory structure you should be, like this:
 
+.. admonition:: you are here
+
+   ~/ppa-hunt/subjects/
  
 
 Architecture of NeuroPipe
@@ -50,6 +55,10 @@ NeuroPipe optimizes for both of these cases. Here's how: You make whatever scrip
 
 Installing NeuroPipe
 --------------------
+
+.. admonition:: you are here
+
+   ~/
 
 Requirements:
 
@@ -73,6 +82,10 @@ Now extract that file, and rename the extracted directory "neuropipe"::
 Setting up your NeuroPipe project
 =================================
 
+.. admonition:: you are here
+
+   ~/
+
 To set up our new project in NeuroPipe, run this command::
 
   $ neuropipe/np ppa-hunt
@@ -81,6 +94,10 @@ That command makes a rich folder structure at *ppa-hunt* for you to build your p
 
   $ cd ppa-hunt
   $ ls
+
+.. admonition:: you are here
+
+   ~/ppa-hunt
 
 You should see at least a *README.txt* file, a command called *scaffold*, a file called *protocol.txt*, and a directory called *subject-template*. Start by reading *README.txt*::
 
@@ -121,6 +138,10 @@ It says the next step is to collect data for a subject. Lucky you, that's alread
 Setting up a subject to analyze
 ===============================
 
+.. admonition:: you are here
+
+   ~/ppa-hunt
+
 Our subject ID is "0608101_conatt02", so run this command::
 
   $ ./scaffold 0608101_conatt02
@@ -130,6 +151,10 @@ Our subject ID is "0608101_conatt02", so run this command::
   $ cd subjects/0608101_conatt02
   $ less README.txt
 
+.. admonition:: you are here
+
+   ~/ppa-hunt/subjects/0608101_conatt02
+
 This *README.txt* says your first step is to get some DICOM data and put it in a Gzipped TAR archive at *data/raw.tar.gz*. Like I mentioned, the data has already been collected. It's even TAR-ed and Gzipped. Hit "q" to get out of *README.txt* and get the data with this command::
 
   $ curl http://www.princeton.edu/ntblab/resources/0608101_conatt02.tar.gz > data/raw.tar.gz
@@ -137,6 +162,10 @@ This *README.txt* says your first step is to get some DICOM data and put it in a
 
 Preparing your data for analysis
 ================================
+
+.. admonition:: you are here
+
+   ~/ppa-hunt/subjects/0608101_conatt02
 
 Open *README.txt* again::
 
@@ -185,6 +214,10 @@ Use the "(What's this?)" links to figure out what all the diagnostics mean. When
 GLM analysis with FEAT
 ======================
 
+.. admonition:: you are here
+
+   ~/ppa-hunt/subjects/0608101_conatt02
+
 Now that you've got some data, and know its quality is sufficient for analysis, it's time to do an analysis. We'll use FSL's FEAT to perform a GLM-based analysis. take a look at `FEAT's manual`_ to learn more about FEAT and GLM analysis in general.
 
 .. _FEAT's manual: http://www.fmrib.ox.ac.uk/fsl/feat5/index.html
@@ -203,6 +236,10 @@ It opens to the Data tab.
 The Data tab
 ------------
 
+.. admonition:: you are here
+
+   ~/ppa-hunt/subjects/0608101_conatt02
+
 Click "Select 4D data" and select the file *data/nifti/localizer01.nii.gz*. Set "Output directory" to *analysis/firstlevel/localizer_hrf*. FEAT should have detected "Total volumes" as 244, but it may have mis-detected "TR (s)" as 3.0; if so, change that to 1.5. Because *protocol.txt* indicated there were 6s of disdaqs, and TR length is 1.5s, set "Delete volumes" to 4. Set "High pass filter cutoff (s)" to 128.
 
 .. image:: http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/feat-data.png
@@ -213,6 +250,10 @@ Go to the Pre-stats tab.
 The Pre-stats tab
 -----------------
 
+.. admonition:: you are here
+
+   ~/ppa-hunt/subjects/0608101_conatt02
+
 Change "Slice timing correction" to "Interleaved (0,2,4 ...". Leave the rest of the settings at their defaults.
 
 .. image:: http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/feat-pre-stats.png
@@ -222,6 +263,10 @@ Go to the Stats tab.
 
 The Stats tab
 -------------
+
+.. admonition:: you are here
+
+   ~/ppa-hunt/subjects/0608101_conatt02
 
 Check "Add motion parameters to model". Now we must use the description of the experimental design from *protocol.txt* to define regressors for our GLM. *protocol.txt* tells us that blocks consisted of 12 trials, each 1.5s long, with 12s rest between blocks, and 6s rest at the start to let the scanner settle down. That 6s at the start was taken care of in the Data tab, so we have a design that looks like Scene, rest, Face, rest, Scene, rest, ...
 
@@ -262,6 +307,10 @@ Go to the Registration tab.
 The Registration tab
 --------------------
 
+.. admonition:: you are here
+
+   ~/ppa-hunt/subjects/0608101_conatt02
+
 It should already have a "Standard space" image selected; leave it with the default, but change the drop-down menu from Normal search to No search. Check "Initial structural image", and select the file *subjects/0608101_conatt02/data/nifti/0608101_conatt02_t1_flash01.nii.gz*. Check "Main structural image", and select the file *subjects/0608101_conatt02/data/nifti/0608101_conatt02_t1_mprage_sag01.nii.gz*.
 
 .. image:: http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/feat-registration.png
@@ -272,6 +321,10 @@ That's it! Hit Go. A webpage should open in your browser showing FEAT's progress
 Finding the PPA
 ===============
 
+.. admonition:: you are here
+
+   ~/ppa-hunt/subjects/0608101_conatt02
+
 Launch FSLView::
 
   $ fslview
@@ -281,6 +334,10 @@ Click File>Open... and select *analysis/firstlevel/localizer_hrf.feat/mean_func.
 
 Repeating the analysis for a new subject
 ========================================
+
+.. admonition:: you are here
+
+   ~/ppa-hunt/subjects/0608101_conatt02
 
 Now let's perform this analysis on a new subject. FEAT records all of the parameters of analyses you run with it in a file called *design.fsf* in its output directory. Our approach will be to take that file, replace any subject-specific settings with placeholders, and then for each new subject, substitute in appropriate values for the placeholders. Start by copying the *design.fsf* file for the analysis we just ran to a more central location::
 
@@ -342,8 +399,12 @@ After the line that runs *prep.sh*, add this line::
 
   $ cd ../../
   $ ./scaffold 0608102_conatt02.
-  $ cd 0608102_conatt02
+  $ cd subjects/0608102_conatt02
   $ curl http://www.princeton.edu/ntblab/resources/0608102_conatt02.tar.gz > data/raw.tar.gz
   $ ./analyze.sh
+
+.. admonition:: you are here
+
+   ~/ppa-hunt/subjects/0608102_conatt02
 
 FEAT should now be churning away on the new data.
