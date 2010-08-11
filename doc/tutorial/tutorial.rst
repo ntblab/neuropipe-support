@@ -463,6 +463,7 @@ Download the subject's data::
   $ curl http://www.princeton.edu/ntblab/resources/0608102_conatt02.tar.gz > data/raw.tar.gz
 
 Now, analyze it::
+
   $ ./analyze.sh
 
 FEAT should now be churning away on the new data.
