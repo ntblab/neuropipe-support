@@ -51,6 +51,7 @@ Conventions used in this tutorial
 
   $ command-to-run
 
+- Each section will end with a summary of commands that were run. Many of these commands will involve be interactive (like using a text editor), so you won't be able to finish the tutorial by just copying and pasting these summary sections into your terminal. They're intended as a quick reference for when you adapt the tutorial's methods to your own projects.
 - Files will be written like this: *path/to/filename.ext*.
 - Absolute paths will begin with "~/" to indicate the directory that contains your project folder.
 - At the beginning of each section, and after changing directory, you will be reminded of where in the directory structure you should be, like this:
@@ -86,6 +87,12 @@ Now extract that file, and rename the extracted directory "neuropipe"::
   $ rm *neuropipe*.tar.gz
   $ mv *neuropipe* neuropipe
 
+**Summary**::
+
+  $ wget http://github.com/mason-work/neuropipe/tarball/master
+  $ tar -xzvf *neuropipe*.tar.gz
+  $ rm *neuropipe*.tar.gz
+  $ mv *neuropipe* neuropipe
 
 
 Setting up your NeuroPipe project
@@ -143,6 +150,21 @@ Open *README.txt* one last time::
 
 It says the next step is to collect data for a subject. Lucky you, that's already been done, so skip that step. The final instruction is to run the command *./scaffold SUBJECT_ID*, with a real subject ID inserted in place of "SUBJECT_ID".
 
+**Summary**::
+
+  $ neuropipe/np ppa-hunt
+  $ cd ppa-hunt
+  $ ls
+  $ less README.txt
+  $ less protocol.txt
+  $ rm protocol.txt
+  $ wget http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/protocol.txt
+  $ less protocol.txt
+  $ less README.txt
+  $ less subject-template/copy/run-order.txt
+  $ curl http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/run-order.txt > subject-template/copy/run-order.txt
+  $ less README.txt
+
 
 Setting up a subject to analyze
 ===============================
@@ -166,6 +188,13 @@ Our subject ID is "0608101_conatt02", so run this command::
 
 This *README.txt* says your first step is to get some DICOM data and put it in a Gzipped TAR archive at *data/raw.tar.gz*. Like I mentioned, the data has already been collected. It's even TAR-ed and Gzipped. Hit "q" to get out of *README.txt* and get the data with this command::
 
+  $ curl http://www.princeton.edu/ntblab/resources/0608101_conatt02.tar.gz > data/raw.tar.gz
+
+**Summary**::
+
+  $ ./scaffold 0608101_conatt02
+  $ cd subjects/0608101_conatt02
+  $ less README.txt
   $ curl http://www.princeton.edu/ntblab/resources/0608101_conatt02.tar.gz > data/raw.tar.gz
 
 
@@ -218,6 +247,17 @@ There's also a new folder at *data/qa*. Peek in and you'll see a ton of files. T
 
 Use the "(What's this?)" links to figure out what all the diagnostics mean. When then diagnostics have convinced you that there are no quality issues with this data (such as lots of motion) that would make it uninterpretable, close firefox.
 
+**Summary**::
+
+  $ less README.txt
+  $ less run-order.txt
+  $ less README.txt
+  $ less analyze.sh
+  $ less prep.sh
+  $ ./analyze.sh
+  $ ls data/nifti
+  $ fslview data/nifti/0608101_conatt02_t1_mprage_sag01.nii.gz
+  $ firefox data/qa/index.html
 
 
 GLM analysis with FEAT
@@ -240,6 +280,11 @@ Now launch FEAT::
   $ Feat &
 
 It opens to the Data tab. 
+
+**Summary**::
+
+  $ less ../../protocol.txt
+  $ Feat &
 
 
 The Data tab
@@ -312,6 +357,12 @@ Close that window, and FEAT should show you a graph of your model. If it doesn't
 
 Go to the Registration tab.
 
+**Summary**::
+
+  $ mkdir design
+  $ curl http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/scene.txt >design/scene.txt
+  $ curl http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/face.txt >design/face.txt
+
 
 The Registration tab
 --------------------
@@ -380,6 +431,12 @@ Those bits you replaced with placeholders are the parameters that will need to v
 
 Remember that the *copy* subdirectory of *subject-template* contains files that should initially be the same for each subject, but that may need to vary between subjects. We put the fsf file there because it's possible that we'll need to tweak it for future subjects - to fix registration problems, for instance.
 
+**Summary**::
+
+  $ mv analysis/firstlevel/localizer_hrf.feat/design.fsf fsf/localizer_hrf.fsf
+  $ nano fsf/localizer_hrf.fsf
+  $ cp fsf/localizer_hrf.fsf.template ../../subject-template/copy/fsf/
+
 
 Rendering the template
 ----------------------
@@ -407,6 +464,11 @@ That hunk of code calls the function "render_firstlevel" with a bunch of argumen
   $ less globals.sh
 
 This file sets variables that define the structure of each subject's directory. By building the call with those variables, we won't need to modify it for each subject.
+
+**Summary**::
+
+  $ nano scripts/render-fsf-templates.sh
+  $ less globals.sh
 
 
 Automating the analysis
@@ -467,3 +529,15 @@ Now, analyze it::
   $ ./analyze.sh
 
 FEAT should now be churning away on the new data.
+
+**Summary**::
+ 
+  $ nano hrf.sh
+  $ cp hrf.sh ../../subject-template/link/
+  $ nano analyze.sh
+  $ cd ../../
+  $ ./scaffold 0608102_conatt02.
+  $ cd subjects/0608102_conatt02
+  $ curl http://www.princeton.edu/ntblab/resources/0608102_conatt02.tar.gz > data/raw.tar.gz
+  $ ./analyze.sh
+
