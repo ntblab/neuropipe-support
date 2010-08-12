@@ -13,9 +13,9 @@ NeuroPipe Tutorial
 
 
 
-------------------------------------
-Chapter 1 - Within-Subjects Analysis
-------------------------------------
+----------------------------------------------
+Chapter 1 - HRF analysis of block design study
+----------------------------------------------
 
 
 Introduction
@@ -166,8 +166,14 @@ It says the next step is to collect data for a subject. Lucky you, that's alread
   $ less README.txt
 
 
-Setting up a subject to analyze
-===============================
+Analyzing a subject
+===================
+
+We'll start by analyzing a single subject.
+
+
+Setting up
+----------
 
 .. admonition:: you are here
 
@@ -199,7 +205,7 @@ This *README.txt* says your first step is to get some DICOM data and put it in a
 
 
 Preparing your data for analysis
-================================
+--------------------------------
 
 .. admonition:: you are here
 
@@ -260,8 +266,8 @@ Use the "(What's this?)" links to figure out what all the diagnostics mean. When
   $ firefox data/qa/index.html
 
 
-GLM analysis with FEAT
-======================
+GLM analysis with FEAT (first-level)
+------------------------------------
 
 .. admonition:: you are here
 
@@ -288,7 +294,7 @@ It opens to the Data tab.
 
 
 The Data tab
-------------
+''''''''''''
 
 .. admonition:: you are here
 
@@ -302,7 +308,7 @@ Go to the Pre-stats tab.
 
 
 The Pre-stats tab
------------------
+'''''''''''''''''
 
 .. admonition:: you are here
 
@@ -316,7 +322,7 @@ Go to the Stats tab.
 
 
 The Stats tab
--------------
+'''''''''''''
 
 .. admonition:: you are here
 
@@ -365,7 +371,7 @@ Go to the Registration tab.
 
 
 The Registration tab
---------------------
+''''''''''''''''''''
 
 .. admonition:: you are here
 
@@ -379,7 +385,7 @@ That's it! Hit Go. A webpage should open in your browser showing FEAT's progress
 
 
 Finding the PPA
-===============
+---------------
 
 .. admonition:: you are here
 
@@ -541,3 +547,60 @@ FEAT should now be churning away on the new data.
   $ curl http://www.princeton.edu/ntblab/resources/0608102_conatt02.tar.gz > data/raw.tar.gz
   $ ./analyze.sh
 
+
+Combining within-subjects analyses into a group analysis
+========================================================
+
+.. admonition:: you are here
+
+   ~/ppa-hunt/subjects/0608101_conatt02
+
+Now that we've found the PPAs for two subjects individually, it's time to perform a group analysis to learn how reliable the PPA location is across these subjects. We'll use FEAT again to run what it calls a "higher-level analysis", which takes the information from those "first-level" analyses that we just did. The process will be very similar to that in `GLM analysis with FEAT (first-level)`_.
+
+
+GLM analysis with FEAT (higher-level)
+-------------------------------------
+
+Move up to the root project folder::
+
+  $ cd ../../
+
+.. admonition:: you are here
+
+   ~/ppa-hunt
+
+Launch FEAT::
+
+  $ Feat &
+
+
+The Data tab
+''''''''''''
+
+Change the drop-down in the top left from "First-level analysis" to "Higher-level analysis". This will change the stuff you see below. Change "Number of inputs" to 2, because we're combining 2 within-subjects analyses, then click "Select FEAT directories". For the first directory, select *~/ppa-hunt/subjects/0608101_conatt02/analysis/firstlevel/localizer_hrf.feat(, and for the second, select *~/ppa-hunt/subjects/0608102_conatt02/analysis/firstlevel/localizer_hrf.feat*. Set the output directory to *~/ppa-hunt/analysis/localizer_hrf*.
+
+Go to the Stats tab.
+
+.. image:: http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/group-feat-data.png
+
+
+The Stats tab
+'''''''''''''
+
+Click "Model setup wizard", leave it on the default option of "single group average", and click "Process". That's it! Hit "Go" to run the analysis.
+
+.. image:: http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/group-feat-stats.png
+
+
+Finding the group's PPA
+-----------------------
+
+.. admonition:: you are here
+
+   ~/ppa-hunt
+
+When the analysis finishes, open FSLview::
+
+  $ fslview &
+
+Click File>Open Standard and accept the default. Click File>Add, and select *~/ppa-hunt/analysis/localizer_hrf.gfeat/cope3.feat/stats/zstat1.nii.gz*. 
