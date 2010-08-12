@@ -300,7 +300,7 @@ The Data tab
 
    ~/ppa-hunt/subjects/0608101_conatt02
 
-Click "Select 4D data" and select the file *data/nifti/localizer01.nii.gz*. Set "Output directory" to *analysis/firstlevel/localizer_hrf*. FEAT should have detected "Total volumes" as 244, but it may have mis-detected "TR (s)" as 3.0; if so, change that to 1.5. Because *protocol.txt* indicated there were 6s of disdaqs, and TR length is 1.5s, set "Delete volumes" to 4. Set "High pass filter cutoff (s)" to 128.
+Click "Select 4D data" and select the file *data/nifti/localizer01.nii.gz*. Set "Output directory" to *analysis/firstlevel/localizer_hrf*. FEAT should have detected "Total volumes" as 244, but it may have mis-detected "TR (s)" as 3.0; if so, change that to 1.5. Because *protocol.txt* indicated there were 6s of disdaqs (volumes of data at the start of the run that are discarded because the scanner needs a few seconds to settle down), and TR length is 1.5s, set "Delete volumes" to 4. Set "High pass filter cutoff (s)" to 128.
 
 .. image:: http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/feat-data.png
 
@@ -423,7 +423,9 @@ Now, open *fsf/localizer_hrf.fsf* in your favorite text editor. If you don't hav
 
   $ nano fsf/localizer_hrf.fsf
 
-Make the following replacements:
+Make the following replacements, and when you're done, save the file as *fsf/localizer_hrf.fsf.template*. Be sure to include the spaces after "<?=" and before "?>".
+
+::
  
   #. on the line starting with "set fmri(outputdir)", replace all of the text inside the quotes with "<?= $OUTPUT_DIR ?>"
   #. on the line starting with "set fmri(regstandard) ", replace all of the text inside the quotes with "<?= $STANDARD_BRAIN ?>"
@@ -431,7 +433,7 @@ Make the following replacements:
   #. on the line starting with "set initial_highres_files(1) ", replace all of the text inside the quotes with "<?= $INITIAL_HIGHRES_FILE ?>"
   #. on the line starting with "set highres_files(1)", replace all of the text inside the quotes with "<?= $HIGHRES_FILE ?>"
 
-Those bits you replaced with placeholders are the parameters that will need to vary when your analysis is run for a different subject, or on a different computer. Save that file as *fsf/localizer_hrf.fsf.template*. To make it available in new subject directories, do this::
+Those bits you replaced with placeholders are the parameters that will need to vary when your analysis is run for a different subject, or on a different computer. After saving the file as *fsf/localizer_hrf.fsf.template*, make it available in new subject directories, with this command::
 
   $ cp fsf/localizer_hrf.fsf.template ../../subject-template/copy/fsf/
 
@@ -455,7 +457,7 @@ Now, we have a template. To use that template, we'll need a script that fills it
 
   $ nano scripts/render-fsf-templates.sh
 
-It consists of a function called render_firstlevel. We'll use that function to render the localizer template we just made. Add these lines to the end of the file::
+It consists of a function called render_firstlevel. We'll use that function to render the localizer template we just made. Copy these lines as-is onto the end of that file, then save it::
 
   render_firstlevel $FSF_DIR/localizer_hrf.fsf.template \
                     $FIRSTLEVEL_DIR/localizer_hrf.feat \
