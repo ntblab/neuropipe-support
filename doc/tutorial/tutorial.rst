@@ -68,6 +68,9 @@ If your analysis were guaranteed to be identical for every subject, a set of ana
 
 NeuroPipe optimizes for both of these cases. Here's how: You make whatever scripts and files are necessary to analyze an ideal subject, then use them as a template that new subjects will be based on. This template is stored in the *subject-template* directory of your project. The files in this template are split into two types: those that may vary between subjects, and those that won't. The ones that may vary go into *subject-template/copy*, and they will be copied into each new subject's directory. The ones that won't vary go into *subject-template/link*, and they will be symlinked into each new subject's directory; that means that changing a linked files in any subject's directory will immediately change that file in all subject's directories. If you have a non-standard subject, you change the (copied) files within that subject's directory, and other subjects are unaffected. If you need to change the analysis for every subject, you change the linked files in the template, and the change is reflected in each subject's (linked) analysis scripts.
 
+This architecture is diagrammed in the PDF here_.
+
+.. _here: http://docs.google.com/viewer?url=http%3A%2F%2Fgithub.com%2Fmason-work%2Fneuropipe%2Fraw%2Fmaster%2Fdoc%2Farchitecture.pdf
 
 
 Installing NeuroPipe
