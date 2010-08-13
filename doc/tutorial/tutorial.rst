@@ -42,6 +42,8 @@ You should be ok if you understand:
 
 In addition to basic familiarity with the UNIX command line, you'll need access to a unix-based computer, with BXH XCEDE tools and FSL installed. If you're at Princeton, use rondo, which has all of the tools you need already installed.
 
+To access the data that you'll analyze in this tutorial, email ntblab@princeton.edu and request the password.
+
 
 Conventions used in this tutorial
 ---------------------------------
@@ -197,14 +199,16 @@ Our subject ID is "0608101_conatt02", so run this command::
 
 This *README.txt* says your first step is to get some DICOM data and put it in a Gzipped TAR archive at *data/raw.tar.gz*. Like I mentioned, the data has already been collected. It's even TAR-ed and Gzipped. Hit "q" to get out of *README.txt* and get the data with this command::
 
-  $ curl http://www.princeton.edu/ntblab/resources/0608101_conatt02.tar.gz > data/raw.tar.gz
+  $ curl -u ntblab http://www.princeton.edu/ntblab/resources/0608101_conatt02.tar.gz > data/raw.tar.gz
+
+It will prompt you to enter a password; email ntblab@princeton.edu to request access to this data.
 
 **Summary**::
 
   $ ./scaffold 0608101_conatt02
   $ cd subjects/0608101_conatt02
   $ less README.txt
-  $ curl http://www.princeton.edu/ntblab/resources/0608101_conatt02.tar.gz > data/raw.tar.gz
+  $ curl -u ntblab http://www.princeton.edu/ntblab/resources/0608101_conatt02.tar.gz > data/raw.tar.gz
 
 
 Preparing your data for analysis
@@ -533,7 +537,9 @@ Move into that subject's directory::
 
 Download the subject's data::
 
-  $ curl http://www.princeton.edu/ntblab/resources/0608102_conatt02.tar.gz > data/raw.tar.gz
+  $ curl -u ntblab http://www.princeton.edu/ntblab/resources/0608102_conatt02.tar.gz > data/raw.tar.gz
+
+As before, it will prompt you to enter a password; email ntblab@princeton.edu to request access to this data.
 
 Now, analyze it::
 
@@ -549,7 +555,7 @@ FEAT should now be churning away on the new data.
   $ cd ../../
   $ ./scaffold 0608102_conatt02.
   $ cd subjects/0608102_conatt02
-  $ curl http://www.princeton.edu/ntblab/resources/0608102_conatt02.tar.gz > data/raw.tar.gz
+  $ curl -u ntblab http://www.princeton.edu/ntblab/resources/0608102_conatt02.tar.gz > data/raw.tar.gz
   $ ./analyze.sh
 
 
