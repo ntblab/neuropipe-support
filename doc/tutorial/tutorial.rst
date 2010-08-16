@@ -40,11 +40,12 @@ You should be ok if you understand:
 - relative pathnames,
 - symbolic links.
 
-In addition to basic familiarity with the UNIX command line, you'll need access to a unix-based computer, with git_, `BXH XCEDE tools`_, and FSL_ installed. If you're at Princeton, use rondo, which has all of the tools you need already installed.
+In addition to basic familiarity with the UNIX command line, you'll need access to a unix-based computer, with git_, `BXH XCEDE tools`_, and FSL_ installed. If you're at Princeton, use rondo_, which has all of the tools you need already installed.
 
 .. _git: http://git-scm.com/
 .. _`BXH XCEDE tools`: http://nbirn.net/tools/bxh_tools/index.shtm
 .. _FSL: http://www.fmrib.ox.ac.uk/fsl/
+.. _rondo: http://cluster-wiki.pni.princeton.edu/dokuwiki/
 
 To access the data that you'll analyze in this tutorial, email ntblab@princeton.edu and request the password.
 
