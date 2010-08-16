@@ -72,7 +72,7 @@ NeuroPipe optimizes for both of these cases. Here's how: You make whatever scrip
 
 This architecture is diagrammed in the PDF here_.
 
-.. _here: http://docs.google.com/viewer?url=http%3A%2F%2Fgithub.com%2Fmason-work%2Fneuropipe%2Fraw%2Fmaster%2Fdoc%2Farchitecture.pdf
+.. _here: http://docs.google.com/viewer?url=http%3A%2F%2Fgithub.com%2Fntblab%2Fneuropipe-support%2Fraw%2Fmaster%2Fdoc%2Farchitecture.pdf
 
 
 Installing NeuroPipe
@@ -84,7 +84,7 @@ Installing NeuroPipe
 
 First, download neuropipe with the command::
 
-  $ wget http://github.com/mason-work/neuropipe/tarball/master
+  $ wget http://github.com/ntblab/neuropipe-support/tarball/master
 
 Now extract that file, and rename the extracted directory "neuropipe"::
 
@@ -94,7 +94,7 @@ Now extract that file, and rename the extracted directory "neuropipe"::
 
 **Summary**::
 
-  $ wget http://github.com/mason-work/neuropipe/tarball/master
+  $ wget http://github.com/ntblab/neuropipe-support/tarball/master
   $ tar -xzvf *neuropipe*.tar.gz
   $ rm *neuropipe*.tar.gz
   $ mv *neuropipe* neuropipe
@@ -131,7 +131,7 @@ The first instruction it has for us in the Getting Started section is to open *p
 It says we should fill it in with details on the data collection protocol. We'll just download a *protocol.txt* file that describes the ppa-hunt data you're about to analyze. Hit "q" to quit out of *protocol.txt*, then run these commands::
 
   $ rm protocol.txt
-  $ wget http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/protocol.txt
+  $ wget http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/protocol.txt
 
 Read that newly downloaded *protocol.txt*::
 
@@ -147,7 +147,7 @@ The next instruction it gives is to open *subject-template/copy/run-order.txt*. 
 
 As with *protocol.txt*, a *run-order.txt* file has already been prepared for you. Download that file, and put it where *README.txt* says::
 
-  $ curl http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/run-order.txt > subject-template/copy/run-order.txt
+  $ curl http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/run-order.txt > subject-template/copy/run-order.txt
 
 Open *README.txt* one last time::
 
@@ -163,11 +163,11 @@ It says the next step is to collect data for a subject. Lucky you, that's alread
   $ less README.txt
   $ less protocol.txt
   $ rm protocol.txt
-  $ wget http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/protocol.txt
+  $ wget http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/protocol.txt
   $ less protocol.txt
   $ less README.txt
   $ less subject-template/copy/run-order.txt
-  $ curl http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/run-order.txt > subject-template/copy/run-order.txt
+  $ curl http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/run-order.txt > subject-template/copy/run-order.txt
   $ less README.txt
 
 
@@ -309,7 +309,7 @@ The Data tab
 
 Click "Select 4D data" and select the file *data/nifti/localizer01.nii.gz*. Set "Output directory" to *analysis/firstlevel/localizer_hrf*. FEAT should have detected "Total volumes" as 244, but it may have mis-detected "TR (s)" as 3.0; if so, change that to 1.5. Because *protocol.txt* indicated there were 6s of disdaqs (volumes of data at the start of the run that are discarded because the scanner needs a few seconds to settle down), and TR length is 1.5s, set "Delete volumes" to 4. Set "High pass filter cutoff (s)" to 128.
 
-.. image:: http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/feat-data.png
+.. image:: http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/feat-data.png
 
 Go to the Pre-stats tab.
 
@@ -323,7 +323,7 @@ The Pre-stats tab
 
 Change "Slice timing correction" to "Interleaved (0,2,4 ...". Leave the rest of the settings at their defaults.
 
-.. image:: http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/feat-pre-stats.png
+.. image:: http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/feat-pre-stats.png
 
 Go to the Stats tab.
 
@@ -344,16 +344,16 @@ We will specify this design precisely using text files in FEAT's 3-column format
 In your own projects, you should make these files automatically based on the code that runs your experiment. For that reason, I've generated the 3-column files for you. Make a directory to put them in, then download the files::
 
   $ mkdir design
-  $ curl http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/scene.txt >design/scene.txt
-  $ curl http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/face.txt >design/face.txt
+  $ curl http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/scene.txt >design/scene.txt
+  $ curl http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/face.txt >design/face.txt
 
 Click the "Full model setup" button. Set EV name to "scene". FSL calls regressors EV's, short for Explanatory Variables. Set "Basic shape" to "Custom (3 column format)" and select *design/scene.txt*. That file on its own describes a square wave, but to account for the shape of the BOLD response, we convolve it with another function. Set "Convolution" to "Double-Gamma HRF". Now we set up the face regressor. Set "Number of original EVs" to 2, then click tab 2.
 
-.. image:: http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/feat-stats-ev1.png
+.. image:: http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/feat-stats-ev1.png
 
 Set EV name to "face". Set "Basic shape" to "Custom (3 column format)" and select *design/face.txt*. Change Convolution to Double-Gamma HRF, like we did for the scene regressor.
 
-.. image:: http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/feat-stats-ev2.png
+.. image:: http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/feat-stats-ev2.png
 
 Now go to the Contrasts & F-tests tab. Increase "Contrasts" to 4. We'll make 1 contrast to show the main effect of the face regressor, one for the scene regressor, 1 to show where the scene regressor is greater than the face regressor, and one to show where the face regressor is greater:
 
@@ -362,19 +362,19 @@ Now go to the Contrasts & F-tests tab. Increase "Contrasts" to 4. We'll make 1 c
 * Set the 3rd row's title to "scene>face", it's "EV1" value to 1, and it's "EV2" value to -1.
 * Set the 4th row's title to "face>scene", it's "EV1" value to -1, and it's "EV2" value to 1.
 
-.. image:: http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/feat-stats-contrasts-and-f-tests.png
+.. image:: http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/feat-stats-contrasts-and-f-tests.png
 
 Close that window, and FEAT should show you a graph of your model. If it doesn't look like the one below, check you followed the instructions correctly.
 
-.. image:: http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/feat-model-graph.png
+.. image:: http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/feat-model-graph.png
 
 Go to the Registration tab.
 
 **Summary**::
 
   $ mkdir design
-  $ curl http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/scene.txt >design/scene.txt
-  $ curl http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/face.txt >design/face.txt
+  $ curl http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/scene.txt >design/scene.txt
+  $ curl http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/face.txt >design/face.txt
 
 
 The Registration tab
@@ -386,7 +386,7 @@ The Registration tab
 
 It should already have a "Standard space" image selected; leave it with the default, but change the drop-down menu from Normal search to No search. Check "Initial structural image", and select the file *subjects/0608101_conatt02/data/nifti/0608101_conatt02_t1_flash01.nii.gz*. Check "Main structural image", and select the file *subjects/0608101_conatt02/data/nifti/0608101_conatt02_t1_mprage_sag01.nii.gz*.
 
-.. image:: http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/feat-registration.png
+.. image:: http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/feat-registration.png
 
 That's it! Hit Go. A webpage should open in your browser showing FEAT's progress. Once it's done, this webpage provides a useful summary of the analysis you just ran with FEAT. Later, we'll make a webpage for this subject to gather information like this FEAT report, the QA results, and plots summarizing this subject's data. But for now, let's continue with the hunt for the PPA.
 
@@ -592,7 +592,7 @@ Change the drop-down in the top left from "First-level analysis" to "Higher-leve
 
 Go to the Stats tab.
 
-.. image:: http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/group-feat-data.png
+.. image:: http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/group-feat-data.png
 
 
 The Stats tab
@@ -600,7 +600,7 @@ The Stats tab
 
 Click "Model setup wizard", leave it on the default option of "single group average", and click "Process". That's it! Hit "Go" to run the analysis.
 
-.. image:: http://github.com/mason-work/neuropipe/raw/master/doc/tutorial/group-feat-stats.png
+.. image:: http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/group-feat-stats.png
 
 
 Finding the group's PPA
