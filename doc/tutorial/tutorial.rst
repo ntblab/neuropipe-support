@@ -47,6 +47,10 @@ In addition to basic familiarity with the UNIX command line, you'll need access 
 .. _FSL: http://www.fmrib.ox.ac.uk/fsl/
 .. _rondo: http://cluster-wiki.pni.princeton.edu/dokuwiki/
 
+This tutorial has you use git to track changes to the example project. A full explanation of git and version control systems is outside the scope of the tutorial, so if you're unfamiliar with those, read chapters 1 and 2 of `Pro Git`_.
+
+.. _`Pro Git`: http://progit.org/book/
+
 To access the data that you'll analyze in this tutorial, email ntblab@princeton.edu and request the password.
 
 
@@ -87,11 +91,19 @@ Setting up your NeuroPipe project
 
    ~/
 
-To set up our new project with NeuroPipe, run this command::
+NeuroPipe is a sort of skeleton for fMRI analysis projects using FSL. To work with it, you download that skeleton, then flesh it out.
+
+We'll use git to grab the latest copy of NeuroPipe. But before that, configure git with your current name, email, and text editor of choice (if you haven't already)::
+
+  $ git config --global user.name "YOUR NAME HERE"
+  $ git config --global user.email "YOUR_EMAIL@HERE.COM"
+  $ git config --global core.editor nano
+
+Now, using git, download NeuroPipe into a folder called *ppa-hunt*::
 
   $ git clone git://github.com/ntblab/neuropipe.git ppa-hunt
 
-That command makes a rich folder structure at *ppa-hunt* for you to build your project in. Move into that directory and look around::
+Move into that directory and look around::
 
   $ cd ppa-hunt
   $ ls
