@@ -79,31 +79,6 @@ This architecture is diagrammed in the PDF here_.
 .. _here: http://docs.google.com/viewer?url=http%3A%2F%2Fgithub.com%2Fntblab%2Fneuropipe-support%2Fraw%2Fmaster%2Fdoc%2Farchitecture.pdf
 
 
-Installing NeuroPipe
---------------------
-
-.. admonition:: you are here
-
-   ~/
-
-First, download neuropipe with the command::
-
-  $ wget http://github.com/ntblab/neuropipe-support/tarball/master
-
-Now extract that file, and rename the extracted directory "neuropipe"::
-
-  $ tar -xzvf *neuropipe*.tar.gz
-  $ rm *neuropipe*.tar.gz
-  $ mv *neuropipe* neuropipe
-
-**Summary**::
-
-  $ wget http://github.com/ntblab/neuropipe-support/tarball/master
-  $ tar -xzvf *neuropipe*.tar.gz
-  $ rm *neuropipe*.tar.gz
-  $ mv *neuropipe* neuropipe
-
-
 Setting up your NeuroPipe project
 =================================
 
@@ -111,9 +86,9 @@ Setting up your NeuroPipe project
 
    ~/
 
-To set up our new project in NeuroPipe, run this command::
+To set up our new project with NeuroPipe, run this command::
 
-  $ neuropipe/np ppa-hunt
+  $ git clone git://github.com/ntblab/neuropipe.git ppa-hunt
 
 That command makes a rich folder structure at *ppa-hunt* for you to build your project in. Move into that directory and look around::
 
