@@ -630,7 +630,7 @@ Launch FEAT::
 The Data tab
 ''''''''''''
 
-Change the drop-down in the top left from "First-level analysis" to "Higher-level analysis". This will change the stuff you see below. Change "Number of inputs" to 2, because we're combining 2 within-subjects analyses, then click "Select FEAT directories". For the first directory, select *~/ppa-hunt/subjects/0608101_conatt02/analysis/firstlevel/localizer_hrf.feat*, and for the second, select *~/ppa-hunt/subjects/0608102_conatt02/analysis/firstlevel/localizer_hrf.feat*. Set the output directory to *~/ppa-hunt/analysis/localizer_hrf*.
+Change the drop-down in the top left from "First-level analysis" to "Higher-level analysis". This will change the stuff you see below. Change "Number of inputs" to 2, because we're combining 2 within-subjects analyses, then click "Select FEAT directories". For the first directory, select *~/ppa-hunt/subjects/0608101_conatt02/analysis/firstlevel/localizer_hrf.feat*, and for the second, select *~/ppa-hunt/subjects/0608102_conatt02/analysis/firstlevel/localizer_hrf.feat*. Set the output directory to *~/ppa-hunt/group/analysis/localizer_hrf*.
 
 Go to the Stats tab.
 
@@ -656,4 +656,4 @@ When the analysis finishes, open FSLview::
 
   $ fslview &
 
-Click File>Open Standard and accept the default. Click File>Add, and select *~/ppa-hunt/analysis/localizer_hrf.gfeat/cope3.feat/stats/zstat1.nii.gz*. 
+Click File>Open Standard and accept the default. Click File>Add, and select *~/ppa-hunt/group/analysis/localizer_hrf.gfeat/cope3.feat/stats/zstat1.nii.gz*. 
