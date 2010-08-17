@@ -118,15 +118,15 @@ Move into that directory and look around::
 
    ~/ppa-hunt
 
-You should see at least a *README.txt* file, a command called *scaffold*, a file called *protocol.txt*, and a directory called *subject-template*. Start by reading *README.txt*::
+You should see a *README.txt* file, a command called *scaffold*, a file called *protocol.txt*, and a directory called *subject-template*. Start by reading *README.txt*::
 
   $ less README.txt
 
-The first instruction it has for us in the Getting Started section is to open *protocol.txt* and follow its instructions. Hit "q" to quit out of *README.txt*, then open *protocol.txt*::
+The first instruction in the Getting Started section is to open *protocol.txt* and follow its instructions. Hit "q" to quit *README.txt*, then open *protocol.txt*::
 
   $ less protocol.txt
 
-It says we should fill it in with details on the data collection protocol. We'll just download a *protocol.txt* file that describes the ppa-hunt data you're about to analyze. Hit "q" to quit out of *protocol.txt*, then run these commands::
+It says to fill it in with details on the data collection protocol. We'll just download a *protocol.txt* file that describes the ppa-hunt data you're about to analyze. Hit "q" to quit out of *protocol.txt*, then run these commands::
 
   $ rm protocol.txt
   $ wget http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/protocol.txt
@@ -139,11 +139,11 @@ Hit "q", and open *README.txt* again::
 
   $ less README.txt
 
-The next instruction it gives is to open *subject-template/copy/run-order.txt*. Hit "q", then read that file::
+The next instruction is to open *subject-template/copy/run-order.txt*. Hit "q", then read that file::
 
   $ less subject-template/copy/run-order.txt
 
-As with *protocol.txt*, a *run-order.txt* file has already been prepared for you. Download that file, and put it where *README.txt* says::
+As with *protocol.txt*, a *run-order.txt* file is already made for you. Download that file, and put it where *README.txt* says::
 
   $ curl http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/run-order.txt > subject-template/copy/run-order.txt
 
@@ -151,7 +151,7 @@ Open *README.txt* one last time::
 
   $ less README.txt
 
-It says the next step is to collect data for a subject. Lucky you, that's already been done, so skip that step. The final instruction is to run the command *./scaffold SUBJECT_ID*, with a real subject ID inserted in place of "SUBJECT_ID".
+It says the next step is to collect data for a subject. That's already been done, so skip that step. The final instruction is to run the command *./scaffold SUBJECT_ID*, with a real subject ID inserted in place of "SUBJECT_ID".
 
 **Summary**::
 
@@ -195,11 +195,11 @@ Our subject ID is "0608101_conatt02", so run this command::
 
    ~/ppa-hunt/subjects/0608101_conatt02
 
-This *README.txt* says your first step is to get some DICOM data and put it in a Gzipped TAR archive at *data/raw.tar.gz*. Like I mentioned, the data has already been collected. It's even TAR-ed and Gzipped. Hit "q" to get out of *README.txt* and get the data with this command::
+This *README.txt* says your first step is to get some DICOM data and put it in a Gzipped TAR archive at *data/raw.tar.gz*. Like I mentioned, the data has already been collected. It's even TAR-ed and Gzipped. Hit "q" to quit *README.txt* and get the data with this command::
 
   $ curl -u ntblab http://www.princeton.edu/ntblab/resources/0608101_conatt02.tar.gz > data/raw.tar.gz
 
-It will prompt you to enter a password; email ntblab@princeton.edu to request access to this data.
+It will prompt you to enter a password; email ntblab@gmail.com to request access to this data if you don't have it.
 
 **Summary**::
 
@@ -228,17 +228,17 @@ You should see that it's identical to the one we downloaded before. Hit "q", the
 
   $ less README.txt
 
-It says that we should proceed by doing various transformations on the data, and then running a quality assurance tool to make sure the data is usable. The transformations make the data more palatable to FSL_, which we will use for analysis. As *README.txt* says, you do all that with the command *analyze.sh*. Before running that, let's take a look at what it does::
+It says that we should proceed by doing various transformations on the data, and then running a quality assurance tool to make sure the data is usable. The transformations make the data more palatable to FSL_, which we will use for analysis. As *README.txt* says, you do all that with the command *analyze.sh*. Before running that, see what it does::
 
   $ less analyze.sh
 
 .. _FSL: http://www.fmrib.ox.ac.uk/fsl/
 
-Look at the body of the script, and you'll see that it just calls another script, *prep.sh*. Hit "q" to quit reading *analyze.sh* and read *prep.sh*::
+Look at the body of the script, and notice it just runs another script: *prep.sh*. Hit "q" to quit *analyze.sh* and read *prep.sh*::
 
   $ less prep.sh
 
-*prep.sh* calls three other scripts: one to do those transformations on the data, one to run the quality assurance tools, and one called *render-fsf-templates.sh*. Don't worry about that last one for now--we'll cover it later. If you'd like, you can open up those first two scripts to see in detail what they do. Otherwise, press on::
+*prep.sh* calls three other scripts: one to do those transformations on the data, one to run the quality assurance tools, and one called *render-fsf-templates.sh*. Don't worry about that last one for now--we'll cover it later. If you'd like, open those first two scripts to see what they do. Otherwise, press on::
 
   $ ./analyze.sh
 
@@ -278,7 +278,7 @@ GLM analysis with FEAT (first-level)
 
    ~/ppa-hunt/subjects/0608101_conatt02
 
-Now that you've got some data, and know its quality is sufficient for analysis, it's time to do an analysis. We'll use FSL's FEAT to perform a GLM-based analysis. take a look at `FEAT's manual`_ to learn more about FEAT and GLM analysis in general.
+Now that you have data, and of adequate quality, it's time to do an analysis. We'll use FSL's FEAT to perform a GLM-based analysis. If GLM analysis or FEAT is new to you, read `FEAT's manual`_ to learn more about them. If any of the steps seem mysterious to you, hover your mouse over the relevant part of FEAT and a tooltip will appear describing that part in detail.
 
 .. _FEAT's manual: http://www.fmrib.ox.ac.uk/fsl/feat5/index.html
 
@@ -305,7 +305,7 @@ The Data tab
 
    ~/ppa-hunt/subjects/0608101_conatt02
 
-Click "Select 4D data" and select the file *data/nifti/localizer01.nii.gz*. Set "Output directory" to *analysis/firstlevel/localizer_hrf*. FEAT should have detected "Total volumes" as 244, but it may have mis-detected "TR (s)" as 3.0; if so, change that to 1.5. Because *protocol.txt* indicated there were 6s of disdaqs (volumes of data at the start of the run that are discarded because the scanner needs a few seconds to settle down), and TR length is 1.5s, set "Delete volumes" to 4. Set "High pass filter cutoff (s)" to 128.
+Click "Select 4D data" and select the file *data/nifti/localizer01.nii.gz*; FEAT will analyze this data. Set "Output directory" to *analysis/firstlevel/localizer_hrf*; FEAT will put the results of its analysis in this folder, but with ".feat" appended, or "+.feat" appended if this is the second analysis with this name that you've run. FEAT should have detected "Total volumes" as 244, but it may have mis-detected "TR (s)" as 3.0; if so, change that to 1.5, because this experiment had a TR length of 1.5 seconds. Because *protocol.txt* indicated there were 6 seconds of disdaqs (volumes of data at the start of the run that are discarded because the scanner needs a few seconds to settle down), and TR length is 1.5s, set "Delete volumes" to 4. Set "High pass filter cutoff (s)" to 128 to remove slow drifts from your signal.
 
 .. image:: http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/feat-data.png
 
@@ -319,7 +319,7 @@ The Pre-stats tab
 
    ~/ppa-hunt/subjects/0608101_conatt02
 
-Change "Slice timing correction" to "Interleaved (0,2,4 ...". Leave the rest of the settings at their defaults.
+Change "Slice timing correction" to "Interleaved (0,2,4 ...", because slices were collected in this interleaved pattern. Leave the rest of the settings at their defaults.
 
 .. image:: http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/feat-pre-stats.png
 
@@ -333,27 +333,36 @@ The Stats tab
 
    ~/ppa-hunt/subjects/0608101_conatt02
 
-Check "Add motion parameters to model". Now we must use the description of the experimental design from *protocol.txt* to define regressors for our GLM. *protocol.txt* tells us that blocks consisted of 12 trials, each 1.5s long, with 12s rest between blocks, and 6s rest at the start to let the scanner settle down. That 6s at the start was taken care of in the Data tab, so we have a design that looks like Scene, rest, Face, rest, Scene, rest, ...
+Check "Add motion parameters to model"; this makes regressors from estimates of the subject's motion, which hopefully absorb variance in the signal due to transient motion. To account for the variance in the signal due to the experimental manipulation, we define regressors based on the design, as described in *protocol.txt*. *protocol.txt* says that blocks consisted of 12 trials, each 1.5s long, with 12s rest between blocks, and 6s rest at the start to let the scanner settle down. That 6s at the start was taken care of in the Data tab, so we have a design that looks like Scene, rest, Face, rest, Scene, rest, ...
 
-We will specify this design precisely using text files in FEAT's 3-column format: we make 1 text file per regressor, each with one line per period of time belonging to that regressor. Each line has 3 numbers, separated by whitespace. The first number indicates the onset time in seconds of the period. The second number indicates the duration of the period. The third number indicates the height of the regressor during the period; always set this to 1 unless you know what you're doing. See `FEAT's documentation`_ for more details.
+We will specify this design using text files in FEAT's 3-column format: we make 1 text file per regressor, each with one line per period of time belonging to that regressor. Each line has 3 numbers, separated by whitespace. The first number indicates the onset time in seconds of the period. The second number indicates the duration of the period. The third number indicates the height of the regressor during the period; always set this to 1 unless you know what you're doing. See `FEAT's documentation`_ for more details.
 
 .. _FEAT's documentation: http://www.fmrib.ox.ac.uk/fsl/feat5/detail.html#stats
 
-In your own projects, you should make these files automatically based on the code that runs your experiment. For that reason, I've generated the 3-column files for you. Make a directory to put them in, then download the files::
+These design files are provided for you. Make a directory to put them in, then download the files::
 
   $ mkdir design
   $ curl http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/scene.txt >design/scene.txt
   $ curl http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/face.txt >design/face.txt
 
-Click the "Full model setup" button. Set EV name to "scene". FSL calls regressors EV's, short for Explanatory Variables. Set "Basic shape" to "Custom (3 column format)" and select *design/scene.txt*. That file on its own describes a square wave, but to account for the shape of the BOLD response, we convolve it with another function. Set "Convolution" to "Double-Gamma HRF". Now we set up the face regressor. Set "Number of original EVs" to 2, then click tab 2.
+Examine each of these files and refer to *protocol.txt* as necessary::
+
+  $ less design/scene.txt
+  $ less design/face.txt
+
+When making these design files for your own projects, do not use a Windows machine or you will likely have `problems with line endings`_.
+
+.. _`problems with line endings`: http://en.wikipedia.org/wiki/Newline#Common_problems
+
+To use these files to specify the design, click the "Full model setup" button. Set EV name to "scene". FSL calls regressors EV's, short for Explanatory Variables. Set "Basic shape" to "Custom (3 column format)" and select *design/scene.txt*. That file on its own describes a square wave; to account for the shape of the BOLD response, we convolve it with another function that models the hemodynamic response to a stimulus. Set "Convolution" to "Double-Gamma HRF". Now to set up the face regressor set "Number of original EVs" to 2 and click to tab 2.
 
 .. image:: http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/feat-stats-ev1.png
 
-Set EV name to "face". Set "Basic shape" to "Custom (3 column format)" and select *design/face.txt*. Change Convolution to Double-Gamma HRF, like we did for the scene regressor.
+Set EV name to "face". Set "Basic shape" to "Custom (3 column format)" and select *design/face.txt*. Change "Convolution" to "Double-Gamma HRF", like we did for the scene regressor.
 
 .. image:: http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/feat-stats-ev2.png
 
-Now go to the Contrasts & F-tests tab. Increase "Contrasts" to 4. We'll make 1 contrast to show the main effect of the face regressor, one for the scene regressor, 1 to show where the scene regressor is greater than the face regressor, and one to show where the face regressor is greater:
+Now go to the "Contrasts & F-tests" tab. Increase "Contrasts" to 4. There is now a matrix of number fields with a row for each contrast and a column for each EV. You specify a contrast as a linear combination of the parameter estimates on each regressor. We'll make one contrast to show the main effect of the face regressor, one to show the main effect of the scene regressor, one to show where the scene regressor is greater than the face regressor, and one to show where the face regressor is greater:
 
 * Set the 1st row's title to "scene", it's "EV1" value to 1, and it's "EV2" value to 0.
 * Set the 2nd row's title to "face", it's "EV1" value to 0, and it's "EV2" value to 1.
@@ -362,7 +371,7 @@ Now go to the Contrasts & F-tests tab. Increase "Contrasts" to 4. We'll make 1 c
 
 .. image:: http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/feat-stats-contrasts-and-f-tests.png
 
-Close that window, and FEAT should show you a graph of your model. If it doesn't look like the one below, check you followed the instructions correctly.
+Close that window, and FEAT shows you a graph of your model. If it's different from the one below, check you followed the instructions correctly.
 
 .. image:: http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/feat-model-graph.png
 
@@ -373,6 +382,8 @@ Go to the Registration tab.
   $ mkdir design
   $ curl http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/scene.txt >design/scene.txt
   $ curl http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/face.txt >design/face.txt
+  $ less design/scene.txt
+  $ less design/face.txt
 
 
 The Registration tab
@@ -382,11 +393,15 @@ The Registration tab
 
    ~/ppa-hunt/subjects/0608101_conatt02
 
-It should already have a "Standard space" image selected; leave it with the default, but change the drop-down menu from Normal search to No search. Check "Initial structural image", and select the file *subjects/0608101_conatt02/data/nifti/0608101_conatt02_t1_flash01.nii.gz*. Check "Main structural image", and select the file *subjects/0608101_conatt02/data/nifti/0608101_conatt02_t1_mprage_sag01.nii.gz*.
+Different subjects have different shaped brains, and may have been in different positions in the scanner. To compare the data collected from different subjects, for each subject we compute the transformation that best moves and warps their data to match a standard brain, apply those transformations, then compare each subject in this "standard space". This Registration tab is where we set the parameters used to compute the transformation; we won't actually apply the transformation until we get to group analysis.
+
+FEAT should already have a "Standard space" image selected; leave it with the default, but change the drop-down menu from "Normal search" to "No search", or this subject's brain will be misregistered. Check "Initial structural image", and select the file *subjects/0608101_conatt02/data/nifti/0608101_conatt02_t1_flash01.nii.gz*. Check "Main structural image", and select the file *subjects/0608101_conatt02/data/nifti/0608101_conatt02_t1_mprage_sag01.nii.gz*.
+
+The subject's functional data is first registered to the initial structural image, then that is registered to the main structural image, which is then registered to the standard space image. All this indirection is necessary because registration can fail, and it's more likely to fail if you try to go directly from the functional data to standard space.
 
 .. image:: http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/feat-registration.png
 
-That's it! Hit Go. A webpage should open in your browser showing FEAT's progress. Once it's done, this webpage provides a useful summary of the analysis you just ran with FEAT. Later, we'll make a webpage for this subject to gather information like this FEAT report, the QA results, and plots summarizing this subject's data. But for now, let's continue with the hunt for the PPA.
+That's it! Hit Go. A webpage should open in your browser showing FEAT's progress. Once it's done, this webpage provides a useful summary of the analysis you just ran with FEAT. Later, we'll make a webpage for this subject to gather information like this FEAT report, the QA results, and plots summarizing this subject's data. But for now, let's continue hunting the PPA.
 
 
 Finding the PPA
@@ -400,7 +415,7 @@ Launch FSLView::
 
   $ fslview
 
-Click File>Open... and select *analysis/firstlevel/localizer_hrf.feat/mean_func.nii.gz*. Click File>Add... *analysis/firstlevel/localizer_hrf.feat/stats/zstat3.nii.gz*. *zstat3.nii.gz* is an image of z-statistics for the scene>face contrast being different from 0, so high intensity values in a voxel indicate that the scene regressor caught much more of the variance in fMRI signal at that voxel than the face regressor. To find the PPA, we'll look for regions with really high values in *zstat3.nii.gz*. Set the Min threshold at the top of FSLView to something like 8, then click around in the brain to see what regions had contrast z-stats at that threshold or above. See if you can find a pair of bilateral regions with zstat's at a high threshold, around the middle of the brain; that'll be the PPA.
+Click File>Open... and select *analysis/firstlevel/localizer_hrf.feat/mean_func.nii.gz*; this is an image of the mean signal intensity at each voxel over the course of the run. We use it as a background to overlay a contrast image on. Click File>Add... *analysis/firstlevel/localizer_hrf.feat/stats/zstat3.nii.gz*. *zstat3.nii.gz* is an image of z-statistics for the scene>face contrast being different from 0, so high intensity values in a voxel indicate that the scene regressor caught much more of the variance in fMRI signal at that voxel than the face regressor. To find the PPA, we'll look for regions with really high values in *zstat3.nii.gz*. To include only these regions in the overlay, set the Min threshold at the top of FSLView to something like 8, then click around in the brain to see what regions had contrast z-stats at that threshold or above. Look for a bilateral pair of regions with zstat's at a high threshold, around the middle of the brain; that'll be the PPA.
 
 
 Repeating the analysis for a new subject
