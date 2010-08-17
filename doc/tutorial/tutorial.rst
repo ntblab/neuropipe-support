@@ -21,15 +21,15 @@ Chapter 1 - HRF analysis of block design study
 Introduction
 ============
 
-NeuroPipe is a framework for reproducible fMRI research projects. It's optimized for projects composed of within-subjects analyses that are mainly identical, which are combined into an across-subject analysis. If this describes the structure of your project, using NeuroPipe will make it simple for you to run complex analyses that can be reproduced entirely by running a single command. This simplifies the task of ensuring your analysis is bug-free, by letting you easily make a fix and test it. And, it allows others to re-run your analysis to verify your work is correct, or to build upon your project once you've finished it.
+NeuroPipe is a framework for reproducible fMRI analysis projects with FSL. It's designed for group (across-subjects) analyses built on top of within-subjects analyses that are mainly identical. If this (or a subset of it) describes your project, NeuroPipe will help you implement your analyses and run them with a single command. This simplifies debugging, by letting you quickly make a fix and test it. And, it lets others re-run your analysis to verify your work is correct, or to build upon your project once you've finished it.
 
-This tutorial will walk you through using NeuroPipe for a within-subjects analysis on one subject, that we will then repeat for a second subject to demonstrate how NeuroPipe facilitates these sorts of analyses with minimal redundant code and effort. For our example analysis, we fit a GLM to data collected while subjects viewed blocks of scene images and face images, in order to locate the PPA region in these subjects.
+This tutorial walks you through using NeuroPipe for a within-subjects analysis on one subject, repeating that analysis for a second subject, and then running a group analysis across both of these subjects. For our example analysis, we fit a GLM to data collected while subjects viewed blocks of scene images and face images, in order to locate the PPA in these subjects.
 
 
 Prerequisites
 -------------
 
-NeuroPipe is built on top of UNIX commands and BASH scripts. If you're unfamiliar with those, you may find this tutorial confusing. Invest some time into learning UNIX and shell scripting; it will yield good returns. A good book to start with is `Unix Third Edition: Visual Quickstart Guide`_, which you can read for free online if you're at Princeton.
+NeuroPipe is built with UNIX commands and BASH scripts. If you're unfamiliar with those, this tutorial may confuse you. Invest some time into learning UNIX and shell scripting; it will yield good returns. Try starting with `Unix Third Edition: Visual Quickstart Guide`_, which you can read for free online if you're at Princeton.
 
 .. _`Unix Third Edition: Visual Quickstart Guide`: http://proquest.safaribooksonline.com/0321442458 
 
@@ -40,32 +40,32 @@ You should be ok if you understand:
 - relative pathnames,
 - symbolic links.
 
-In addition to basic familiarity with the UNIX command line, you'll need access to a unix-based computer, with git_, `BXH XCEDE tools`_, and FSL_ installed. If you're at Princeton, use rondo_, which has all of the tools you need already installed.
+In addition to basic familiarity with the UNIX command line, you'll need access to a UNIX-based computer (Mac OSX or any flavor of Linux should work), with git_, `BXH XCEDE tools`_, and FSL_ installed. If you're at Princeton, use rondo_, which has all the necessary tools installed.
 
 .. _git: http://git-scm.com/
 .. _`BXH XCEDE tools`: http://nbirn.net/tools/bxh_tools/index.shtm
 .. _FSL: http://www.fmrib.ox.ac.uk/fsl/
 .. _rondo: http://cluster-wiki.pni.princeton.edu/dokuwiki/
 
-This tutorial has you use git to track changes to the example project. A full explanation of git and version control systems is outside the scope of the tutorial, so if you're unfamiliar with those, read chapters 1 and 2 of `Pro Git`_.
+In this tutorial, you use git to track changes to the example project. A full explanation of git and version control systems is the scope of the tutorial, so if you're unfamiliar with those, read chapters 1 and 2 of `Pro Git`_.
 
 .. _`Pro Git`: http://progit.org/book/
 
-To access the data that you'll analyze in this tutorial, email ntblab@princeton.edu and request the password.
+To access the data that you'll analyze in this tutorial, email ntblab@gmail.com and request the password.
 
 
 Conventions used in this tutorial
 ---------------------------------
 
-- Text that must be copied exactly as specified will be written inside of double quotes, like this: "text to copy".
-- Commands that must be executed on the command line will look like this::
+- Text that must be copied exactly is written between double quotes, like this: "text to copy".
+- Commands to execute on the command line look like this::
 
   $ command-to-run
 
-- Each section will end with a summary of commands that were run. Many of these commands will involve be interactive (like using a text editor), so you won't be able to finish the tutorial by just copying and pasting these summary sections into your terminal. They're intended as a quick reference for when you adapt the tutorial's methods to your own projects.
-- Files will be written like this: *path/to/filename.ext*.
-- Absolute paths will begin with "~/" to indicate the directory that contains your project folder.
-- At the beginning of each section, and after changing directory, you will be reminded of where in the directory structure you should be, like this:
+- Each section ends with a summary of commands used. Many of these commands are interactive (like using a text editor), so you can't complete the tutorial by just copy-and-pasting the summary sections. They're intended as a quick reference when you adapt the tutorial's methods to your own projects.
+- Files are written like this: *path/to/filename.ext*.
+- Absolute paths begin with "~/" to indicate the directory containing your project folder.
+- At the beginning of each section, and after changing directory, are reminders of what directory you're in:
 
 .. admonition:: you are here
 
@@ -75,9 +75,15 @@ Conventions used in this tutorial
 Architecture of NeuroPipe
 -------------------------
 
-If your analysis were guaranteed to be identical for every subject, a set of analysis scripts, parameterized by subject id, would satisfy your needs; you would just run the analysis scripts for each subject. But if one subject differed from the others - say, they had to get out of the scanner, which cut a run short - then your analysis scripts would require conditional logic to deal with this, and other non-standard subjects. At the other extreme, if you made a copy of your analysis scripts for each subject, it would be simple to accomodate a non-standard subject by tweaking their scripts - independent of the rest. But that would complicate making a change in the analysis that applied to every subject, because you would have to edit the appropriate scripts for each subject.
+Before using NeuroPipe, you should understand how it's structured and why.
 
-NeuroPipe optimizes for both of these cases. Here's how: You make whatever scripts and files are necessary to analyze an ideal subject, then use them as a template that new subjects will be based on. This template is stored in the *subject-template* directory of your project. The files in this template are split into two types: those that may vary between subjects, and those that won't. The ones that may vary go into *subject-template/copy*, and they will be copied into each new subject's directory. The ones that won't vary go into *subject-template/link*, and they will be symlinked into each new subject's directory; that means that changing a linked files in any subject's directory will immediately change that file in all subject's directories. If you have a non-standard subject, you change the (copied) files within that subject's directory, and other subjects are unaffected. If you need to change the analysis for every subject, you change the linked files in the template, and the change is reflected in each subject's (linked) analysis scripts.
+Imagine your experiment needed no redesigns, your equipment never malfunctioned, and no subject moved, fell asleep, or didn't respond, etc... With the resulting data, your analysis pipeline could be blind to which subject it was analyzing; just throw some data in and it would do the same process.
+
+But, if one subject differed from the others--say, they coughed during a run, leaving half the data usable--then your pipeline would require conditional logic to deal with this one--perhaps a different model specification, in this case. The complexity of the pipeline would grow with each non-standard subject.
+
+At some point, it would become simpler to duplicate the pipeline for each subject and modify each copy as necessary. Imagine you do so, but then want a new statistical analysis for each subject. To accomplish that, you must now change each pipeline copy--a waste of time and likely source of bugs. The problem was caused by duplicating too much.
+
+NeuroPipe provides the flexibility to analyze non-standard subjects, while minimizing duplication, by making you specify which parts of your pipeline may vary between subjects and which wont. You make whatever scripts and files are necessary to analyze an ideal subject and then use those as a template that new subjects are based on. This template is stored in the *subject-template* directory of your project. The files that may vary between subjects go into *subject-template/copy*, and they will be copied into each new subject's directory. The ones that won't vary go into *subject-template/link*, and they will be symlinked into each new subject's directory; that means that changing a linked file in any subject's directory will immediately change that file in all subject's directories. If you have a non-standard subject, you change the (copied) files within that subject's directory, and other subjects are unaffected. If you must change the analysis for every subject, you change the linked files in the template, and the change is reflected in each subject's (linked) analysis scripts.
 
 This architecture is diagrammed in the PDF here_.
 
