@@ -199,7 +199,7 @@ This *README.txt* says your first step is to get some DICOM data and put it in a
 
   $ curl -u ntblab http://www.princeton.edu/ntblab/resources/0608101_conatt02.tar.gz > data/raw.tar.gz
 
-It will prompt you to enter a password; email ntblab@gmail.com to request access to this data if you don't have it.
+It will prompt you to enter a password; email ntblab@gmail.com to request access to this data if you don't have it. NOTE: *curl* is a generic tool for downloading files, and here we've directed it to download data that I put on Princeton's servers; it doesn't work in general to retrieve data after you've done a scan. On rondo at Princeton, you can use *~/prototype/link/scripts/retrieve-data-from-sun.sh* (which appears at *~/subjects/SUBJ/scripts/retrieve-data-from-sun.sh*) to get your data as long as your subject's folder name matches the subject ID used during for your scan session.
 
 **Summary**::
 
