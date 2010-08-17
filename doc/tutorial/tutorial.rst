@@ -425,7 +425,7 @@ Repeating the analysis for a new subject
 
    ~/ppa-hunt/subjects/0608101_conatt02
 
-Congratulations on analyzing your first subject with NeuroPipe! Now we'll do it all over again, but in a way that takes less effort on your part. FEAT recorded all parameters of the analysis you just ran in a file called *design.fsf* in its output directory, which was *analysis/firstlevel/localizer_hrf.feat/*. Our approach will be to take that file, replace any subject-specific settings with placeholders, and then for each new subject, automatically substitute in appropriate values for the placeholders and run feat on the resulting file.
+Congratulations on analyzing your first subject with NeuroPipe! Now, we'll do it again, but more automatically. FEAT recorded all parameters of the analysis you just ran, in a file called *design.fsf* in its output directory, which was *analysis/firstlevel/localizer_hrf.feat/*. Our approach is to take that file, replace subject-specific settings with placeholders, then for each new subject, automatically substitute appropriate values for the placeholders, and run FEAT with the resulting file.
 
 
 Templating the fsf file
@@ -439,11 +439,11 @@ Start by copying the *design.fsf* file for the analysis we just ran to a more ce
 
   $ mv analysis/firstlevel/localizer_hrf.feat/design.fsf fsf/localizer_hrf.fsf
 
-Now, open *fsf/localizer_hrf.fsf* in your favorite text editor. If you don't have a favorite, try this::
+We'll keep fsf files and their templates in this *fsf* folder. Now, open *fsf/localizer_hrf.fsf* in your favorite text editor. If you don't have a favorite, try this::
 
   $ nano fsf/localizer_hrf.fsf
 
-Make the following replacements, and when you're done, save the file as *fsf/localizer_hrf.fsf.template*. Be sure to include the spaces after "<?=" and before "?>".
+Make the following replacements and save the file as *fsf/localizer_hrf.fsf.template*. Be sure to include the spaces after "<?=" and before "?>".
 
 ::
  
@@ -453,11 +453,11 @@ Make the following replacements, and when you're done, save the file as *fsf/loc
   #. on the line starting with "set initial_highres_files(1) ", replace all of the text inside the quotes with "<?= $INITIAL_HIGHRES_FILE ?>"
   #. on the line starting with "set highres_files(1)", replace all of the text inside the quotes with "<?= $HIGHRES_FILE ?>"
 
-Those bits you replaced with placeholders are the parameters that will need to vary when your analysis is run for a different subject, or on a different computer. After saving the file as *fsf/localizer_hrf.fsf.template*, make it available in new subject directories, with this command::
+Those bits you replaced with placeholders are the parameters that must change when analyzing a different subject, or using a different computer. After saving the file as *fsf/localizer_hrf.fsf.template*, copy it to the template so it's available for future subjects::
 
   $ cp fsf/localizer_hrf.fsf.template ../../subject-template/copy/fsf/
 
-Remember that the *copy* subdirectory of *subject-template* contains files that should initially be the same for each subject, but that may need to vary between subjects. We put the fsf file there because it's possible that we'll need to tweak it for future subjects - to fix registration problems, for instance.
+Recall that the *subject-template/copy* holds files that should initially be the same, but may need to vary between subjects. We put the fsf file there because it may need to be tweaked for future subjects - to fix registration problems, for instance.
 
 **Summary**::
 
@@ -473,11 +473,11 @@ Rendering the template
 
    ~/ppa-hunt/subjects/0608101_conatt02
 
-Now, we have a template. To use that template, we'll need a script that fills it in appropriately for each subject. This filling-in process is called rendering, and a script that does most of the work for you is provided at *scripts/render-fsf-templates.sh*. Open that in your text editor::
+Now, we have a template fsf file. To use that template, we need a script that fills it in, appropriately, for each subject. This filling-in process is called rendering, and a script that does most of the work is provided at *scripts/render-fsf-templates.sh*. Open that in your text editor::
 
   $ nano scripts/render-fsf-templates.sh
 
-It consists of a function called render_firstlevel. We'll use that function to render the localizer template we just made. Copy these lines as-is onto the end of that file, then save it::
+It consists of a function called render_firstlevel, which we'll use to render the localizer template. Copy these lines as-is onto the end of that file, then save it::
 
   render_firstlevel $FSF_DIR/localizer_hrf.fsf.template \
                     $FIRSTLEVEL_DIR/localizer_hrf.feat \
@@ -487,11 +487,11 @@ It consists of a function called render_firstlevel. We'll use that function to r
                     $NIFTI_DIR/${SUBJ}_t1_mprage_sag01.nii.gz \
                     > $FSF_DIR/localizer_hrf.fsf
 
-That hunk of code calls the function "render_firstlevel" with a bunch of arguments that use the variables in *globals.sh*.  Take a look at *globals.sh*::
+That hunk of code calls the function render_firstlevel, passing it the values to substitute for the template's placeholders. These values use a bunch of completely-uppercase variables, which are defined in *globals.sh*.  Examine *globals.sh*::
 
   $ less globals.sh
 
-This file sets variables that define the structure of each subject's directory. By building the call with those variables, we won't need to modify it for each subject.
+*scripts/convert-and-wrap-raw-data.sh* needs to know where to look for the subject's raw data, and where to put the converted and wrapped data. *scripts/qa-wrapped-data.sh* needs to know where that wrapped data was put. To avoid hardcoding that information into each script, those locations are defined as variables in *globals.sh*, which each script then loads. By building the call to render_firstlevel with those variables, we won't need to modify it for each subject, and if you ever change the structure of your subject directory, all you must do is modify *globals.sh* to reflect the changes.
 
 **Summary**::
 
@@ -506,9 +506,9 @@ Automating the analysis
 
    ~/ppa-hunt/subjects/0608101_conatt02
 
-*prep.sh* already calls this *render-fsf-templates.sh* script, and *analyze.sh* calls *prep.sh*, so the only thing left to automate is running *feat* on the rendered fsf file from a script that's called by *analyze.sh*. We'll make a new script called *hrf.sh* for that purpose. Make the script with this command::
+As we saw earlier, *prep.sh* already calls *render-fsf-templates.sh*. *analyze.sh* calls *prep.sh*, so to automate the analysis, all that remains is running *feat* on the rendered fsf file from a script that's called by *analyze.sh*. We'll make a new script called *localizer.sh* for that purpose. Make the script with this command::
 
-  $ nano hrf.sh
+  $ nano localizer.sh
 
 Then fill it with this text::
 
@@ -516,27 +516,27 @@ Then fill it with this text::
   source globals.sh
   feat $FSF_DIR/localizer_hrf.fsf
 
-The first line says that this is a BASH script. The second line loads variables that are used by many scripts in this subject's directory. The third line calls the command *feat*, which runs FEAT without the graphical interface. The argument passed to *feat* is the path to the fsf file we want it to use, but notice that the path is specified with a variable "$FSF_DIR". That variable is defined in *globals.sh*.
+The first line says that this is a BASH script. The second line loads variables from *globals.sh*. The third line calls *feat*, which runs FEAT without the graphical interface. The argument passed to *feat* is the path to the fsf file for it to use. Notice that the path is specified with a variable "$FSF_DIR", which is defined in *globals.sh*.
 
-To make this script available in new subject directories, do this::
+To make this script available in future subject directories, copy it to the template::
 
-  $ cp hrf.sh ../../subject-template/link/
+  $ cp localizer.sh ../../subject-template/link/
 
-Remember, the *subject-template/link* directory holds files that should be identical in each subject's directory. Any file in that directory will be linked into each new subject's directory, which means that when one of the linked files is changed in one subject's directory (or in *subject-template/link*), the change is immediately reflected in all the other links to that file.
+Remember, *subject-template/link* holds files that should be identical in each subject's directory. Any file in that directory will be linked into each new subject's directory: when a linked file is changed in one subject's directory (or in *subject-template/link*), the change is immediately reflected in all other links to that file.
 
-Now we that we have a script for running the analysis, we'll call it from *analyze.sh* so that the entire analysis, from preprocessing the data to running the GLM, all happens when you run *analyze.sh*. Open *analyze.sh* in your text editor::
+Now that we have a script for running the GLM analysis, we'll call it from *analyze.sh* so that one command does the entire analysis. Open *analyze.sh* in your text editor::
 
   $ nano analyze.sh
 
 After the line that runs *prep.sh*, add this line::
   
-  bash hrf.sh
+  bash localizer.sh
 
-*analyze.sh* is linked to *~/subject-template/link/analyze.sh*, so the change you just made will be reflected in *analyze.sh* in all current and future subject directories. Let's test that this worked by analyzing a new subject. First, move back to the project's root directory::
+*analyze.sh* is linked to *~/subject-template/link/analyze.sh*, so the change you just made will be reflected in *analyze.sh* in all current and future subject directories. Test that worked by analyzing a new subject. First, move back to the project's root directory::
 
   $ cd ../../
 
-Set up a directory for the new subject::
+Scaffold a directory for the new subject::
 
   $ ./scaffold 0608102_conatt02.
 
@@ -558,12 +558,12 @@ Now, analyze it::
 
   $ ./analyze.sh
 
-FEAT should now be churning away on the new data.
+FEAT should be churning away on the new data.
 
 **Summary**::
  
-  $ nano hrf.sh
-  $ cp hrf.sh ../../subject-template/link/
+  $ nano localizer.sh
+  $ cp localizer.sh ../../subject-template/link/
   $ nano analyze.sh
   $ cd ../../
   $ ./scaffold 0608102_conatt02.
