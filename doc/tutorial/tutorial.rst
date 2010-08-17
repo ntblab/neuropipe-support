@@ -83,7 +83,7 @@ But, if one subject differed from the others--say, they coughed during a run, le
 
 At some point, it would become simpler to duplicate the pipeline for each subject and modify each copy as necessary. Imagine you do so, but then want a new statistical analysis for each subject. To accomplish that, you must now change each pipeline copy--a waste of time and likely source of bugs. The problem was caused by duplicating too much.
 
-NeuroPipe provides the flexibility to analyze non-standard subjects, while minimizing duplication, by making you specify which parts of your pipeline may vary between subjects and which wont. You make whatever scripts and files are necessary to analyze an ideal subject and then use those as a template that new subjects are based on. This template is stored in the *subject-template* directory of your project. The files that may vary between subjects go into *subject-template/copy*, and they will be copied into each new subject's directory. The ones that won't vary go into *subject-template/link*, and they will be symlinked into each new subject's directory; that means that changing a linked file in any subject's directory will immediately change that file in all subject's directories. If you have a non-standard subject, you change the (copied) files within that subject's directory, and other subjects are unaffected. If you must change the analysis for every subject, you change the linked files in the template, and the change is reflected in each subject's (linked) analysis scripts.
+NeuroPipe provides the flexibility to analyze non-standard subjects, while minimizing duplication, by making you specify which parts of your pipeline may vary between subjects and which wont. You make whatever scripts and files are necessary to analyze an ideal subject and then use those as a basis for each new subject's pipeline. This is called the prototype and it's stored in the *prototype* directory of your project. The files that may vary between subjects go into *prototype/copy*, and they will be copied into each new subject's directory. The ones that won't vary go into *prototype/link*, and they will be symlinked into each new subject's directory; that means that changing a linked file in any subject's directory will immediately change that file in all subject's directories. If you have a non-standard subject, you change the (copied) files within that subject's directory, and other subjects are unaffected. If you must change the analysis for every subject, you change the linked files in the prototype, and the change is reflected in each subject's (linked) analysis scripts.
 
 This architecture is diagrammed in the PDF here_.
 
@@ -118,7 +118,7 @@ Move into that directory and look around::
 
    ~/ppa-hunt
 
-You should see a *README.txt* file, a command called *scaffold*, a file called *protocol.txt*, and a directory called *subject-template*. Start by reading *README.txt*::
+You should see a *README.txt* file, a command called *scaffold*, a file called *protocol.txt*, and a directory called *prototype*. Start by reading *README.txt*::
 
   $ less README.txt
 
@@ -139,13 +139,13 @@ Hit "q", and open *README.txt* again::
 
   $ less README.txt
 
-The next instruction is to open *subject-template/copy/run-order.txt*. Hit "q", then read that file::
+The next instruction is to open *prototype/copy/run-order.txt*. Hit "q", then read that file::
 
-  $ less subject-template/copy/run-order.txt
+  $ less prototype/copy/run-order.txt
 
 As with *protocol.txt*, a *run-order.txt* file is already made for you. Download that file, and put it where *README.txt* says::
 
-  $ curl http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/run-order.txt > subject-template/copy/run-order.txt
+  $ curl http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/run-order.txt > prototype/copy/run-order.txt
 
 Open *README.txt* one last time::
 
@@ -164,8 +164,8 @@ It says the next step is to collect data for a subject. That's already been done
   $ wget http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/protocol.txt
   $ less protocol.txt
   $ less README.txt
-  $ less subject-template/copy/run-order.txt
-  $ curl http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/run-order.txt > subject-template/copy/run-order.txt
+  $ less prototype/copy/run-order.txt
+  $ curl http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/run-order.txt > prototype/copy/run-order.txt
   $ less README.txt
 
 
@@ -220,7 +220,7 @@ Open *README.txt* again::
 
   $ less README.txt
 
-We already set up *run-order.txt*, and put it in *subject-template/copy/*. That directory is special. Any file or folder in it will be copied into each new subject directory that's created by *scaffold*. To check that *run-order.txt* came through all right, hit "q" to get out of *README.txt*, and run this command::
+We already set up *run-order.txt*, and put it in *prototype/copy/*. That directory is special. Any file or folder in it will be copied into each new subject directory that's created by *scaffold*. To check that *run-order.txt* came through all right, hit "q" to get out of *README.txt*, and run this command::
 
   $ less run-order.txt
 
@@ -453,17 +453,17 @@ Make the following replacements and save the file as *fsf/localizer_hrf.fsf.temp
   #. on the line starting with "set initial_highres_files(1) ", replace all of the text inside the quotes with "<?= $INITIAL_HIGHRES_FILE ?>"
   #. on the line starting with "set highres_files(1)", replace all of the text inside the quotes with "<?= $HIGHRES_FILE ?>"
 
-Those bits you replaced with placeholders are the parameters that must change when analyzing a different subject, or using a different computer. After saving the file as *fsf/localizer_hrf.fsf.template*, copy it to the template so it's available for future subjects::
+Those bits you replaced with placeholders are the parameters that must change when analyzing a different subject, or using a different computer. After saving the file as *fsf/localizer_hrf.fsf.template*, copy it to the prototype so it's available for future subjects::
 
-  $ cp fsf/localizer_hrf.fsf.template ../../subject-template/copy/fsf/
+  $ cp fsf/localizer_hrf.fsf.prototype ../../prototype/copy/fsf/
 
-Recall that the *subject-template/copy* holds files that should initially be the same, but may need to vary between subjects. We put the fsf file there because it may need to be tweaked for future subjects - to fix registration problems, for instance.
+Recall that the *prototype/copy* holds files that should initially be the same, but may need to vary between subjects. We put the fsf file there because it may need to be tweaked for future subjects - to fix registration problems, for instance.
 
 **Summary**::
 
   $ mv analysis/firstlevel/localizer_hrf.feat/design.fsf fsf/localizer_hrf.fsf
   $ nano fsf/localizer_hrf.fsf
-  $ cp fsf/localizer_hrf.fsf.template ../../subject-template/copy/fsf/
+  $ cp fsf/localizer_hrf.fsf.template ../../prototype/copy/fsf/
 
 
 Rendering the template
@@ -518,11 +518,11 @@ Then fill it with this text::
 
 The first line says that this is a BASH script. The second line loads variables from *globals.sh*. The third line calls *feat*, which runs FEAT without the graphical interface. The argument passed to *feat* is the path to the fsf file for it to use. Notice that the path is specified with a variable "$FSF_DIR", which is defined in *globals.sh*.
 
-To make this script available in future subject directories, copy it to the template::
+To make this script available in future subject directories, copy it to the prototype::
 
-  $ cp localizer.sh ../../subject-template/link/
+  $ cp localizer.sh ../../prototype/link/
 
-Remember, *subject-template/link* holds files that should be identical in each subject's directory. Any file in that directory will be linked into each new subject's directory: when a linked file is changed in one subject's directory (or in *subject-template/link*), the change is immediately reflected in all other links to that file.
+Remember, *prototype/link* holds files that should be identical in each subject's directory. Any file in that directory will be linked into each new subject's directory: when a linked file is changed in one subject's directory (or in *prototype/link*), the change is immediately reflected in all other links to that file.
 
 Now that we have a script for running the GLM analysis, we'll call it from *analyze.sh* so that one command does the entire analysis. Open *analyze.sh* in your text editor::
 
@@ -532,7 +532,7 @@ After the line that runs *prep.sh*, add this line::
   
   bash localizer.sh
 
-*analyze.sh* is linked to *~/subject-template/link/analyze.sh*, so the change you just made will be reflected in *analyze.sh* in all current and future subject directories. Test that worked by analyzing a new subject. First, move back to the project's root directory::
+*analyze.sh* is linked to *~/prototype/link/analyze.sh*, so the change you just made will be reflected in *analyze.sh* in all current and future subject directories. Test that worked by analyzing a new subject. First, move back to the project's root directory::
 
   $ cd ../../
 
@@ -563,7 +563,7 @@ FEAT should be churning away on the new data.
 **Summary**::
  
   $ nano localizer.sh
-  $ cp localizer.sh ../../subject-template/link/
+  $ cp localizer.sh ../../prototype/link/
   $ nano analyze.sh
   $ cd ../../
   $ ./scaffold 0608102_conatt02.
