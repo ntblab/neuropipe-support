@@ -666,8 +666,8 @@ Repeating the group analysis with a new subject
 To automate the group analysis to work without additional effort when new subjects are added, we follow the same sort of procedure we did for within-subjects analyses: take the fsf file created when we manually ran FEAT, turn it into a template, write a script to render that template appropriately, then write a script to run FEAT on the rendered fsf file.
 
 
-Templating the fsf file
------------------------
+Templating the group fsf file
+-----------------------------
 
 .. admonition:: you are here
 
@@ -691,7 +691,7 @@ Make the following replacements and save the file. Be sure to include the spaces
 ::
  
   #. on the line starting with "set fmri(outputdir)", replace all of the text inside the quotes with "<?= $OUTPUT_DIR ?>"
-  #. on the line starting with "set fmri(regstandard) ", replace all of the text inside the quotes with "<?= $STANDARD_BRAIN ?>"
+  #. on the line starting with "set fmri(regstandard) ", copy or write down the text inside the quotes, then replace it with "<?= $STANDARD_BRAIN ?>"
   #. on the line starting with "set fmri(npts)", replace the number at the end of the line with "<?= count($subjects) ?>"
   #. on the line starting with "set fmri(multiple)", replace the number at the end of the line with "<?= count($subjects) ?>"
 
@@ -729,3 +729,75 @@ Save the file.
   $ nano fsf/localizer_hrf.fsf.template
 
 
+Automating the group analysis
+-----------------------------
+
+.. admonition:: you are here
+
+   ~/ppa-hunt/group
+
+Now that we have a template for the group localizer analysis fsf file, all that's left is to render it and run FEAT on the rendered fsf file. Move up to the project directory and make a file called *localizer.sh* with your text editor::
+
+  $ cd ..
+  $ nano localizer.sh
+
+.. admonition:: you are here
+
+   ~/ppa-hunt
+
+Copy these lines into localizer.sh::
+
+  #!/bin/bash
+  # This script expects to be run in the directory it's contained by.
+
+  STANDARD_BRAIN=/usr/share/fsl/data/standard/MNI152_T1_2mm_brain.nii.gz
+  PROJECT_DIR=$(pwd)
+  SUBJECTS_DIR=subjects
+
+  ALL_SUBJECTS=$(ls -1d $SUBJECTS_DIR/*/ | cut --delimiter=/ --fields=2)
+
+  GROUP_DIR=group
+
+
+  # This function defines variables needed to render higher-level fsf templates.
+  function define_vars {
+    output_dir=$1
+
+    echo "
+    <?php
+    \$OUTPUT_DIR = '$output_dir';
+    \$STANDARD_BRAIN = '$STANDARD_BRAIN';
+    \$SUBJECTS_DIR = '$PROJECT_DIR/$SUBJECTS_DIR';
+    "
+
+    echo '$subjects = array();'
+    for subj in $ALL_SUBJECTS; do
+      echo "array_push(\$subjects, '$subj');";
+    done
+
+    echo "
+    ?>
+    "
+  }
+
+  # Form a complete template by prepending variable definitions to the template,
+  # then render it with PHP and run FEAT on the rendered fsf file.
+  FSF_TEMPLATE=$GROUP_DIR/fsf/localizer_hrf.fsf.template
+  FSF_FILE=$GROUP_DIR/fsf/localizer_hrf.fsf
+  output_dir=$GROUP_DIR/analysis/localizer_hrf.gfeat
+  define_vars $output_dir | cat - "$FSF_TEMPLATE" | php > "$FSF_FILE"
+  feat "$FSF_FILE"
+
+If the text following "STANDARD_BRAIN=" differs from what you copied out of the fsf file in the previous section, replace it with that text you copied.
+
+Save and close the script, then run it to test that everything works::
+
+  $ bash localizer.sh
+
+A webpage should open in your browser showing FEAT's progress. Because we manually ran this analysis and put its output into *~/ppa-hunt/group/analysis/localizer_hrf.gfeat*, FEAT should have created a new directory at *~/ppa-hunt/group/analysis/localizer_hrf+.gfeat*, and be showing you the analysis running in that directory.
+
+**Summary**::
+
+  $ cd ..
+  $ nano localizer.sh
+  $ bash localizer.sh
