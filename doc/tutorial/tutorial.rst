@@ -608,19 +608,20 @@ Combining within-subjects analyses into a group analysis
 
    ~/ppa-hunt/subjects/0608101_conatt02
 
-Now that we've found the PPAs for two subjects individually, it's time to perform a group analysis to learn how reliable the PPA location is across these subjects. We'll use FEAT again to run what it calls a "higher-level analysis", which takes the information from those "first-level" analyses that we just did. The process will be very similar to that in `GLM analysis with FEAT (first-level)`_.
+Now that we've found the PPAs for two subjects individually, it's time to perform a group analysis to learn how reliable the PPA location is across these subjects. We'll use FEAT again to run what it calls a "higher-level analysis", which takes the information from those "first-level" analyses that we just did. The process will be very similar to that in `GLM analysis with FEAT (first-level)`_. When running within-subjects analyses, we stored FEAT folders, scripts, and fsf files in the subjects's folders; now that we're doing group analyses, we'll store all of those under *~/group*.
 
 
 GLM analysis with FEAT (higher-level)
 -------------------------------------
 
-Move up to the root project folder::
+Move up to the root project folder, then to the group folder::
 
   $ cd ../../
+  $ cd group
 
 .. admonition:: you are here
 
-   ~/ppa-hunt
+   ~/ppa-hunt/group
 
 Launch FEAT::
 
@@ -630,7 +631,7 @@ Launch FEAT::
 The Data tab
 ''''''''''''
 
-Change the drop-down in the top left from "First-level analysis" to "Higher-level analysis". This will change the stuff you see below. Change "Number of inputs" to 2, because we're combining 2 within-subjects analyses, then click "Select FEAT directories". For the first directory, select *~/ppa-hunt/subjects/0608101_conatt02/analysis/firstlevel/localizer_hrf.feat*, and for the second, select *~/ppa-hunt/subjects/0608102_conatt02/analysis/firstlevel/localizer_hrf.feat*. Set the output directory to *~/ppa-hunt/group/analysis/localizer_hrf*.
+Change the drop-down in the top left from "First-level analysis" to "Higher-level analysis". This will change the stuff you see below. Set "Number of inputs" to 2, because we're combining 2 within-subjects analyses, then click "Select FEAT directories". For the first directory, select *~/ppa-hunt/subjects/0608101_conatt02/analysis/firstlevel/localizer_hrf.feat*, and for the second, select *~/ppa-hunt/subjects/0608102_conatt02/analysis/firstlevel/localizer_hrf.feat*. Set the output directory to *~/ppa-hunt/group/analysis/localizer_hrf*.
 
 Go to the Stats tab.
 
@@ -650,10 +651,81 @@ Finding the group's PPA
 
 .. admonition:: you are here
 
-   ~/ppa-hunt
+   ~/ppa-hunt/group
 
 When the analysis finishes, open FSLview::
 
   $ fslview &
 
 Click File>Open Standard and accept the default. Click File>Add, and select *~/ppa-hunt/group/analysis/localizer_hrf.gfeat/cope3.feat/stats/zstat1.nii.gz*. 
+
+
+Repeating the group analysis with a new subject
+===============================================
+
+To automate the group analysis to work without additional effort when new subjects are added, we follow the same sort of procedure we did for within-subjects analyses: take the fsf file created when we manually ran FEAT, turn it into a template, write a script to render that template appropriately, then write a script to run FEAT on the rendered fsf file.
+
+
+Templating the fsf file
+-----------------------
+
+.. admonition:: you are here
+
+   ~/ppa-hunt/group
+
+When we made a template fsf file for the within-subject analyses, we didn't have to change the structure of the template, only replace single lines with placeholders. But to template a higher-level fsf file, we'll need to repeat whole sections of the fsf file for each subject going into the group analysis. To accomplish this, we'll use PHP_ to render the templates, and write loops_ for those sections of the template that need repeating for each subject. You won't need to know PHP to follow the steps below, but if you're curious about what we're doing, read that page on loops.
+
+.. _PHP: http://en.wikipedia.org/wiki/PHP
+.. _loops: http://www.php.net/manual/en/control-structures.for.php
+
+Start by copying the *design.fsf* file for the group analysis we just ran to *~/group/fsf*, where we'll store fsf files and their templates::
+
+  $ mv analysis/localizer_hrf.gfeat/design.fsf fsf/localizer_hrf.fsf
+
+Now, open *fsf/localizer_hrf.fsf* in your favorite text editor::
+
+  $ nano fsf/localizer_hrf.fsf
+
+Make the following replacements and save the file as *fsf/localizer_hrf.fsf.template*. Be sure to include the spaces after each "<?=" and before each "?>".
+
+::
+ 
+  #. on the line starting with "set fmri(outputdir)", replace all of the text inside the quotes with "<?= $OUTPUT_DIR ?>"
+  #. on the line starting with "set fmri(regstandard) ", replace all of the text inside the quotes with "<?= $STANDARD_BRAIN ?>"
+  #. on the line starting with "set fmri(npts)", replace the number at the end of the line with "<?= count($subjects) ?>"
+  #. on the line starting with "set fmri(multiple)", replace the number at the end of the line with "<?= count($subjects) ?>"
+
+Those were the parts of the template that won't vary with the number of subjects; now we template the parts that will, using loops. 
+
+Find the line that says "# 4D AVW data or FEAT directory (1)". Replace it and the next 4 lines with::
+
+  <?php for ($i=0; $i < count($subjects); $i++) { ?>
+  # 4D AVW data or FEAT directory (<?= $i+1 ?>)
+  set feat_files(<?= $i+1 ?>) "<?= $SUBJ_DIR ?>/<?= $subjects[$i] ?>/analysis/firstlevel/localizer_hrf.feat"
+
+  <?php } ?>
+
+Find the line that says "# Higher-level EV value for EV 1 and input 1". Replace it and the next 4 lines with::
+
+  <?php for ($i=1; $i < count($subjects)+1; $i++) { ?>
+  # Higher-level EV value for EV 1 and input <?= $i ?> 
+  set fmri(evg<?= $i ?>.1) 1
+
+  <?php } ?>
+
+Find the line that says "# Group membership for input 1". Replace it and the next 4 lines with::
+
+  <?php for ($i=1; $i < count($subjects)+1; $i++) { ?>
+  # Group membership for input <?= $i ?> 
+  set fmri(groupmem.<?= $i ?>) 1
+
+  <?php } ?>
+
+As a 
+Now save the file as *fsf/localizer_hrf.fsf.template*.
+
+**Summary**::
+
+  $ mv analysis/firstlevel/localizer_hrf.feat/design.fsf fsf/localizer_hrf.fsf
+  $ nano fsf/localizer_hrf.fsf
+
