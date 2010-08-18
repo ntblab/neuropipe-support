@@ -643,8 +643,8 @@ When the analysis finishes, open FSLview::
 Click File>Open Standard and accept the default. Click File>Add, and select *~/ppa-hunt/group/analysis/localizer_hrf.gfeat/cope3.feat/stats/zstat1.nii.gz*. 
 
 
-Repeating the group analysis with a new subject
-===============================================
+Automating the group analysis
+=============================
 
 To automate the group analysis to work without additional effort when new subjects are added, we follow the same sort of procedure we did for within-subjects analyses: take the fsf file created when we manually ran FEAT, turn it into a template, write a script to render that template appropriately, then write a script to run FEAT on the rendered fsf file.
 
