@@ -100,7 +100,6 @@ Setting up your NeuroPipe project
 NeuroPipe is a sort of skeleton for fMRI analysis projects using FSL. To work with it, you download that skeleton, then flesh it out.
 
 We'll use git to grab the latest copy of NeuroPipe. But before that, configure git with your current name, email, and text editor of choice (if you haven't already)::
-<<<<<<< HEAD:doc/tutorial/tutorial.rst
 
   $ git config --global user.name "YOUR NAME HERE"
   $ git config --global user.email "YOUR_EMAIL@HERE.COM"
@@ -110,17 +109,6 @@ Now, using git, download NeuroPipe into a folder called *ppa-hunt*::
 
   $ git clone git://github.com/ntblab/neuropipe.git ppa-hunt
 
-=======
-
-  $ git config --global user.name "YOUR NAME HERE"
-  $ git config --global user.email "YOUR_EMAIL@HERE.COM"
-  $ git config --global core.editor nano
-
-Now, using git, download NeuroPipe into a folder called *ppa-hunt*::
-
-  $ git clone git://github.com/ntblab/neuropipe.git ppa-hunt
-
->>>>>>> 54fee1bbc78dd6d3185ad4c91850792333293f9a:doc/tutorial/tutorial.rst
 Move into that directory and look around::
 
   $ cd ppa-hunt
