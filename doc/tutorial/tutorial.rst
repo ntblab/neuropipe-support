@@ -680,13 +680,13 @@ When we made a template fsf file for the within-subject analyses, we didn't have
 
 Start by copying the *design.fsf* file for the group analysis we just ran to *~/group/fsf*, where we'll store fsf files and their templates::
 
-  $ mv analysis/localizer_hrf.gfeat/design.fsf fsf/localizer_hrf.fsf
+  $ mv analysis/localizer_hrf.gfeat/design.fsf fsf/localizer_hrf.fsf.template
 
-Now, open *fsf/localizer_hrf.fsf* in your favorite text editor::
+Now, open *fsf/localizer_hrf.fsf.template* in your favorite text editor::
 
-  $ nano fsf/localizer_hrf.fsf
+  $ nano fsf/localizer_hrf.fsf.template
 
-Make the following replacements and save the file as *fsf/localizer_hrf.fsf.template*. Be sure to include the spaces after each "<?=" and before each "?>".
+Make the following replacements and save the file. Be sure to include the spaces after each "<?=" and before each "?>".
 
 ::
  
@@ -721,11 +721,11 @@ Find the line that says "# Group membership for input 1". Replace it and the nex
 
   <?php } ?>
 
-As a 
-Now save the file as *fsf/localizer_hrf.fsf.template*.
+Save the file.
 
 **Summary**::
 
-  $ mv analysis/firstlevel/localizer_hrf.feat/design.fsf fsf/localizer_hrf.fsf
-  $ nano fsf/localizer_hrf.fsf
+  $ mv analysis/localizer_hrf.gfeat/design.fsf fsf/localizer_hrf.fsf.template
+  $ nano fsf/localizer_hrf.fsf.template
+
 
