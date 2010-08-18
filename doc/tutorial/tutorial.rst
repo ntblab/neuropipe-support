@@ -733,6 +733,8 @@ Copy these lines into localizer.sh::
   #!/bin/bash
   # This script expects to be run in the directory it's contained by.
 
+  PATH=$PATH:/exanet/ntb/packages/php-5.3.2/sapi/cli  # this is for rondo until php is installed
+
   STANDARD_BRAIN=/usr/share/fsl/data/standard/MNI152_T1_2mm_brain.nii.gz
   PROJECT_DIR=$(pwd)
   SUBJECTS_DIR=subjects
