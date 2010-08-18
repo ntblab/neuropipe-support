@@ -356,7 +356,6 @@ These design files are provided for you. Make a directory to put them in, then d
   $ mkdir design
   $ curl http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/scene.txt >design/scene.txt
   $ curl http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/face.txt >design/face.txt
-<<<<<<< HEAD:doc/tutorial/tutorial.rst
 
 Examine each of these files and refer to *protocol.txt* as necessary::
 
@@ -371,22 +370,6 @@ To use these files to specify the design, click the "Full model setup" button. S
 
 .. image:: http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/feat-stats-ev1.png
 
-=======
-
-Examine each of these files and refer to *protocol.txt* as necessary::
-
-  $ less design/scene.txt
-  $ less design/face.txt
-
-When making these design files for your own projects, do not use a Windows machine or you will likely have `problems with line endings`_.
-
-.. _`problems with line endings`: http://en.wikipedia.org/wiki/Newline#Common_problems
-
-To use these files to specify the design, click the "Full model setup" button. Set EV name to "scene". FSL calls regressors EV's, short for Explanatory Variables. Set "Basic shape" to "Custom (3 column format)" and select *design/scene.txt*. That file on its own describes a square wave; to account for the shape of the BOLD response, we convolve it with another function that models the hemodynamic response to a stimulus. Set "Convolution" to "Double-Gamma HRF". Now to set up the face regressor set "Number of original EVs" to 2 and click to tab 2.
-
-.. image:: http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/feat-stats-ev1.png
-
->>>>>>> 54fee1bbc78dd6d3185ad4c91850792333293f9a:doc/tutorial/tutorial.rst
 Set EV name to "face". Set "Basic shape" to "Custom (3 column format)" and select *design/face.txt*. Change "Convolution" to "Double-Gamma HRF", like we did for the scene regressor.
 
 .. image:: http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/feat-stats-ev2.png
