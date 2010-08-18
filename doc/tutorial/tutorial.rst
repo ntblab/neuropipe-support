@@ -571,3 +571,206 @@ FEAT should be churning away on the new data.
   $ curl -u ntblab http://www.princeton.edu/ntblab/resources/0608102_conatt02.tar.gz > data/raw.tar.gz
   $ ./analyze.sh
 
+
+Combining within-subjects analyses into a group analysis
+========================================================
+
+.. admonition:: you are here
+
+   ~/ppa-hunt/subjects/0608101_conatt02
+
+Now that we've found the PPAs for two subjects individually, it's time to perform a group analysis to learn how reliable the PPA location is across these subjects. We'll use FEAT again to run what it calls a "higher-level analysis", which takes the information from those "first-level" analyses that we just did. The process will be very similar to that in `GLM analysis with FEAT (first-level)`_. When running within-subjects analyses, we stored FEAT folders, scripts, and fsf files in the subjects's folders; now that we're doing group analyses, we'll store all of those under *~/group*.
+
+
+GLM analysis with FEAT (higher-level)
+-------------------------------------
+
+Move up to the root project folder, then to the group folder::
+
+  $ cd ../../
+  $ cd group
+
+.. admonition:: you are here
+
+   ~/ppa-hunt/group
+
+Launch FEAT::
+
+  $ Feat &
+
+
+The Data tab
+''''''''''''
+
+Change the drop-down in the top left from "First-level analysis" to "Higher-level analysis". This will change the stuff you see below. Set "Number of inputs" to 2, because we're combining 2 within-subjects analyses, then click "Select FEAT directories". For the first directory, select *~/ppa-hunt/subjects/0608101_conatt02/analysis/firstlevel/localizer_hrf.feat*, and for the second, select *~/ppa-hunt/subjects/0608102_conatt02/analysis/firstlevel/localizer_hrf.feat*. Set the output directory to *~/ppa-hunt/group/analysis/localizer_hrf*.
+
+Go to the Stats tab.
+
+.. image:: http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/group-feat-data.png
+
+
+The Stats tab
+'''''''''''''
+
+Click "Model setup wizard", leave it on the default option of "single group average", and click "Process". That's it! Hit "Go" to run the analysis.
+
+.. image:: http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/group-feat-stats.png
+
+
+Finding the group's PPA
+-----------------------
+
+.. admonition:: you are here
+
+   ~/ppa-hunt/group
+
+When the analysis finishes, open FSLview::
+
+  $ fslview &
+
+Click File>Open Standard and accept the default. Click File>Add, and select *~/ppa-hunt/group/analysis/localizer_hrf.gfeat/cope3.feat/stats/zstat1.nii.gz*. 
+
+
+Automating the group analysis
+=============================
+
+To automate the group analysis to work without additional effort when new subjects are added, we follow the same sort of procedure we did for within-subjects analyses: take the fsf file created when we manually ran FEAT, turn it into a template, write a script to render that template appropriately, then write a script to run FEAT on the rendered fsf file.
+
+
+Templating the group fsf file
+-----------------------------
+
+.. admonition:: you are here
+
+   ~/ppa-hunt/group
+
+When we made a template fsf file for the within-subject analyses, we didn't have to change the structure of the template, only replace single lines with placeholders. But to template a higher-level fsf file, we'll need to repeat whole sections of the fsf file for each subject going into the group analysis. To accomplish this, we'll use PHP_ to render the templates, and write loops_ for those sections of the template that need repeating for each subject. You won't need to know PHP to follow the steps below, but if you're curious about what we're doing, read that page on loops.
+
+.. _PHP: http://en.wikipedia.org/wiki/PHP
+.. _loops: http://www.php.net/manual/en/control-structures.for.php
+
+Start by copying the *design.fsf* file for the group analysis we just ran to *~/group/fsf*, where we'll store fsf files and their templates::
+
+  $ mv analysis/localizer_hrf.gfeat/design.fsf fsf/localizer_hrf.fsf.template
+
+Now, open *fsf/localizer_hrf.fsf.template* in your favorite text editor::
+
+  $ nano fsf/localizer_hrf.fsf.template
+
+Make the following replacements and save the file. Be sure to include the spaces after each "<?=" and before each "?>".
+
+::
+ 
+  #. on the line starting with "set fmri(outputdir)", replace all of the text inside the quotes with "<?= $OUTPUT_DIR ?>"
+  #. on the line starting with "set fmri(regstandard) ", copy or write down the text inside the quotes, then replace it with "<?= $STANDARD_BRAIN ?>"
+  #. on the line starting with "set fmri(npts)", replace the number at the end of the line with "<?= count($subjects) ?>"
+  #. on the line starting with "set fmri(multiple)", replace the number at the end of the line with "<?= count($subjects) ?>"
+
+Those were the parts of the template that won't vary with the number of subjects; now we template the parts that will, using loops. 
+
+Find the line that says "# 4D AVW data or FEAT directory (1)". Replace it and the next 4 lines with::
+
+  <?php for ($i=0; $i < count($subjects); $i++) { ?>
+  # 4D AVW data or FEAT directory (<?= $i+1 ?>)
+  set feat_files(<?= $i+1 ?>) "<?= $SUBJ_DIR ?>/<?= $subjects[$i] ?>/analysis/firstlevel/localizer_hrf.feat"
+
+  <?php } ?>
+
+Find the line that says "# Higher-level EV value for EV 1 and input 1". Replace it and the next 4 lines with::
+
+  <?php for ($i=1; $i < count($subjects)+1; $i++) { ?>
+  # Higher-level EV value for EV 1 and input <?= $i ?> 
+  set fmri(evg<?= $i ?>.1) 1
+
+  <?php } ?>
+
+Find the line that says "# Group membership for input 1". Replace it and the next 4 lines with::
+
+  <?php for ($i=1; $i < count($subjects)+1; $i++) { ?>
+  # Group membership for input <?= $i ?> 
+  set fmri(groupmem.<?= $i ?>) 1
+
+  <?php } ?>
+
+Save the file.
+
+**Summary**::
+
+  $ mv analysis/localizer_hrf.gfeat/design.fsf fsf/localizer_hrf.fsf.template
+  $ nano fsf/localizer_hrf.fsf.template
+
+
+Automating the group analysis
+-----------------------------
+
+.. admonition:: you are here
+
+   ~/ppa-hunt/group
+
+Now that we have a template for the group localizer analysis fsf file, all that's left is to render it and run FEAT on the rendered fsf file. Move up to the project directory and make a file called *localizer.sh* with your text editor::
+
+  $ cd ..
+  $ nano localizer.sh
+
+.. admonition:: you are here
+
+   ~/ppa-hunt
+
+Copy these lines into localizer.sh::
+
+  #!/bin/bash
+  # This script expects to be run in the directory it's contained by.
+
+  PATH=$PATH:/exanet/ntb/packages/php-5.3.2/sapi/cli  # this is for rondo until php is installed
+
+  STANDARD_BRAIN=/usr/share/fsl/data/standard/MNI152_T1_2mm_brain.nii.gz
+  PROJECT_DIR=$(pwd)
+  SUBJECTS_DIR=subjects
+
+  ALL_SUBJECTS=$(ls -1d $SUBJECTS_DIR/*/ | cut --delimiter=/ --fields=2)
+
+  GROUP_DIR=group
+
+
+  # This function defines variables needed to render higher-level fsf templates.
+  function define_vars {
+    output_dir=$1
+
+    echo "
+    <?php
+    \$OUTPUT_DIR = '$output_dir';
+    \$STANDARD_BRAIN = '$STANDARD_BRAIN';
+    \$SUBJECTS_DIR = '$PROJECT_DIR/$SUBJECTS_DIR';
+    "
+
+    echo '$subjects = array();'
+    for subj in $ALL_SUBJECTS; do
+      echo "array_push(\$subjects, '$subj');";
+    done
+
+    echo "
+    ?>
+    "
+  }
+
+  # Form a complete template by prepending variable definitions to the template,
+  # then render it with PHP and run FEAT on the rendered fsf file.
+  FSF_TEMPLATE=$GROUP_DIR/fsf/localizer_hrf.fsf.template
+  FSF_FILE=$GROUP_DIR/fsf/localizer_hrf.fsf
+  output_dir=$GROUP_DIR/analysis/localizer_hrf.gfeat
+  define_vars $output_dir | cat - "$FSF_TEMPLATE" | php > "$FSF_FILE"
+  feat "$FSF_FILE"
+
+If the text following "STANDARD_BRAIN=" differs from what you copied out of the fsf file in the previous section, replace it with that text you copied.
+
+Save and close the script, then run it to test that everything works::
+
+  $ bash localizer.sh
+
+A webpage should open in your browser showing FEAT's progress. Because we manually ran this analysis and put its output into *~/ppa-hunt/group/analysis/localizer_hrf.gfeat*, FEAT should have created a new directory at *~/ppa-hunt/group/analysis/localizer_hrf+.gfeat*, and be showing you the analysis running in that directory.
+
+**Summary**::
+
+  $ cd ..
+  $ nano localizer.sh
+  $ bash localizer.sh
