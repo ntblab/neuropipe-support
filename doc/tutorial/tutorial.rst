@@ -99,6 +99,10 @@ Setting up your NeuroPipe project
 
 NeuroPipe is a sort of skeleton for fMRI analysis projects using FSL. To work with it, you download that skeleton, then flesh it out.
 
+First, log in to your UNIX terminal. If you're at Princeton, that means log in to rondo; look at `the access page on the rondo wiki`_ if you're not sure how.
+
+.. _`the access page on the rondo wiki`: http://cluster-wiki.pni.princeton.edu/dokuwiki/wiki:access
+
 We'll use git to grab the latest copy of NeuroPipe. But before that, configure git with your current name, email, and text editor of choice (if you haven't already)::
 
   $ git config --global user.name "YOUR NAME HERE"
