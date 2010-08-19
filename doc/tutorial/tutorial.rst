@@ -435,15 +435,15 @@ Templating the fsf file
 
    ~/ppa-hunt/subjects/0608101_conatt02
 
-Start by copying the *design.fsf* file for the analysis we just ran to a more central location::
+Start by copying the *design.fsf* file for the analysis we just ran to *fsf*, and give it a ".template" extension::
 
-  $ mv analysis/firstlevel/localizer_hrf.feat/design.fsf fsf/localizer_hrf.fsf
+  $ cp analysis/firstlevel/localizer_hrf.feat/design.fsf fsf/localizer_hrf.fsf.template
 
-We'll keep fsf files and their templates in this *fsf* folder. Now, open *fsf/localizer_hrf.fsf* in your favorite text editor. If you don't have a favorite, try this::
+We'll keep fsf files and their templates in this *fsf* folder. Now, open *fsf/localizer_hrf.fsf.template* in your favorite text editor. If you don't have a favorite, try this::
 
-  $ nano fsf/localizer_hrf.fsf
+  $ nano fsf/localizer_hrf.fsf.template
 
-Make the following replacements and save the file as *fsf/localizer_hrf.fsf.template*. Be sure to include the spaces after "<?=" and before "?>".
+Make the following replacements and save the file. Be sure to include the spaces after "<?=" and before "?>".
 
 ::
  
@@ -453,16 +453,16 @@ Make the following replacements and save the file as *fsf/localizer_hrf.fsf.temp
   #. on the line starting with "set initial_highres_files(1) ", replace all of the text inside the quotes with "<?= $INITIAL_HIGHRES_FILE ?>"
   #. on the line starting with "set highres_files(1)", replace all of the text inside the quotes with "<?= $HIGHRES_FILE ?>"
 
-Those bits you replaced with placeholders are the parameters that must change when analyzing a different subject, or using a different computer. After saving the file as *fsf/localizer_hrf.fsf.template*, copy it to the prototype so it's available for future subjects::
+Those bits you replaced with placeholders are the parameters that must change when analyzing a different subject, or using a different computer. After saving the file, copy it to the prototype so it's available for future subjects::
 
-  $ cp fsf/localizer_hrf.fsf.prototype ../../prototype/copy/fsf/
+  $ cp fsf/localizer_hrf.fsf.template ../../prototype/copy/fsf/
 
 Recall that the *prototype/copy* holds files that should initially be the same, but may need to vary between subjects. We put the fsf file there because it may need to be tweaked for future subjects - to fix registration problems, for instance.
 
 **Summary**::
 
-  $ mv analysis/firstlevel/localizer_hrf.feat/design.fsf fsf/localizer_hrf.fsf
-  $ nano fsf/localizer_hrf.fsf
+  $ cp analysis/firstlevel/localizer_hrf.feat/design.fsf fsf/localizer_hrf.fsf.template
+  $ nano fsf/localizer_hrf.fsf.template
   $ cp fsf/localizer_hrf.fsf.template ../../prototype/copy/fsf/
 
 
@@ -649,9 +649,9 @@ When we made a template fsf file for the within-subject analyses, we didn't have
 .. _PHP: http://en.wikipedia.org/wiki/PHP
 .. _loops: http://www.php.net/manual/en/control-structures.for.php
 
-Start by copying the *design.fsf* file for the group analysis we just ran to *~/group/fsf*, where we'll store fsf files and their templates::
+Start by copying the *design.fsf* file for the group analysis we just ran to *~/group/fsf*, and give it a ".template" extension::
 
-  $ mv analysis/localizer_hrf.gfeat/design.fsf fsf/localizer_hrf.fsf.template
+  $ cp analysis/localizer_hrf.gfeat/design.fsf fsf/localizer_hrf.fsf.template
 
 Now, open *fsf/localizer_hrf.fsf.template* in your favorite text editor::
 
@@ -696,7 +696,7 @@ Save the file.
 
 **Summary**::
 
-  $ mv analysis/localizer_hrf.gfeat/design.fsf fsf/localizer_hrf.fsf.template
+  $ cp analysis/localizer_hrf.gfeat/design.fsf fsf/localizer_hrf.fsf.template
   $ nano fsf/localizer_hrf.fsf.template
 
 
