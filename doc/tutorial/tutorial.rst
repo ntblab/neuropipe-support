@@ -722,17 +722,10 @@ Copy these lines into localizer.sh::
 
   pushd $(dirname $0) > /dev/null  # move into this script's directory
 
-  PATH=$PATH:/exanet/ntb/packages/php-5.3.2/sapi/cli  # this is for rondo until php is installed
+  source globals.sh  # load project-wide settings
 
   STANDARD_BRAIN=/usr/share/fsl/data/standard/MNI152_T1_2mm_brain.nii.gz
-  PROJECT_DIR=$(pwd)
-  SUBJECTS_DIR=subjects
-
-  ALL_SUBJECTS=$(ls -1d $SUBJECTS_DIR/*/ | cut --delimiter=/ --fields=2)
-
-  GROUP_DIR=group
-
-
+  
   # This function defines variables needed to render higher-level fsf templates.
   function define_vars {
     output_dir=$1
@@ -756,11 +749,11 @@ Copy these lines into localizer.sh::
 
   # Form a complete template by prepending variable definitions to the template,
   # then render it with PHP and run FEAT on the rendered fsf file.
-  FSF_TEMPLATE=$GROUP_DIR/fsf/localizer_hrf.fsf.template
-  FSF_FILE=$GROUP_DIR/fsf/localizer_hrf.fsf
+  fsf_template=$GROUP_DIR/fsf/localizer_hrf.fsf.template
+  fsf_file=$GROUP_DIR/fsf/localizer_hrf.fsf
   output_dir=$GROUP_DIR/analysis/localizer_hrf.gfeat
-  define_vars $output_dir | cat - "$FSF_TEMPLATE" | php > "$FSF_FILE"
-  feat "$FSF_FILE"
+  define_vars $output_dir | cat - "$fsf_template" | php > "$fsf_file"
+  feat "$fsf_file"
 
   popd > /dev/null  # return to whatever directory this script was run from
 
@@ -777,3 +770,36 @@ A webpage should open in your browser showing FEAT's progress. Because we manual
   $ cd ..
   $ nano localizer.sh
   $ bash localizer.sh
+
+
+Automating the entire analysis
+==============================
+
+.. admonition:: you are here
+
+   ~/ppa-hunt
+
+Our goal was to run the entire analysis with a single command, to make it easy to reproduce. We're close. Open *analyze.sh* in your text editor::
+
+  $ nano analyze.sh
+
+You see that this script loads settings by sourcing *globals.sh*, runs each subject's individual analysis, then has a space for us to run scripts to do our group analysis. After the comment marking where to run group analyses, add this line::
+
+  bash localizer.sh
+
+Save and exit. That's it! To test this out, first delete any pre-existing subject and group analyses::
+
+  $ rm -rf subjects/*/analysis/firstlevel/*
+  $ rm -rf group/analysis/firstlevel/*
+
+Now run the whole analysis::
+
+  $ bash analyze.sh
+
+**Summary**::
+
+  $ nano analyze.sh
+  $ rm -rf subjects/*/analysis/firstlevel/*
+  $ rm -rf group/analysis/firstlevel/*
+  $ bash analyze.sh
+
