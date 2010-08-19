@@ -199,18 +199,18 @@ Our subject ID is "0608101_conatt02", so run this command::
 
    ~/ppa-hunt/subjects/0608101_conatt02
 
-This *README.txt* says your first step is to get some DICOM data and put it in a Gzipped TAR archive at *data/raw.tar.gz*. Like I mentioned, the data has already been collected. It's even TAR-ed and Gzipped. Hit "q" to quit *README.txt* and get the data with this command::
+This *README.txt* says your first step is to get some DICOM data and put it in a Gzipped TAR archive at *data/raw.tar.gz*. Like I mentioned, the data has already been collected. It's even TAR-ed and Gzipped. Hit "q" to quit *README.txt* and get the data with this command (NOTE: you must be on rondo for this to work)::
 
-  $ curl -u ntblab http://www.princeton.edu/ntblab/resources/0608101_conatt02.tar.gz > data/raw.tar.gz
+  $ cp /exanet/ntb/packages/neuropipe/example_data/0608101_conatt02.raw.tar.gz data/raw.tar.gz
 
-It will prompt you to enter a password; email ntblab@gmail.com to request access to this data if you don't have it. NOTE: *curl* is a generic tool for downloading files, and here we've directed it to download data that I put on Princeton's servers; it doesn't work in general to retrieve data after you've done a scan. On rondo at Princeton, you can use *~/prototype/link/scripts/retrieve-data-from-sun.sh* (which appears at *~/subjects/SUBJ/scripts/retrieve-data-from-sun.sh*) to get your data as long as your subject's folder name matches the subject ID used during for your scan session.
+It will prompt you to enter a password; email ntblab@gmail.com to request access to this data if you don't have it. NOTE: *cp* just copies files, and here we've directed it to copy data that was prepared for this tutorial; it doesn't work in general to retrieve data after you've done a scan. On rondo at Princeton, you can use *~/prototype/link/scripts/retrieve-data-from-sun.sh* (which appears at *~/subjects/SUBJ/scripts/retrieve-data-from-sun.sh*) to get your data, as long as your subject's folder name matches the subject ID used during for your scan session.
 
 **Summary**::
 
   $ ./scaffold 0608101_conatt02
   $ cd subjects/0608101_conatt02
   $ less README.txt
-  $ curl -u ntblab http://www.princeton.edu/ntblab/resources/0608101_conatt02.tar.gz > data/raw.tar.gz
+  $ cp /exanet/ntb/packages/neuropipe/example_data/0608101_conatt02.raw.tar.gz data/raw.tar.gz
 
 
 Preparing your data for analysis
@@ -552,9 +552,9 @@ Move into that subject's directory::
 
    ~/ppa-hunt/subjects/0608101_conatt02
 
-Download the subject's data::
+Get the subject's data (NOTE: you must be on rondo for this to work)::
 
-  $ curl -u ntblab http://www.princeton.edu/ntblab/resources/0608102_conatt02.tar.gz > data/raw.tar.gz
+  $ cp /exanet/ntb/packages/neuropipe/example_data/0608102_conatt02.raw.tar.gz data/raw.tar.gz
 
 As before, it will prompt you to enter a password; email ntblab@princeton.edu to request access to this data.
 
@@ -572,7 +572,7 @@ FEAT should be churning away on the new data.
   $ cd ../../
   $ ./scaffold 0608102_conatt02.
   $ cd subjects/0608102_conatt02
-  $ curl -u ntblab http://www.princeton.edu/ntblab/resources/0608102_conatt02.tar.gz > data/raw.tar.gz
+  $ cp /exanet/ntb/packages/neuropipe/example_data/0608102_conatt02.raw.tar.gz data/raw.tar.gz
   $ ./analyze.sh
 
 
