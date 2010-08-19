@@ -719,7 +719,8 @@ Now that we have a template for the group localizer analysis fsf file, all that'
 Copy these lines into localizer.sh::
 
   #!/bin/bash
-  # This script expects to be run in the directory it's contained by.
+
+  pushd $(dirname $0) > /dev/null  # move into this script's directory
 
   PATH=$PATH:/exanet/ntb/packages/php-5.3.2/sapi/cli  # this is for rondo until php is installed
 
@@ -760,6 +761,8 @@ Copy these lines into localizer.sh::
   output_dir=$GROUP_DIR/analysis/localizer_hrf.gfeat
   define_vars $output_dir | cat - "$FSF_TEMPLATE" | php > "$FSF_FILE"
   feat "$FSF_FILE"
+
+  popd > /dev/null  # return to whatever directory this script was run from
 
 If the text following "STANDARD_BRAIN=" differs from what you copied out of the fsf file in the previous section, replace it with that text you copied.
 
