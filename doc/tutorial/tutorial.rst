@@ -542,7 +542,7 @@ After the line that runs *prep.sh*, add this line::
 
 Scaffold a directory for the new subject::
 
-  $ ./scaffold 0608102_conatt02.
+  $ ./scaffold 0608102_conatt02
 
 Move into that subject's directory::
 
