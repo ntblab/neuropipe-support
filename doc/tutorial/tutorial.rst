@@ -158,7 +158,13 @@ As with *protocol.txt*, a *run-order.txt* file is already made for you. Download
 
   $ curl http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/run-order.txt > prototype/copy/run-order.txt
 
-Open *README.txt* one last time::
+Open this new *run-order.txt* to see what it's like now::
+
+  $ less prototype/copy/run-order.txt
+
+Most runs are marked as "ERROR_RUN" so that only the runs relevant to this tutorial remain.
+
+Quit *run-order.txt* with "q", and open *README.txt* one last time::
 
   $ less README.txt
 
@@ -177,6 +183,7 @@ It says the next step is to collect data for a subject. That's already been done
   $ less README.txt
   $ less prototype/copy/run-order.txt
   $ curl http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/run-order.txt > prototype/copy/run-order.txt
+  $ less prototype/copy/run-order.txt
   $ less README.txt
 
 
