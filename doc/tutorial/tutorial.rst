@@ -83,7 +83,14 @@ But, if one subject differed from the others--say, they coughed during a run, le
 
 At some point, it would become simpler to duplicate the pipeline for each subject and modify each copy as necessary. Imagine you do so, but then want a new statistical analysis for each subject. To accomplish that, you must now change each pipeline copy--a waste of time and likely source of bugs. The problem was caused by duplicating too much.
 
-NeuroPipe provides the flexibility to analyze non-standard subjects, while minimizing duplication, by making you specify which parts of your pipeline may vary between subjects and which wont. You make whatever scripts and files are necessary to analyze an ideal subject and then use those as a basis for each new subject's pipeline. This is called the prototype and it's stored in the *prototype* directory of your project. The files that may vary between subjects go into *prototype/copy*, and they will be copied into each new subject's directory. The ones that won't vary go into *prototype/link*, and they will be symlinked into each new subject's directory; that means that changing a linked file in any subject's directory will immediately change that file in all subject's directories. If you have a non-standard subject, you change the (copied) files within that subject's directory, and other subjects are unaffected. If you must change the analysis for every subject, you change the linked files in the prototype, and the change is reflected in each subject's (linked) analysis scripts.
+NeuroPipe provides the flexibility to analyze non-standard subjects, while minimizing duplication, by making you specify which parts of your pipeline may vary between subjects and which wont. You make whatever scripts and files are necessary to analyze an ideal subject and then use those as a basis for each new subject's pipeline. This is called the prototype and it's stored in the *prototype* directory of your project. To analyze a new subject, you'll use a command called *scaffold*, which creates a folder for the subject's pipeline based on what's in *prototype*. Files that may vary between subjects go into *prototype/copy*, and *scaffold* copies them into each new subject's directory. Files that won't vary go into *prototype/link*, and *scaffold* symlinks them into each new subject's directory; that means that changing a linked file in any subject's directory will immediately change that file in all subject's directories. If you have a non-standard subject, after scaffolding them, you change the appropriate (copied) files within that subject's directory, and other subjects are unaffected. If you must change the analysis for every subject, change the linked files in *prototype/link*, and the change is reflected in the corresponding files in each subject directory.
+
+The workflow is to::
+
+ 1. develop your analysis pipeline for one subject,
+ 2. generalize that pipeline and divide the scripts into those that may vary between subjects and those that won't,
+ 3. use that prototype to scaffold new subjects,
+ 4. modify the new subjects's pipelines as necessary.
 
 This architecture is diagrammed in the PDF here_.
 
@@ -99,6 +106,10 @@ Setting up your NeuroPipe project
 
 NeuroPipe is a sort of skeleton for fMRI analysis projects using FSL. To work with it, you download that skeleton, then flesh it out.
 
+First, log in to your UNIX terminal. If you're at Princeton, that means log in to rondo; look at `the access page on the rondo wiki`_ if you're not sure how.
+
+.. _`the access page on the rondo wiki`: http://cluster-wiki.pni.princeton.edu/dokuwiki/wiki:access
+
 We'll use git to grab the latest copy of NeuroPipe. But before that, configure git with your current name, email, and text editor of choice (if you haven't already)::
 
   $ git config --global user.name "YOUR NAME HERE"
@@ -107,7 +118,7 @@ We'll use git to grab the latest copy of NeuroPipe. But before that, configure g
 
 Now, using git, download NeuroPipe into a folder called *ppa-hunt*::
 
-  $ git clone git://github.com/ntblab/neuropipe.git ppa-hunt
+  $ git clone http://github.com/ntblab/neuropipe.git ppa-hunt
 
 Move into that directory and look around::
 
@@ -147,7 +158,13 @@ As with *protocol.txt*, a *run-order.txt* file is already made for you. Download
 
   $ curl http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/run-order.txt > prototype/copy/run-order.txt
 
-Open *README.txt* one last time::
+Open this new *run-order.txt* to see what it's like now::
+
+  $ less prototype/copy/run-order.txt
+
+Most runs are marked as "ERROR_RUN" so that only the runs relevant to this tutorial remain.
+
+Quit *run-order.txt* with "q", and open *README.txt* one last time::
 
   $ less README.txt
 
@@ -166,6 +183,7 @@ It says the next step is to collect data for a subject. That's already been done
   $ less README.txt
   $ less prototype/copy/run-order.txt
   $ curl http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/run-order.txt > prototype/copy/run-order.txt
+  $ less prototype/copy/run-order.txt
   $ less README.txt
 
 
@@ -195,18 +213,18 @@ Our subject ID is "0608101_conatt02", so run this command::
 
    ~/ppa-hunt/subjects/0608101_conatt02
 
-This *README.txt* says your first step is to get some DICOM data and put it in a Gzipped TAR archive at *data/raw.tar.gz*. Like I mentioned, the data has already been collected. It's even TAR-ed and Gzipped. Hit "q" to quit *README.txt* and get the data with this command::
+This *README.txt* says your first step is to get some DICOM data and put it in a Gzipped TAR archive at *data/raw.tar.gz*. Like I mentioned, the data has already been collected. It's even TAR-ed and Gzipped. Hit "q" to quit *README.txt* and get the data with this command (NOTE: you must be on rondo for this to work)::
 
-  $ curl -u ntblab http://www.princeton.edu/ntblab/resources/0608101_conatt02.tar.gz > data/raw.tar.gz
+  $ cp /exanet/ntb/packages/neuropipe/example_data/0608101_conatt02.raw.tar.gz data/raw.tar.gz
 
-It will prompt you to enter a password; email ntblab@gmail.com to request access to this data if you don't have it. NOTE: *curl* is a generic tool for downloading files, and here we've directed it to download data that I put on Princeton's servers; it doesn't work in general to retrieve data after you've done a scan. On rondo at Princeton, you can use *~/prototype/link/scripts/retrieve-data-from-sun.sh* (which appears at *~/subjects/SUBJ/scripts/retrieve-data-from-sun.sh*) to get your data as long as your subject's folder name matches the subject ID used during for your scan session.
+It will prompt you to enter a password; email ntblab@gmail.com to request access to this data if you don't have it. NOTE: *cp* just copies files, and here we've directed it to copy data that was prepared for this tutorial; it doesn't work in general to retrieve data after you've done a scan. On rondo at Princeton, you can use *~/prototype/link/scripts/retrieve-data-from-sun.sh* (which appears at *~/subjects/SUBJ/scripts/retrieve-data-from-sun.sh*) to get your data, as long as your subject's folder name matches the subject ID used during for your scan session.
 
 **Summary**::
 
   $ ./scaffold 0608101_conatt02
   $ cd subjects/0608101_conatt02
   $ less README.txt
-  $ curl -u ntblab http://www.princeton.edu/ntblab/resources/0608101_conatt02.tar.gz > data/raw.tar.gz
+  $ cp /exanet/ntb/packages/neuropipe/example_data/0608101_conatt02.raw.tar.gz data/raw.tar.gz
 
 
 Preparing your data for analysis
@@ -305,7 +323,7 @@ The Data tab
 
    ~/ppa-hunt/subjects/0608101_conatt02
 
-Click "Select 4D data" and select the file *data/nifti/localizer01.nii.gz*; FEAT will analyze this data. Set "Output directory" to *analysis/firstlevel/localizer_hrf*; FEAT will put the results of its analysis in this folder, but with ".feat" appended, or "+.feat" appended if this is the second analysis with this name that you've run. FEAT should have detected "Total volumes" as 244, but it may have mis-detected "TR (s)" as 3.0; if so, change that to 1.5, because this experiment had a TR length of 1.5 seconds. Because *protocol.txt* indicated there were 6 seconds of disdaqs (volumes of data at the start of the run that are discarded because the scanner needs a few seconds to settle down), and TR length is 1.5s, set "Delete volumes" to 4. Set "High pass filter cutoff (s)" to 128 to remove slow drifts from your signal.
+Click "Select 4D data" and select the file *data/nifti/0608101_conatt02_localizer01.nii.gz*; FEAT will analyze this data. Set "Output directory" to *analysis/firstlevel/localizer_hrf*; FEAT will put the results of its analysis in this folder, but with ".feat" appended, or "+.feat" appended if this is the second analysis with this name that you've run. FEAT should have detected "Total volumes" as 244, but it may have mis-detected "TR (s)" as 3.0; if so, change that to 1.5, because this experiment had a TR length of 1.5 seconds. Because *protocol.txt* indicated there were 6 seconds of disdaqs (volumes of data at the start of the run that are discarded because the scanner needs a few seconds to settle down), and TR length is 1.5s, set "Delete volumes" to 4. Set "High pass filter cutoff (s)" to 128 to remove slow drifts from your signal.
 
 .. image:: http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/feat-data.png
 
@@ -435,15 +453,15 @@ Templating the fsf file
 
    ~/ppa-hunt/subjects/0608101_conatt02
 
-Start by copying the *design.fsf* file for the analysis we just ran to a more central location::
+Start by copying the *design.fsf* file for the analysis we just ran to *fsf*, and give it a ".template" extension::
 
-  $ mv analysis/firstlevel/localizer_hrf.feat/design.fsf fsf/localizer_hrf.fsf
+  $ cp analysis/firstlevel/localizer_hrf.feat/design.fsf fsf/localizer_hrf.fsf.template
 
-We'll keep fsf files and their templates in this *fsf* folder. Now, open *fsf/localizer_hrf.fsf* in your favorite text editor. If you don't have a favorite, try this::
+We'll keep fsf files and their templates in this *fsf* folder. Now, open *fsf/localizer_hrf.fsf.template* in your favorite text editor. If you don't have a favorite, try this::
 
-  $ nano fsf/localizer_hrf.fsf
+  $ nano fsf/localizer_hrf.fsf.template
 
-Make the following replacements and save the file as *fsf/localizer_hrf.fsf.template*. Be sure to include the spaces after "<?=" and before "?>".
+Make the following replacements and save the file. Be sure to include the spaces after "<?=" and before "?>".
 
 ::
  
@@ -453,16 +471,16 @@ Make the following replacements and save the file as *fsf/localizer_hrf.fsf.temp
   #. on the line starting with "set initial_highres_files(1) ", replace all of the text inside the quotes with "<?= $INITIAL_HIGHRES_FILE ?>"
   #. on the line starting with "set highres_files(1)", replace all of the text inside the quotes with "<?= $HIGHRES_FILE ?>"
 
-Those bits you replaced with placeholders are the parameters that must change when analyzing a different subject, or using a different computer. After saving the file as *fsf/localizer_hrf.fsf.template*, copy it to the prototype so it's available for future subjects::
+Those bits you replaced with placeholders are the parameters that must change when analyzing a different subject, or using a different computer. After saving the file, copy it to the prototype so it's available for future subjects::
 
-  $ cp fsf/localizer_hrf.fsf.prototype ../../prototype/copy/fsf/
+  $ cp fsf/localizer_hrf.fsf.template ../../prototype/copy/fsf/
 
 Recall that the *prototype/copy* holds files that should initially be the same, but may need to vary between subjects. We put the fsf file there because it may need to be tweaked for future subjects - to fix registration problems, for instance.
 
 **Summary**::
 
-  $ mv analysis/firstlevel/localizer_hrf.feat/design.fsf fsf/localizer_hrf.fsf
-  $ nano fsf/localizer_hrf.fsf
+  $ cp analysis/firstlevel/localizer_hrf.feat/design.fsf fsf/localizer_hrf.fsf.template
+  $ nano fsf/localizer_hrf.fsf.template
   $ cp fsf/localizer_hrf.fsf.template ../../prototype/copy/fsf/
 
 
@@ -538,7 +556,7 @@ After the line that runs *prep.sh*, add this line::
 
 Scaffold a directory for the new subject::
 
-  $ ./scaffold 0608102_conatt02.
+  $ ./scaffold 0608102_conatt02
 
 Move into that subject's directory::
 
@@ -548,9 +566,9 @@ Move into that subject's directory::
 
    ~/ppa-hunt/subjects/0608101_conatt02
 
-Download the subject's data::
+Get the subject's data (NOTE: you must be on rondo for this to work)::
 
-  $ curl -u ntblab http://www.princeton.edu/ntblab/resources/0608102_conatt02.tar.gz > data/raw.tar.gz
+  $ cp /exanet/ntb/packages/neuropipe/example_data/0608102_conatt02.raw.tar.gz data/raw.tar.gz
 
 As before, it will prompt you to enter a password; email ntblab@princeton.edu to request access to this data.
 
@@ -568,7 +586,7 @@ FEAT should be churning away on the new data.
   $ cd ../../
   $ ./scaffold 0608102_conatt02.
   $ cd subjects/0608102_conatt02
-  $ curl -u ntblab http://www.princeton.edu/ntblab/resources/0608102_conatt02.tar.gz > data/raw.tar.gz
+  $ cp /exanet/ntb/packages/neuropipe/example_data/0608102_conatt02.raw.tar.gz data/raw.tar.gz
   $ ./analyze.sh
 
 
@@ -649,9 +667,9 @@ When we made a template fsf file for the within-subject analyses, we didn't have
 .. _PHP: http://en.wikipedia.org/wiki/PHP
 .. _loops: http://www.php.net/manual/en/control-structures.for.php
 
-Start by copying the *design.fsf* file for the group analysis we just ran to *~/group/fsf*, where we'll store fsf files and their templates::
+Start by copying the *design.fsf* file for the group analysis we just ran to *~/group/fsf*, and give it a ".template" extension::
 
-  $ mv analysis/localizer_hrf.gfeat/design.fsf fsf/localizer_hrf.fsf.template
+  $ cp analysis/localizer_hrf.gfeat/design.fsf fsf/localizer_hrf.fsf.template
 
 Now, open *fsf/localizer_hrf.fsf.template* in your favorite text editor::
 
@@ -696,7 +714,7 @@ Save the file.
 
 **Summary**::
 
-  $ mv analysis/localizer_hrf.gfeat/design.fsf fsf/localizer_hrf.fsf.template
+  $ cp analysis/localizer_hrf.gfeat/design.fsf fsf/localizer_hrf.fsf.template
   $ nano fsf/localizer_hrf.fsf.template
 
 
