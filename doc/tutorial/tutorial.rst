@@ -111,7 +111,7 @@ We'll use git to grab the latest copy of NeuroPipe. But before that, configure g
 
 Now, using git, download NeuroPipe into a folder called *ppa-hunt*::
 
-  $ git clone git://github.com/ntblab/neuropipe.git ppa-hunt
+  $ git clone http://github.com/ntblab/neuropipe.git ppa-hunt
 
 Move into that directory and look around::
 
