@@ -83,7 +83,14 @@ But, if one subject differed from the others--say, they coughed during a run, le
 
 At some point, it would become simpler to duplicate the pipeline for each subject and modify each copy as necessary. Imagine you do so, but then want a new statistical analysis for each subject. To accomplish that, you must now change each pipeline copy--a waste of time and likely source of bugs. The problem was caused by duplicating too much.
 
-NeuroPipe provides the flexibility to analyze non-standard subjects, while minimizing duplication, by making you specify which parts of your pipeline may vary between subjects and which wont. You make whatever scripts and files are necessary to analyze an ideal subject and then use those as a basis for each new subject's pipeline. This is called the prototype and it's stored in the *prototype* directory of your project. The files that may vary between subjects go into *prototype/copy*, and they will be copied into each new subject's directory. The ones that won't vary go into *prototype/link*, and they will be symlinked into each new subject's directory; that means that changing a linked file in any subject's directory will immediately change that file in all subject's directories. If you have a non-standard subject, you change the (copied) files within that subject's directory, and other subjects are unaffected. If you must change the analysis for every subject, you change the linked files in the prototype, and the change is reflected in each subject's (linked) analysis scripts.
+NeuroPipe provides the flexibility to analyze non-standard subjects, while minimizing duplication, by making you specify which parts of your pipeline may vary between subjects and which wont. You make whatever scripts and files are necessary to analyze an ideal subject and then use those as a basis for each new subject's pipeline. This is called the prototype and it's stored in the *prototype* directory of your project. To analyze a new subject, you'll use a command called *scaffold*, which creates a folder for the subject's pipeline based on what's in *prototype*. Files that may vary between subjects go into *prototype/copy*, and *scaffold* copies them into each new subject's directory. Files that won't vary go into *prototype/link*, and *scaffold* symlinks them into each new subject's directory; that means that changing a linked file in any subject's directory will immediately change that file in all subject's directories. If you have a non-standard subject, after scaffolding them, you change the appropriate (copied) files within that subject's directory, and other subjects are unaffected. If you must change the analysis for every subject, change the linked files in *prototype/link*, and the change is reflected in the corresponding files in each subject directory.
+
+The workflow is to::
+
+ 1. develop your analysis pipeline for one subject,
+ 2. generalize that pipeline and divide the scripts into those that may vary between subjects and those that won't,
+ 3. use that prototype to scaffold new subjects,
+ 4. modify the new subjects's pipelines as necessary.
 
 This architecture is diagrammed in the PDF here_.
 
