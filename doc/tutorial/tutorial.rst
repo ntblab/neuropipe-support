@@ -754,7 +754,7 @@ Copy these lines into localizer.sh::
     <?php
     \$OUTPUT_DIR = '$output_dir';
     \$STANDARD_BRAIN = '$STANDARD_BRAIN';
-    \$SUBJECTS_DIR = '$PROJECT_DIR/$SUBJECTS_DIR';
+    \$SUBJECTS_DIR = '$PROJECT_DIR/$SUBJECT_DIR';
     "
 
     echo '$subjects = array();'
