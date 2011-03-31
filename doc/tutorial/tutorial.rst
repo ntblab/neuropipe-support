@@ -327,7 +327,7 @@ The Data tab
 
 Click "Select 4D data" and select the file *data/nifti/0608101_conatt02_localizer01.nii.gz*; FEAT will analyze this data. Set "Output directory" to *analysis/firstlevel/localizer_hrf*; FEAT will put the results of its analysis in this folder, but with ".feat" appended, or "+.feat" appended if this is the second analysis with this name that you've run. FEAT should have detected "Total volumes" as 244, but it may have mis-detected "TR (s)" as 3.0; if so, change that to 1.5, because this experiment had a TR length of 1.5 seconds. Because *protocol.txt* indicated there were 6 seconds of disdaqs (volumes of data at the start of the run that are discarded because the scanner needs a few seconds to settle down), and TR length is 1.5s, set "Delete volumes" to 4. Set "High pass filter cutoff (s)" to 128 to remove slow drifts from your signal.
 
-.. image:: https://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/feat-pre-stats.png
+.. image:: https://github.com/ntblab/neuropipe-support/raw/rc-0.2/doc/tutorial/feat-pre-stats.png
 
 Go to the Pre-stats tab.
 
@@ -376,11 +376,11 @@ When making these design files for your own projects, do not use a Windows machi
 
 To use these files to specify the design, click the "Full model setup" button. Set EV name to "scene". FSL calls regressors EV's, short for Explanatory Variables. Set "Basic shape" to "Custom (3 column format)" and select *design/scene.txt*. That file on its own describes a square wave; to account for the shape of the BOLD response, we convolve it with another function that models the hemodynamic response to a stimulus. Set "Convolution" to "Double-Gamma HRF". Now to set up the face regressor set "Number of original EVs" to 2 and click to tab 2.
 
-.. image:: http://github.com/ntblab/neuropipe-support/raw/rc-0.2/doc/tutorial/feat-stats-ev1.png
+.. image:: https://github.com/ntblab/neuropipe-support/raw/rc-0.2/doc/tutorial/feat-stats-ev1.png
 
 Set EV name to "face". Set "Basic shape" to "Custom (3 column format)" and select *design/face.txt*. Change "Convolution" to "Double-Gamma HRF", like we did for the scene regressor.
 
-.. image:: http://github.com/ntblab/neuropipe-support/raw/rc-0.2/doc/tutorial/feat-stats-ev2.png
+.. image:: https://github.com/ntblab/neuropipe-support/raw/rc-0.2/doc/tutorial/feat-stats-ev2.png
 
 Now go to the "Contrasts & F-tests" tab. Increase "Contrasts" to 4. There is now a matrix of number fields with a row for each contrast and a column for each EV. You specify a contrast as a linear combination of the parameter estimates on each regressor. We'll make one contrast to show the main effect of the face regressor, one to show the main effect of the scene regressor, one to show where the scene regressor is greater than the face regressor, and one to show where the face regressor is greater:
 
@@ -389,11 +389,11 @@ Now go to the "Contrasts & F-tests" tab. Increase "Contrasts" to 4. There is now
 * Set the 3rd row's title to "scene>face", it's "EV1" value to 1, and it's "EV2" value to -1.
 * Set the 4th row's title to "face>scene", it's "EV1" value to -1, and it's "EV2" value to 1.
 
-.. image:: http://github.com/ntblab/neuropipe-support/raw/rc-0.2/doc/tutorial/feat-stats-contrasts-and-f-tests.png
+.. image:: https://github.com/ntblab/neuropipe-support/raw/rc-0.2/doc/tutorial/feat-stats-contrasts-and-f-tests.png
 
 Close that window, and FEAT shows you a graph of your model. If it's different from the one below, check you followed the instructions correctly.
 
-.. image:: http://github.com/ntblab/neuropipe-support/raw/rc-0.2/doc/tutorial/feat-model-graph.png
+.. image:: https://github.com/ntblab/neuropipe-support/raw/rc-0.2/doc/tutorial/feat-model-graph.png
 
 Go to the Registration tab.
 
@@ -419,7 +419,7 @@ FEAT should already have a "Standard space" image selected; leave it with the de
 
 The subject's functional data is first registered to the initial structural image, then that is registered to the main structural image, which is then registered to the standard space image. All this indirection is necessary because registration can fail, and it's more likely to fail if you try to go directly from the functional data to standard space.
 
-.. image:: http://github.com/ntblab/neuropipe-support/raw/rc-0.2/doc/tutorial/feat-registration.png
+.. image:: https://github.com/ntblab/neuropipe-support/raw/rc-0.2/doc/tutorial/feat-registration.png
 
 That's it! Hit Go. A webpage should open in your browser showing FEAT's progress. Once it's done, this webpage provides a useful summary of the analysis you just ran with FEAT. Later, we'll make a webpage for this subject to gather information like this FEAT report, the QA results, and plots summarizing this subject's data. But for now, let's continue hunting the PPA.
 
@@ -626,7 +626,7 @@ Change the drop-down in the top left from "First-level analysis" to "Higher-leve
 
 Go to the Stats tab.
 
-.. image:: http://github.com/ntblab/neuropipe-support/raw/rc-0.2/doc/tutorial/group-feat-data.png
+.. image:: https://github.com/ntblab/neuropipe-support/raw/rc-0.2/doc/tutorial/group-feat-data.png
 
 
 The Stats tab
@@ -634,7 +634,7 @@ The Stats tab
 
 Click "Model setup wizard", leave it on the default option of "single group average", and click "Process". That's it! Hit "Go" to run the analysis.
 
-.. image:: http://github.com/ntblab/neuropipe-support/raw/rc-0.2/doc/tutorial/group-feat-stats.png
+.. image:: https://github.com/ntblab/neuropipe-support/raw/rc-0.2/doc/tutorial/group-feat-stats.png
 
 
 Finding the group's PPA
