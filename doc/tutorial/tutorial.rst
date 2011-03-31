@@ -327,7 +327,7 @@ The Data tab
 
 Click "Select 4D data" and select the file *data/nifti/0608101_conatt02_localizer01.nii.gz*; FEAT will analyze this data. Set "Output directory" to *analysis/firstlevel/localizer_hrf*; FEAT will put the results of its analysis in this folder, but with ".feat" appended, or "+.feat" appended if this is the second analysis with this name that you've run. FEAT should have detected "Total volumes" as 244, but it may have mis-detected "TR (s)" as 3.0; if so, change that to 1.5, because this experiment had a TR length of 1.5 seconds. Because *protocol.txt* indicated there were 6 seconds of disdaqs (volumes of data at the start of the run that are discarded because the scanner needs a few seconds to settle down), and TR length is 1.5s, set "Delete volumes" to 4. Set "High pass filter cutoff (s)" to 128 to remove slow drifts from your signal.
 
-.. image:: http://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/feat-pre-stats.png
+.. image:: https://github.com/ntblab/neuropipe-support/raw/master/doc/tutorial/feat-pre-stats.png
 
 Go to the Pre-stats tab.
 
@@ -341,7 +341,7 @@ The Pre-stats tab
 
 Change "Slice timing correction" to "Interleaved (0,2,4 ...", because slices were collected in this interleaved pattern. Leave the rest of the settings at their defaults.
 
-.. image:: http://github.com/ntblab/neuropipe-support/raw/rc-0.2/doc/tutorial/feat-pre-stats.png
+.. image:: https://github.com/ntblab/neuropipe-support/raw/rc-0.2/doc/tutorial/feat-pre-stats.png
 
 Go to the Stats tab.
 
