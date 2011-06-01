@@ -1,16 +1,28 @@
   |--README.txt
   |--protocol.txt
-  |--scaffold
+  |--scaffold.sh
   |--scripts/
   |--analysis/
   |--results/
+  |--design/
+  |--fsf/
   |--subjects/
-  `--subject-template/
+  `--prototype/
      |--copy/
      |  |--runorder.txt
      |  |--data/
+     |	|--analysis/
+     		|--firstlevel/
+     		|--secondlevel/
      |  |--results/
+     |	|--design/
+     |	|--fsf/
      |  `--scripts/
      `--link/
+     	|--globals.sh
         |--README/
         `--scripts/
+        
+NOTE: this structure only includes scripts that are relevant to the maintance of your
+project folder. Scripts included in neuropipe for analysis purposes are described in
+script-descriptions.txt
