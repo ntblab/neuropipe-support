@@ -141,7 +141,7 @@ The first instruction in the Getting Started section is to open *protocol.txt* a
 It says to fill it in with details on the data collection protocol. When working on your own project, be specific when filling out the protocol information, so anyone looking through your data has a clear idea of what happened during the experiment. For now, we'll just download a *protocol.txt* file that describes the ppa-hunt data you're about to analyze. Hit "q" to quit out of *protocol.txt*, then run these commands::
 
   $ rm protocol.txt
-  $ curl https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/protocol.txt > protocol.txt
+  $ curl -k https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/protocol.txt > protocol.txt
 
 Read that newly downloaded *protocol.txt*::
 
@@ -157,7 +157,7 @@ The next instruction is to open *prototype/copy/run-order.txt*. Hit "q", then re
 
 As with *protocol.txt*, a *run-order.txt* file is already made for you. Download that file, and put it where *README.txt* says::
 
-  $ curl https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/0831101_confba02_run-order.txt > prototype/copy/run-order.txt
+  $ curl -k https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/0831101_confba02_run-order.txt > prototype/copy/run-order.txt
 
 Open this new *run-order.txt* to see what it's like now::
 
@@ -180,11 +180,11 @@ It says the next step is to collect data for a subject. That's already been done
   $ less README.txt
   $ less protocol.txt
   $ rm protocol.txt
-  $ curl https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/protocol.txt > protocol.txt
+  $ curl -k https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/protocol.txt > protocol.txt
   $ less protocol.txt
   $ less README.txt
   $ less prototype/copy/run-order.txt
-  $ curl https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/run-order.txt > prototype/copy/run-order.txt
+  $ curl -k https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/run-order.txt > prototype/copy/run-order.txt
   $ less prototype/copy/run-order.txt
   $ less README.txt
 
@@ -362,8 +362,8 @@ We will specify this design using text files in FEAT's 3-column format: we make 
 These design files are provided for you. Make a directory to put them in, then download the files::
 
  $ mkdir design
- $ curl https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/0831101_confba02_house.txt >design/house.txt
- $ curl https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/0831101_confba02_face.txt >design/face.txt
+ $ curl -k https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/0831101_confba02_house.txt >design/house.txt
+ $ curl -k https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/0831101_confba02_face.txt >design/face.txt
 
 Examine each of these files and refer to *protocol.txt* as necessary::
 
@@ -397,8 +397,8 @@ Go to the Registration tab.
 **Summary**::
 
 $ mkdir design
-$ curl https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/0831101_confba02_house.txt >design/house.txt
-$ curl https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/0831101_confba02_face.txt >design/face.txt
+$ curl -k https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/0831101_confba02_house.txt >design/house.txt
+$ curl -k https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/0831101_confba02_face.txt >design/face.txt
 $ less design/house.txt
 $ less design/face.txt
 
@@ -780,8 +780,8 @@ Then, move into that subject's directory::
  
 This subject's stimuli order was slightly different. Instead of beginning with face images, their first set of stimuli were house images. They therefore have different face and house regressor files. They're provided for you already::
 
-  $ curl https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/0831102_confba02_house.txt > design/house.txt
-  $ curl https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/0831102_confba02_face.txt > design/face.txt
+  $ curl -k https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/0831102_confba02_house.txt > design/house.txt
+  $ curl -k https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/0831102_confba02_face.txt > design/face.txt
 
 We already made a template for the localizer run that works for different subjects, edited scripts/render-fsf-templates.sh to make a unique design file for each run, and created localizer.sh to run the two Feat analyses. Because we already copied these files into *~/protoype*, these changes will be present in the new subject's directory. All that's left is to render the templates and then run the analysis! First, fill in the templates::
 
@@ -808,8 +808,8 @@ FEAT should be churning away on the new data. Take some time to look over the QA
   $ cd ../../
   $ ./scaffold 0831102_confba02
   $ cd subjects/0831102_confba02
-  $ curl https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/0831102_confba02_house.txt > design/house.txt
-  $ curl https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/0831102_confba02_face.txt > design/face.txt
+  $ curl -k https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/0831102_confba02_house.txt > design/house.txt
+  $ curl -k https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/0831102_confba02_face.txt > design/face.txt
   $ scripts/render-fsf-templates.sh
   $ ls fsf
   $ cp /exanet/ntb/packages/neuropipe/example_data/0831102_confba02.raw.tar.gz data/raw.tar.gz
