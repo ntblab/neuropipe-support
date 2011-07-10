@@ -4,7 +4,7 @@ modulations in the PPA area when seeing patterns of repetions in scene imagery.
 they lay in a Skyra Allegra 3T scanner with a mirror on the head coil reflecting
 projected stimuli. TR length was 1.5s. 6s of rest were allotted at the start of
 the experiment, to allow the scanner signal to settle. subjects were allowed
-minute of rest between each task.
+one minute of rest between each task.
 
 Task 1:
 subjects fixated on a dot in the center of the screen, and viewed blocks of

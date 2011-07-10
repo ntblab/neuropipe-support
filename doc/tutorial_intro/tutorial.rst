@@ -25,10 +25,10 @@ NeuroPipe is a framework for reproducible fMRI analysis projects with FSL. It's 
 
 This quick introduction walks you through the structure of neuropipe, what you need to know in order to use it, and how to set it up for the study of your choice. After reading this introduction, you can then use the more advanced tutorials to learn several types of analyses:
 
-  -a within-subjects analysis on one subject, repeating that analysis for a second subject, and then running a group analysis across both of these subjects
-  -a within-subjects analysis on two subjects, where a within-subject higher-level analysis needs to be completed before running a group analysis
-  -an FIR analysis for one subject, with a within-subject higher-level analysis
-  -an roi analysis for one subject
+ - a within-subjects analysis on one subject, repeating that analysis for a second subject, and then running a group analysis across both of these subjects
+ - a within-subjects analysis on two subjects, where a within-subject higher-level analysis needs to be completed before running a group analysis
+ - an FIR analysis for one subject, with a within-subject higher-level analysis
+ - a regions of interest (ROI) analysis for one subject
 
 
 Prerequisites
@@ -42,10 +42,10 @@ You should be ok if you understand:
 
 - how to run programs from the UNIX command line,
 - how to move around the directory tree with *cd*,
-- relative pathnames,
+- relative pathnames, and
 - symbolic links.
 
-In addition to basic familiarity with the UNIX command line, you'll need access to a UNIX-based computer (Mac OSX or any flavor of Linux should work), with git_, `BXH XCEDE tools`_, and FSL_ installed. If you're at Princeton, use rondo_, which has all the necessary tools installed.
+In addition to basic familiarity with the UNIX command line, you'll need access to a UNIX-based computer (Mac OSX or any flavor of Linux should work), with git_, `BXH XCEDE tools`_, and FSL_ installed. If you're at Princeton, use rondo_, which has all the necessary tools installed. If not, you'll have to download these packages and modify the pathnames in *prototype/link/globals.sh* to source the correct packages. You'll only have to do it once for each project you begin.
 
 .. _git: http://git-scm.com/
 .. _`BXH XCEDE tools`: http://nbirn.net/tools/bxh_tools/index.shtm
@@ -55,8 +55,6 @@ In addition to basic familiarity with the UNIX command line, you'll need access 
 In this tutorial, you use git to track changes to the example project. A full explanation of git and version control systems is the scope of the tutorial, so if you're unfamiliar with those, read chapters 1 and 2 of `Pro Git`_.
 
 .. _`Pro Git`: http://progit.org/book/
-
-To access the data that you'll analyze in this tutorial, email ntblab@gmail.com and request the password.
 
 
 Conventions used in these tutorials
@@ -101,6 +99,11 @@ This architecture is diagrammed in the PDF here_.
 
 .. _here: http://docs.google.com/viewer?url=http%3A%2F%2Fgithub.com%2Fntblab%2Fneuropipe-support%2Fraw%2Fdev%2Fdoc%2Farchitecture.pdf
 
+A note about using example data
+-------------------------------
+
+Because the data used in these tutorials may be personally identifiable, these data are subject to privacy restrictions and are not available on github. If you are working outside of Princeton University and would like to use these files, please contact ntblab@princeton.edu. If you are working within the university but outside of the Turk-Browne lab, you can find it on the ntb partition on rondo at /exanet/ntb/packages/neuropipe/example_data. Contact ntblab@princeton.edu if you are unable to access it due to permissions restrictions.
+
 
 Setting up your NeuroPipe project
 =================================
@@ -111,7 +114,7 @@ Setting up your NeuroPipe project
 
 NeuroPipe is a sort of skeleton for fMRI analysis projects using FSL. To work with it, you download that skeleton, then flesh it out.
 
-First, log in to your UNIX terminal. If you're at Princeton, that means log in to rondo; look at `the access page on the rondo wiki`_ if you're not sure how.
+First, log in to your UNIX terminal. If you're at Princeton, that means log in to rondo; look at `the access page on the rondo wiki`_ if you're not sure how. (Do not qrsh, otherwise you cannot retrieve files from github using curl).
 
 .. _`the access page on the rondo wiki`: http://cluster-wiki.pni.princeton.edu/dokuwiki/wiki:access
 
@@ -123,7 +126,7 @@ We'll use git to grab the latest copy of NeuroPipe. But before that, configure g
 
 Now, using git, download NeuroPipe into a folder called *ppa-hunt*, and set it up::
 
-  $ git clone http://github.com/ntblab/neuropipe.git ppa-hunt
+  $ git clone git://github.com/ntblab/neuropipe.git ppa-hunt
   $ cd ppa-hunt
   $ git checkout -b ppa-hunt origin/dev
 
@@ -135,7 +138,7 @@ Look around::
 
    ~/ppa-hunt
 
-You should see a *README.txt* file, a command called *scaffold*, a file called *protocol.txt*, and a directory called *prototype*. Start by reading *README.txt*::
+You should see, among other things, a *README.txt* file, a command called *scaffold*, a file called *protocol.txt*, and a directory called *prototype*. Start by reading *README.txt*::
 
   $ less README.txt
 
@@ -146,7 +149,7 @@ The first instruction in the Getting Started section is to open *protocol.txt* a
 It says to fill it in with details on the data collection protocol. We'll just download a *protocol.txt* file that describes the ppa-hunt data you can analyze in later tutorials. Hit "q" to quit out of *protocol.txt*, then run these commands::
 
   $ rm protocol.txt
-  $ curl https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_intro/protocol.txt > protocol.txt
+  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_intro/protocol.txt > protocol.txt
 
 Read that newly downloaded *protocol.txt*::
 
@@ -162,13 +165,13 @@ The next instruction is to open *prototype/copy/run-order.txt*. Hit "q", then re
 
 As with *protocol.txt*, a *run-order.txt* file is already made for you. Download that file, and put it where *README.txt* says::
 
-  $ curl https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial/run-order.txt > prototype/copy/run-order.txt
+  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_intro/run-order.txt > prototype/copy/run-order.txt
 
 Open this new *run-order.txt* to see what it's like now::
 
   $ less prototype/copy/run-order.txt
 
-Some runs are marked as "ERROR_RUN" so that only the runs relevant to your remain.
+Some runs are marked as "ERROR_RUN" so that only the runs relevant to your analysis remain.
 
 Quit *run-order.txt* with "q", and open *README.txt* one last time::
 
@@ -185,10 +188,10 @@ Next, it's time to collect some subject data and run some analyses. From here, y
   $ less README.txt
   $ less protocol.txt
   $ rm protocol.txt
-  $ curl https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial/protocol.txt > protocol.txt
+  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_intro/protocol.txt > protocol.txt
   $ less protocol.txt
   $ less README.txt
   $ less prototype/copy/run-order.txt
-  $ curl https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial/run-order.txt > prototype/copy/run-order.txt
+  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_intro/run-order.txt > prototype/copy/run-order.txt
   $ less prototype/copy/run-order.txt
   $ less README.txt
