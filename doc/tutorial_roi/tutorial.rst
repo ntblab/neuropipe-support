@@ -84,11 +84,11 @@ So, let's do it!
 
  $ scripts/roi.sh analysis/firstlevel/encoding_fir01.feat analysis/firstlevel/encoding_fir02.feat
  
-You should now have cvs files in *results/roi* along with an .Rdat file that can be loaded into R for running statistics or plotting your data. For example, you can plot the timecourse for each ROI for visual comparison between experiment conditions, and also differenes in the activity of each brain region::
+You should now have cvs files in *results/roi* along with an .Rdat file that can be loaded into R for running statistics or plotting your data. For example, you can plot the timecourse for each ROI for visual comparison between experiment conditions, and also differenes in the activity of each brain region.
 
 .. image:: https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_roi/ggplot2-graph.png
 
-And, after running this ROI analysis on the data from two runs each from 18 subjects, we can start to see a difference in the BOLD response caused by adaptation -- that is, when a novel image was presented after a series of two objects that had been previously shown (RC_NFI), no adaptation occurs because the sequence of images is not learned. Likewise, when a series of two novel images are presented before an image that has already been shown (NC_RFI), since the sequence of images as never been learned before, no adaptation appears. However, when a series of three images appear in an order thas has been previously shown (RC_RFI), the appearance of the third image is expected, and adaptation is present. We can see this in the decreased BOLD peak in the timecourse for that category::
+And, after running this ROI analysis on the data from two runs each from 18 subjects, we can start to see a difference in the BOLD response caused by adaptation -- that is, when a novel image was presented after a series of two objects that had been previously shown (RC_NFI), no adaptation occurs because the sequence of images is not learned. Likewise, when a series of two novel images are presented before an image that has already been shown (NC_RFI), since the sequence of images as never been learned before, no adaptation appears. However, when a series of three images appear in an order thas has been previously shown (RC_RFI), the appearance of the third image is expected, and adaptation is present. We can see this in the decreased BOLD peak in the timecourse for that category.
 
 .. image:: https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_roi/ggplot2-graph-all.png
 
