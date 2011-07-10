@@ -25,10 +25,10 @@ NeuroPipe is a framework for reproducible fMRI analysis projects with FSL. It's 
 
 This quick introduction walks you through the structure of neuropipe, what you need to know in order to use it, and how to set it up for the study of your choice. After reading this introduction, you can then use the more advanced tutorials to learn several types of analyses:
 
- - a within-subjects analysis on one subject, repeating that analysis for a second subject, and then running a group analysis across both of these subjects
- - a within-subjects analysis on two subjects, where a within-subject higher-level analysis needs to be completed before running a group analysis
- - an FIR analysis for one subject, with a within-subject higher-level analysis
- - a regions of interest (ROI) analysis for one subject
+- a within-subjects analysis on one subject, repeating that analysis for a second subject, and then running a group analysis across both of these subjects
+- a within-subjects analysis on two subjects, where a within-subject higher-level analysis needs to be completed before running a group analysis
+- an FIR analysis for one subject, with a within-subject higher-level analysis
+- a regions of interest (ROI) analysis for one subject
 
 
 Prerequisites
@@ -90,10 +90,10 @@ NeuroPipe provides the flexibility to analyze non-standard subjects, while minim
 
 The workflow is to::
 
- 1. develop your analysis pipeline for one subject,
- 2. generalize that pipeline and divide the scripts into those that may vary between subjects and those that won't,
- 3. use that prototype to scaffold new subjects,
- 4. modify the new subjects's pipelines as necessary.
+1. develop your analysis pipeline for one subject,
+2. generalize that pipeline and divide the scripts into those that may vary between subjects and those that won't,
+3. use that prototype to scaffold new subjects,
+4. modify the new subjects's pipelines as necessary.
 
 This architecture is diagrammed in the PDF here_.
 
