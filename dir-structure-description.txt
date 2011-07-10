@@ -19,7 +19,7 @@ results
   of statistical test results
 
 design
- holds the intermediary files that are necessary for higher levelFeat analyses, 
+ holds the intermediary files that are necessary for higher-level Feat analyses, 
  such as nuisance or stimulus regressors, or ROI coordinate information
 
 fsf
