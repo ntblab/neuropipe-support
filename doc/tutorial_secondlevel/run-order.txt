@@ -36,21 +36,13 @@
 circle_localizer01
 circle_localizer02
 circle_localizer03
-circle_localizer04
+sagittal_scout01
+t1_flash01
 ERROR_RUN
 ERROR_RUN
 ERROR_RUN
+t1_mprage_sag01
 ERROR_RUN
-ERROR_RUN
-ERROR_RUN
-ERROR_RUN
-rest01 221
-rest02 221
-face01 221
-house01 221
-face02 221
-house02 221
-localizer01 221
-t2_tse01
+localizer01 244
 fieldmap01
-t1_mprage01
+fieldmap02

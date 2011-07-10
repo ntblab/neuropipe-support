@@ -18,15 +18,24 @@ NeuroPipe Tutorial
 Chapter 2 - HRF analysis of block design study
 ----------------------------------------------
 
-Now that you know how neuropipe works and why it's useful, let's use it to analyze a block design study.  In this study, you will be running an HRF analysis of a block design study that two subjects particpated in. First, you will analyze the first subject's data, and then template the analysis workflow to use on the second subject's data. Then, you will run a second-level analysis that combines the data from both subjects, and create a template to automate the second-level analysis for future subjects.  
+Now that you know how neuropipe works and why it's useful, let's use it to analyze some data.  In this study, you will be running an HRF analysis of a block design study that two subjects particpated in. First, you will analyze the first subject's data, and then template the analysis workflow to use on the second subject's data. Then, you will run a second-level analysis that combines the data from both subjects, and create a template to automate the second-level analysis for future subjects.  
 
-Before you begin, make sure that you have a copy of your project folder ('ppa-hunt'). 
+Before you begin, make sure that you have a copy of your project folder that you made in the intro tutorial (ppa-hunt). 
 
 Analyzing a subject
 ===================
 
-We'll start by analyzing a single subject.
+We'll start by analyzing a single subject. To prepare for that, you'll need to know the order of the scans that were collected for subjects that took thsi experiment. A *run-order.txt* file is already made for you. Download that file and take a look::
 
+  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_intro/run-order.txt > prototype/copy/run-order.txt
+  $ less prototype/copy/run-order.txt
+  
+Note that ERROR_RUN is listed for each scan that is irrelevant to this tutorial.
+
+**Summary**::
+
+  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_intro/run-order.txt > prototype/copy/run-order.txt
+  $ less prototype/copy/run-order.txt
 
 Setting up
 ----------
@@ -48,11 +57,11 @@ Our subject ID is "0608101_conatt02", so run this command::
 
    ~/ppa-hunt/subjects/0608101_conatt02
 
-This *README.txt* says your first step is to get some DICOM data and put it in a Gzipped TAR archive at *data/raw.tar.gz*. Like I mentioned, the data has already been collected. It's even TAR-ed and Gzipped. Hit "q" to quit *README.txt* and get the data with this command (NOTE: you must be on rondo for this to work)::
+This *README.txt* says your first step is to get some DICOM data and put it in a Gzipped TAR archive at *data/raw.tar.gz*. Like I mentioned, the data has already been collected. It's even TAR-ed and Gzipped. Hit "q" to quit *README.txt* and get the data with this command (NOTE: you must qrsh to a node on rondo for this to work)::
 
   $ cp /exanet/ntb/packages/neuropipe/example_data/0608101_conatt02.raw.tar.gz data/raw.tar.gz
 
-Email ntblab@gmail.com to request access to this data. NOTE: *cp* just copies files, and here we've directed it to copy data that was prepared for this tutorial; it doesn't work in general to retrieve data after you've done a scan. On rondo at Princeton, you can use *~/prototype/link/scripts/retrieve-data-from-sun.sh* (which appears at *~/subjects/SUBJ/scripts/retrieve-data-from-sun.sh*) to get your data, as long as your subject's folder name matches the subject ID used during for your scan session.
+If you are not a part of the Princeton University network, or if you are not permitted to copy this file, email ntblab@princeton.edu to request access to this data. NOTE: *cp* just copies files, and here we've directed it to copy data that was prepared for this tutorial; it doesn't work in general to retrieve data after you've done a scan. On rondo at Princeton, you can use *~/prototype/link/scripts/retrieve-data-from-sun.sh* (which appears at *~/subjects/SUBJ/scripts/retrieve-data-from-sun.sh*) to get your data, as long as your subject's folder name matches the subject ID used during for your scan session.
 
 **Summary**::
 
@@ -161,7 +170,7 @@ The Data tab
 
 Click "Select 4D data" and select the file *data/nifti/0608101_conatt02_localizer01.nii.gz*; FEAT will analyze this data. Set "Output directory" to *analysis/firstlevel/localizer_hrf*; FEAT will put the results of its analysis in this folder, but with ".feat" appended, or "+.feat" appended if this is the second analysis with this name that you've run. FEAT should have detected "Total volumes" as 244, but it may have mis-detected "TR (s)" as 3.0; if so, change that to 1.5, because this experiment had a TR length of 1.5 seconds. Because *protocol.txt* indicated there were 6 seconds of disdaqs (volumes of data at the start of the run that are discarded because the scanner needs a few seconds to settle down), and TR length is 1.5s, set "Delete volumes" to 4. Set "High pass filter cutoff (s)" to 128 to remove slow drifts from your signal.
 
-.. image:: https://github.com/ntblab/neuropipe-support/doc/tutorial/feat-pre-stats.png
+.. image:: https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial/feat-data.png
 
 Go to the Pre-stats tab.
 
