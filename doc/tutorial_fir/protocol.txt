@@ -1,0 +1,9 @@
+subjects fixated on a dot in the center of the screen, and viewed an
+uninterrupted stream of scene images. on each trial, subjects were shown a photo
+of a scene for 0.5s. subjects had 1.3s from the time the photo was shown to
+indicate whether the scene was indoor or outdoor. the next trial began 0.2s
+later, with the start of the next TR. subjects did this task in two separate
+runs.
+
+The task began after 6 volumes of disdaqs had been completed, and the TR was
+1.5. There were 355 colledted volumes total in this scan.
