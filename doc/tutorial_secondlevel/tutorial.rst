@@ -278,7 +278,7 @@ Launch FSLView::
 
 Click File>Open... and select *analysis/firstlevel/localizer_hrf.feat/mean_func.nii.gz*; this is an image of the mean signal intensity at each voxel over the course of the run. We use it as a background to overlay a contrast image on. Click File>Add... *analysis/firstlevel/localizer_hrf.feat/stats/zstat3.nii.gz*. *zstat3.nii.gz* is an image of z-statistics for the scene>face contrast being different from 0, so high intensity values in a voxel indicate that the scene regressor caught much more of the variance in fMRI signal at that voxel than the face regressor. To find the PPA, we'll look for regions with really high values in *zstat3.nii.gz*. To include only these regions in the overlay, set the Min threshold at the top of FSLView to something like 8, then click around in the brain to see what regions had contrast z-stats at that threshold or above. Look for a bilateral pair of regions with zstat's at a high threshold, around the middle of the brain; that'll be the PPA::
 
-.. image:: https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_secondlevel/feat-registration.png
+.. image:: https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_secondlevel/fslview-ppa.png
 
 
 Repeating the analysis for a new subject
