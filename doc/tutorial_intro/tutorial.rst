@@ -48,7 +48,7 @@ You should be ok if you understand:
 In addition to basic familiarity with the UNIX command line, you'll need access to a UNIX-based computer (Mac OSX or any flavor of Linux should work), with git_, `BXH XCEDE tools`_, and FSL_ installed. If you're at Princeton, use rondo_, which has all the necessary tools installed. If not, you'll have to download these packages and modify the pathnames in *prototype/link/globals.sh* to source the correct packages. You'll only have to do it once for each project you begin.
 
 .. _git: http://git-scm.com/
-.. _`BXH XCEDE tools`: http://nbirn.net/tools/bxh_tools/index.shtm
+.. _`BXH XCEDE tools`: http://www.birncommunity.org/tools-catalog/bxhxcede-tools/
 .. _FSL: http://www.fmrib.ox.ac.uk/fsl/
 .. _rondo: http://cluster-wiki.pni.princeton.edu/dokuwiki/
 
