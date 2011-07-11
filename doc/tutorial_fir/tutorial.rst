@@ -19,7 +19,7 @@ Chapter 4 - FIR analysis of an adaptation study
 
 If you've worked through the introductory tutorial, you are ready to use this tutorial (no need to go through the HRF analysis tutorials to understand what's going on here).  In this study, you will be running an FIR analysis of a study for one subject. First, you will analyze the first subject's data, and then template the analysis workflow to use on the second subject's data. Then, you will run a second-level analysis that combines the data from both subjects, and create a template to automate the second-level analysis for future subjects.  
 
-Before you begin, make sure that you have a copy of your project folder ('ppa-hunt'). 
+Before you begin, make sure that you have a copy of your project folder (here, it's called 'fir-proj'). 
 
 Using a FIR model to analyze fMRI data is useful when you 1) are looking to fit as much of your brain data as possible into a model, and 2)do not want to make any assumptions about the shape of the brain's response to your stimuli. This task looks for subdued brain response, or 'adaptation,' when subjects are shown repeated patterns of scene images.  Since the response to these patterns may not look like the canonical hemodynamic response, we'll go with an FIR model instead. In this analysis, we will pick a time window around each trial, and run a GLM to model the response at several time points within the window.
 
@@ -34,7 +34,7 @@ Setting up
 
 .. admonition:: you are here
 
-   ~/ppa-hunt
+   ~/fir-proj
 
 Our subject ID is "0223101_conatt01", so run this command::
 
@@ -47,7 +47,7 @@ Our subject ID is "0223101_conatt01", so run this command::
 
 .. admonition:: you are here
 
-   ~/ppa-hunt/subjects/0223101_conatt01
+   ~/fir-proj/subjects/0223101_conatt01
 
 This *README.txt* says your first step is to get some DICOM data and put it in a Gzipped TAR archive at *data/raw.tar.gz*. This data has already been collected for you. Hit "q" to quit *README.txt* and get the data with this command (NOTE: you must be on rondo for this to work)::
 
@@ -67,7 +67,7 @@ Preparing your data for analysis
 
 .. admonition:: you are here
 
-   ~/ppa-hunt/subjects/0223101_conatt01
+   ~/fir-proj/subjects/0223101_conatt01
 
 Open *README.txt* again::
 
@@ -138,7 +138,7 @@ GLM analysis with FEAT (first-level)
 
 .. admonition:: you are here
 
-   ~/ppa-hunt/subjects/0223101_conatt01
+   ~/fir-proj/subjects/0223101_conatt01
 
 Now that you have data, and of adequate quality, it's time to do an analysis. We'll use FSL's FEAT to perform a GLM-based analysis. If GLM analysis or FEAT is new to you, read `FEAT's manual`_ to learn more about them. If any of the steps seem mysterious to you, hover your mouse over the relevant part of FEAT and a tooltip will appear describing that part in detail.
 
@@ -165,11 +165,11 @@ The Data tab
 
 .. admonition:: you are here
 
-~/ppa-hunt/subjects/0223101_conatt01
+~/fir-proj/subjects/0223101_conatt01
 
 Click "Select 4D data" and select the file *data/nifti/0223101_conatt01_encoding01.nii.gz*; FEAT will analyze this data. Set "Output directory" to *analysis/firstlevel/encoding_fir01*; FEAT will put the results of its analysis in this folder, but with ".feat" appended, or "+.feat" appended if this is the second analysis with this name that you've run. FEAT should have detected "Total volumes" as 355, but it may have mis-detected "TR (s)" as 3.0; if so, change that to 1.5, because this experiment had a TR length of 1.5 seconds. Because *protocol.txt* indicated there were 9 seconds of disdaqs (volumes of data at the start of the run that are discarded because the scanner needs a few seconds to settle down), and TR length is 1.5s, set "Delete volumes" to 6. Set "High pass filter cutoff (s)" to 128 to remove slow drifts from your signal.
 
-.. image:: https://github.com/ntblab/neuropipe-support/doc/tutorial_fir/feat-data.png
+.. image:: https://github.com/ntblab/neuroipe-support/raw/dev/doc/tutorial_fir/feat-data.png
 
 Go to the Pre-stats tab.
 
@@ -179,7 +179,7 @@ The Pre-stats tab
 
 .. admonition:: you are here
 
-   ~/ppa-hunt/subjects/0223101_conatt01
+   ~/fir-proj/subjects/0223101_conatt01
 
 Change "Slice timing correction" to "Interleaved (0,2,4 ...", because slices were collected in this interleaved pattern. Leave the rest of the settings at their defaults.
 
@@ -193,7 +193,7 @@ The Stats tab
 
 .. admonition:: you are here
 
-   ~/ppa-hunt/subjects/0223101_conatt01
+   ~/fir-proj/subjects/0223101_conatt01
 
 Check "Add motion parameters to model"; this makes regressors from estimates of the subject's motion, which hopefully absorb variance in the signal due to transient motion. To account for the variance in the signal due to the experimental manipulation, we define regressors based on the design, as described in *protocol.txt*. *protocol.txt* says that subjects viewed an uninterrupted stream of images, making an indoor/outdoor decision for one image every 1.5 seconds.
 
@@ -206,10 +206,10 @@ We will specify this design using text files in FEAT's 3-column format: we make 
 These design files are provided for you. Make a directory to put them in, then download the files::
 
  $ mkdir design/encoding1
- $ curl -k https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_fir/encoding1/NC_NFI.txt > design/encoding1/NC_NFI.txt
- $ curl -k https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_fir/encoding1/NC_RFI.txt > design/encoding1/NC_RFI.txt
- $ curl -k https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_fir/encoding1/RC_NFI.txt > design/encoding1/RC_NFI.txt
- $ curl -k https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_fir/encoding1/RC_RFI.txt > design/encoding1/RC_RFI.txt
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/encoding1/NC_NFI.txt > design/encoding1/NC_NFI.txt
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/encoding1/NC_RFI.txt > design/encoding1/NC_RFI.txt
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/encoding1/RC_NFI.txt > design/encoding1/RC_NFI.txt
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/encoding1/RC_RFI.txt > design/encoding1/RC_RFI.txt
 
 Examine some of these files and check out the format::
 
@@ -247,10 +247,10 @@ Go to the Registration tab.
 **Summary**::
 
  $ mkdir design/encoding1
- $ curl -k https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_fir/encoding1/NC_NFI.txt > design/encoding1/NC_NFI.txt
- $ curl -k https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_fir/encoding1/NC_RFI.txt > design/encoding1/NC_RFI.txt
- $ curl -k https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_fir/encoding1/RC_NFI.txt > design/encoding1/RC_NFI.txt
- $ curl -k https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_fir/encoding1/RC_RFI.txt > design/encoding1/RC_RFI.txt
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/encoding1/NC_NFI.txt > design/encoding1/NC_NFI.txt
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/encoding1/NC_RFI.txt > design/encoding1/NC_RFI.txt
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/encoding1/RC_NFI.txt > design/encoding1/RC_NFI.txt
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/encoding1/RC_RFI.txt > design/encoding1/RC_RFI.txt
  $ less design/encoding1/NC_NFI.txt
 
 The Registration tab
@@ -258,7 +258,7 @@ The Registration tab
 
 .. admonition:: you are here
 
-   ~/ppa-hunt/subjects/0223101_conatt01
+   ~/fir-proj/subjects/0223101_conatt01
 
 Different subjects have different shaped brains, and may have been in different positions in the scanner. To compare the data collected from different subjects, for each subject we compute the transformation that best moves and warps their data to match a standard brain, apply those transformations, then compare each subject in this "standard space". This Registration tab is where we set the parameters used to compute the transformation; we won't actually apply the transformation until we get to group analysis.
 
@@ -276,7 +276,7 @@ Repeating the analysis for a second run
 
 .. admonition:: you are here
 
-   ~/ppa-hunt/subjects/0223101_conatt01
+   ~/fir-proj/subjects/0223101_conatt01
    
 Now that you have analyzed one run of this subject's data, it's time to repeat the analysis on a second run. In many experiments, subjects will perform the same task in two identical runs so they have a bit of a break during the scanning session, or because different stimuli are counterbalanced across the scan session. The two runs can then be combined in a second-level analysis. This time around, we can do it more automatically. FEAT recorded all parameters of the analysis you just ran, in a file called *design.fsf* in its output directory, which was *analysis/firstlevel/encoding_fir01.feat/*. Our approach is to take that file, replace run-specific settings with placeholders, then for each new run, automatically substitute appropriate values for the placeholders, and run FEAT with the resulting file. 
 
@@ -285,7 +285,7 @@ Templating the fsf file
 
 .. admonition:: you are here
 
-   ~/ppa-hunt/subjects/0223101_conatt01
+   ~/fir-proj/subjects/0223101_conatt01
 
 Start by copying the *design.fsf* file for the analysis we just ran to *fsf*, and give it a ".template" extension::
 
@@ -325,7 +325,7 @@ Rendering the template
 
 .. admonition:: you are here
 
-   ~/ppa-hunt/subjects/0223101_conatt01
+   ~/fir-proj/subjects/0223101_conatt01
 
 Now, we have a template fsf file. To use that template, we need a script that fills it in, appropriately, for each run and for each subject. This filling-in process is called rendering, and a script that does most of the work is provided at *scripts/render-fsf-templates.sh*. Open that in your text editor::
 
@@ -367,7 +367,7 @@ Automating the analysis
 
 .. admonition:: you are here
 
-   ~/ppa-hunt/subjects/0223101_conatt01
+   ~/fir-proj/subjects/0223101_conatt01
 
 As we saw earlier, *prep.sh* already calls *render-fsf-templates.sh*. *analyze.sh* calls *prep.sh*, so to automate the analysis, all that remains is running *feat* on the rendered fsf file from a script that's called by *analyze.sh*. We'll make a new script called *encoding.sh* for that purpose. Make the script with this command::
 
@@ -399,6 +399,14 @@ After the line that runs *prep.sh*, add this line::
 *analyze.sh* is linked to *~/prototype/link/analyze.sh*, so the change you just made will be reflected in *analyze.sh* in all current and future subject directories. Now we can test that it works. First, remove the finished analysis folder::
 
  $ rm -rf analysis/firstlevel/*
+ 
+The second encoding run for this subject requires its own set of regressor files, since the order of images is different in the two runs. Grab the encoding files for the second run::
+
+ $ mkdir design/encoding2
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/encoding2/NC_NFI.txt > design/encoding2/NC_NFI.txt
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/encoding2/NC_RFI.txt > design/encoding2/NC_RFI.txt
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/encoding2/RC_NFI.txt > design/encoding2/RC_NFI.txt
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/encoding2/RC_RFI.txt > design/encoding2/RC_RFI.txt
 
 Then, run our newly updated analysis that deals with both encoding runs::
 
@@ -412,6 +420,11 @@ Feat should be churning away, and two webpages should open in your browser showi
   $ cp scripts/encoding.sh ../../prototype/link/scripts
   $ nano analyze.sh
   $ rm -rf analysis/firstlevel/*
+  $ mkdir design/encoding2
+  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/encoding2/NC_NFI.txt > design/encoding2/NC_NFI.txt
+  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/encoding2/NC_RFI.txt > design/encoding2/NC_RFI.txt
+  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/encoding2/RC_NFI.txt > design/encoding2/RC_NFI.txt
+  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/encoding2/RC_RFI.txt > design/encoding2/RC_RFI.txt
   $ ./analyze.sh
 
 
@@ -420,7 +433,7 @@ What comes next
 
 .. admonition:: you are here
 
-   ~/ppa-hunt/subjects/0223101_conatt01
+   ~/fir-proj/subjects/0223101_conatt01
 
 FIR results are usually not very illuminating at this point, but now you have information about this subject's response to different regressors, in an 18 second window consisting of 12 timepoints.  The results start to emerge as you collapse the results from each regressor across the time points that were specified in the FIR model. This can be done with the whole brain or with individual ROIs. Check out the ROI tutorial if you'd like to continue analyzing this data using an ROI analysis of the PPA.
 

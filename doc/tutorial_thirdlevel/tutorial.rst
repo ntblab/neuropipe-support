@@ -4,8 +4,8 @@ NeuroPipe Tutorial
 
 
 
-:author: Mason Simon
-:email: mgsimon@princeton.edu
+:author: Alexa Tompary
+:email: ntblab@princeton.edu
 
 
 
@@ -23,7 +23,7 @@ In this tutorial, you are interested in running an HRF analysis on two separate 
 Analyzing a subject
 ===================
 
-We'll start by analyzing a single subject.
+We'll start by analyzing a single subject. Make sure you have created a project folder to work in (see the intro tutorial for help).
 
 
 Setting up
@@ -31,7 +31,7 @@ Setting up
 
 .. admonition:: you are here
 
-   ~/ppa-hunt
+   ~/ppa-hunt2
 
 Our subject ID is "0831101_confba02", so run this command::
 
@@ -44,20 +44,27 @@ Our subject ID is "0831101_confba02", so run this command::
 
 .. admonition:: you are here
 
-   ~/ppa-hunt/subjects/0831101_confba02
+   ~/ppa-hunt2/subjects/0831101_confba02
 
-This *README.txt* says your first step is to get some DICOM data and put it in a Gzipped TAR archive at *data/raw.tar.gz*. Like I mentioned, the data has already been collected. It's even TAR-ed and Gzipped. Hit "q" to quit *README.txt* and get the data with this command (NOTE: you must be on rondo for this to work)::
+This *README.txt* says your first step is to get some DICOM data and put it in a Gzipped TAR archive at *data/raw.tar.gz*. Like I mentioned, the data has already been collected. It's even TAR-ed and Gzipped. Hit "q" to quit *README.txt* and get the data with this command (NOTE: you must be on on a node, on rondo for this to work)::
 
   $ cp /exanet/ntb/packages/neuropipe/example_data/0831101_confba02.raw.tar.gz data/raw.tar.gz
 
-Email ntblab@gmail.com to request access to this data. NOTE: *cp* just copies files, and here we've directed it to copy data that was prepared for this tutorial; it doesn't work in general to retrieve data after you've done a scan. On rondo at Princeton, you can use *~/prototype/link/scripts/retrieve-data-from-sun.sh* (which appears at *~/subjects/SUBJ/scripts/retrieve-data-from-sun.sh*) to get your data, as long as your subject's folder name matches the subject ID used during for your scan session.
+Email ntblab@gmail.com to request access to this data if you can't use the above command. NOTE: *cp* just copies files, and here we've directed it to copy data that was prepared for this tutorial; it doesn't work in general to retrieve data after you've done a scan. On rondo at Princeton, you can use *~/prototype/link/scripts/retrieve-data-from-sun.sh* (which appears at *~/subjects/SUBJ/scripts/retrieve-data-from-sun.sh*) to get your data, as long as your subject's folder name matches the subject ID used during for your scan session.
+
+We also need to know the order of the scans that were collected for this subject. Download this file to see it::
+
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831101_confba02_run-order.txt > run-order.txt
+ 
+ERROR_RUN is listed for any scans that are not relevant to this tutorial.
 
 **Summary**::
 
-  $ ./scaffold 0831101_confba02
-  $ cd subjects/0831101_confba02
-  $ less README.txt
-  $ cp /exanet/ntb/packages/neuropipe/example_data/0831101_confba02.raw.tar.gz data/raw.tar.gz
+ $ ./scaffold 0831101_confba02
+ $ cd subjects/0831101_confba02
+ $ less README.txt
+ $ cp /exanet/ntb/packages/neuropipe/example_data/0831101_confba02.raw.tar.gz data/raw.tar.gz
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831101_confba02_run-order.txt > run-order.txt
 
 
 Preparing your data for analysis
@@ -65,19 +72,11 @@ Preparing your data for analysis
 
 .. admonition:: you are here
 
-   ~/ppa-hunt/subjects/0831101_confba02
+   ~/ppa-hunt2/subjects/0831101_confba02
 
 Open *README.txt* again::
 
   $ less README.txt
-
-We already set up *run-order.txt*, and put it in *prototype/copy/*. That directory is special. Any file or folder in it will be copied into each new subject directory that's created by *scaffold*. To check that *run-order.txt* came through all right, hit "q" to get out of *README.txt*, and run this command::
-
-$ less run-order.txt
-
-You should see that it's identical to the one we downloaded before. Hit "q", then open *README.txt* one last time::
-
-$ less README.txt
 
 It says that we should proceed by doing various transformations on the data, and then running a quality assurance tool to make sure the data is usable. The transformations make the data more palatable to FSL_, which we will use for analysis. As *README.txt* says, you do all that with the command *analyze.sh*. Before running that, see what it does::
 
@@ -127,17 +126,21 @@ GLM analysis with FEAT (first-level)
 
 .. admonition:: you are here
 
-   ~/ppa-hunt/subjects/0831101_confba02
+   ~/ppa-hunt2/subjects/0831101_confba02
 
 Now that you have data, and of adequate quality, it's time to do an analysis. We'll use FSL's FEAT to perform a GLM-based analysis. If GLM analysis or FEAT is new to you, read `FEAT's manual`_ to learn more about them. If any of the steps seem mysterious to you, hover your mouse over the relevant part of FEAT and a tooltip will appear describing that part in detail.
 
 .. _FEAT's manual: http://www.fmrib.ox.ac.uk/fsl/feat5/index.html
 
-To set the parameters of the analysis, you must know the experimental design. Open *protocol.txt* in the project directory and read it::
+To set the parameters of the analysis, you must know the experimental design. Download that information and put it in the project directory::
+
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/protocol.txt > ../../protocol.txt
+
+Take a look::
 
  $ less ../../protocol.txt
 
-Now launch FEAT::
+Now that we know the parameters of the experiment, launch FEAT::
 
  $ Feat &
 
@@ -154,11 +157,11 @@ The Data tab
 
 .. admonition:: you are here
 
-~/ppa-hunt/subjects/0831101_confba02
+~/ppa-hunt2/subjects/0831101_confba02
 
 Click "Select 4D data" and select the file *data/nifti/0831101_confba02_localizer01.nii.gz*; FEAT will analyze this data. Set "Output directory" to *analysis/firstlevel/localizer_hrf_01*; FEAT will put the results of its analysis in this folder, but with ".feat" appended, or "+.feat" appended if this is the second analysis with this name that you've run. FEAT should have detected "Total volumes" as 221, but it may have mis-detected "TR (s)" as 3.0; if so, change that to 1.5, because this experiment had a TR length of 1.5 seconds. Because *protocol.txt* indicated there were 6 seconds of disdaqs (volumes of data at the start of the run that are discarded because the scanner needs a few seconds to settle down), and TR length is 1.5s, set "Delete volumes" to 4. Set "High pass filter cutoff (s)" to 128 to remove slow drifts from your signal.
 
-.. image:: https://github.com/ntblab/neuropipe-support/doc/tutorial_thirdlevel/feat-data.png
+.. image:: https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/feat-data.png
 
 Go to the Pre-stats tab.
 
@@ -168,7 +171,7 @@ The Pre-stats tab
 
 .. admonition:: you are here
 
-   ~/ppa-hunt/subjects/0831101_confba02
+   ~/ppa-hunt2/subjects/0831101_confba02
 
 Change "Slice timing correction" to "Interleaved (0,2,4 ...", because slices were collected in this interleaved pattern. Leave the rest of the settings at their defaults.
 
@@ -182,7 +185,7 @@ The Stats tab
 
 .. admonition:: you are here
 
-   ~/ppa-hunt/subjects/0831101_confba02
+   ~/ppa-hunt2/subjects/0831101_confba02
 
 Check "Add motion parameters to model"; this makes regressors from estimates of the subject's motion, which hopefully absorb variance in the signal due to transient motion. To account for the variance in the signal due to the experimental manipulation, we define regressors based on the design, as described in *protocol.txt*. *protocol.txt* says that blocks consisted of 12 trials, each 1.5s long, with 12s rest between blocks, and 6s rest at the start to let the scanner settle down. That 6s at the start was taken care of in the Data tab, so we have a design that looks like House, rest, Face, rest, House, rest, ...
 
@@ -193,8 +196,8 @@ We will specify this design using text files in FEAT's 3-column format: we make 
 These design files are provided for you. Make a directory to put them in, then download the files::
 
  $ mkdir design
- $ curl -k https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/0831101_confba02_house.txt >design/house.txt
- $ curl -k https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/0831101_confba02_face.txt >design/face.txt
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831101_confba02_house.txt >design/house.txt
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831101_confba02_face.txt >design/face.txt
 
 Examine each of these files and refer to *protocol.txt* as necessary::
 
@@ -228,8 +231,8 @@ Go to the Registration tab.
 **Summary**::
 
 $ mkdir design
-$ curl -k https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/0831101_confba02_house.txt >design/house.txt
-$ curl -k https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/0831101_confba02_face.txt >design/face.txt
+$ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831101_confba02_house.txt > design/house.txt
+$ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831101_confba02_face.txt > design/face.txt
 $ less design/house.txt
 $ less design/face.txt
 
@@ -239,7 +242,7 @@ The Registration tab
 
 .. admonition:: you are here
 
-   ~/ppa-hunt/subjects/0831101_confba02
+   ~/ppa-hunt2/subjects/0831101_confba02
 
 Different subjects have different shaped brains, and may have been in different positions in the scanner. To compare the data collected from different subjects, for each subject we compute the transformation that best moves and warps their data to match a standard brain, apply those transformations, then compare each subject in this "standard space". This Registration tab is where we set the parameters used to compute the transformation; we won't actually apply the transformation until we get to group analysis.
 
@@ -249,7 +252,7 @@ The subject's functional data is first registered to the initial structural imag
 
 .. image:: https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/feat-registration.png
 
-That's it! Hit Go. A webpage should open in your browser showing FEAT's progress. Once it's done, this webpage provides a useful summary of the analysis you just ran with FEAT. Later, we'll make a webpage for this subject to gather information like this FEAT report, the QA results, and plots summarizing this subject's data. But for now, let's continue hunting the PPA.
+That's it! Hit Go. A webpage should open in your browser showing FEAT's progress. Once it's done, this webpage provides a useful summary of the analysis you just ran with FEAT. After making sure that no errors occurred during the analysis, let's continue hunting the PPA.
 
 
 Finding the PPA
@@ -257,7 +260,7 @@ Finding the PPA
 
 .. admonition:: you are here
 
-   ~/ppa-hunt/subjects/0831101_confba02
+   ~/ppa-hunt2/subjects/0831101_confba02
 
 Launch FSLView::
 
@@ -266,12 +269,14 @@ Launch FSLView::
 Click File>Open... and select *analysis/firstlevel/localizer_hrf.feat/mean_func.nii.gz*; this is an image of the mean signal intensity at each voxel over the course of the run. We use it as a background to overlay a contrast image on. Click File>Add... *analysis/firstlevel/localizer_hrf.feat/stats/zstat4.nii.gz*. *zstat3.nii.gz* is an image of z-statistics for the house>face contrast being different from 0, so high intensity values in a voxel indicate that the house regressor caught much more of the variance in fMRI signal at that voxel than the face regressor. To find the PPA, we'll look for regions with really high values in *zstat4.nii.gz*. To include only these regions in the overlay, set the Min threshold at the top of FSLView to something like 8, then click around in the brain to see what regions had contrast z-stats at that threshold or above. Look for a bilateral pair of regions with zstat's at a high threshold, around the middle of the brain; that'll be the PPA.
 
 
+
+
 Repeating the analysis for a second run
 ========================================
 
 .. admonition:: you are here
 
-   ~/ppa-hunt/subjects/0831101_confba02
+   ~/ppa-hunt2/subjects/0831101_confba02
    
 Now that you have analyzed one run of this subject's data, it's time to repeat the analysis on a second run. In many experiments, subjects will perform the same task in two identical runs so they have a bit of a break during the scanning session, or because different stimuli are counterbalanced across the scan session. The two runs can then be combined in a second-level analysis. This time around, we can do it more automatically. FEAT recorded all parameters of the analysis you just ran, in a file called *design.fsf* in its output directory, which was *analysis/firstlevel/localizer_hrf_01.feat/*. Our approach is to take that file, replace run-specific settings with placeholders, then for each new run, automatically substitute appropriate values for the placeholders, and run FEAT with the resulting file. 
 
@@ -280,7 +285,7 @@ Templating the fsf file
 
 .. admonition:: you are here
 
-   ~/ppa-hunt/subjects/0831101_confba02
+   ~/ppa-hunt2/subjects/0831101_confba02
 
 Start by copying the *design.fsf* file for the analysis we just ran to *fsf*, and give it a ".template" extension::
 
@@ -316,7 +321,7 @@ Rendering the template
 
 .. admonition:: you are here
 
-   ~/ppa-hunt/subjects/0831101_confba02
+   ~/ppa-hunt2/subjects/0831101_confba02
 
 Now, we have a template fsf file. To use that template, we need a script that fills it in, appropriately, for each run and for each subject. This filling-in process is called rendering, and a script that does most of the work is provided at *scripts/render-fsf-templates.sh*. Open that in your text editor::
 
@@ -356,7 +361,7 @@ Automating the analysis
 
 .. admonition:: you are here
 
-   ~/ppa-hunt/subjects/0831101_confba02
+   ~/ppa-hunt2/subjects/0831101_confba02
 
 As we saw earlier, *prep.sh* already calls *render-fsf-templates.sh*. *analyze.sh* calls *prep.sh*, so to automate the analysis, all that remains is running *feat* on the rendered fsf file from a script that's called by *analyze.sh*. We'll make a new script called *localizer.sh* for that purpose. Make the script with this command::
 
@@ -408,7 +413,7 @@ Collapsing across the two localizer runs
 
 .. admonition:: you are here
 
-   ~/ppa-hunt/subjects/0831101_confba02
+   ~/ppa-hunt2/subjects/0831101_confba02
 
 Now that we have completed Feat analyses for the two localizer runs, it's time to combine the results of the two runs. We'll use FEAT again to run what it calls a "higher-level analysis", which combines the information from those "first-level" analyses that we just did. The process will be very similar to that in `GLM analysis with FEAT (first-level)`_. When running first-level analyses, we stored FEAT folders, scripts, and fsf files in the subjects's *analysis/firstlevel* folder; now that we're doing analyses that combine runs, we'll store all of those under *analysis/secondlevel*.
 
@@ -418,7 +423,7 @@ GLM analysis with FEAT (higher-level)
 
 .. admonition:: you are here
 
-   ~/ppa-hunt/subjects/0831101_confba02
+   ~/ppa-hunt2/subjects/0831101_confba02
 
 Launch FEAT::
 
@@ -448,13 +453,13 @@ Finding the subject's PPA
 
 .. admonition:: you are here
 
-   ~/ppa-hunt/subjects/0831101_confba02
+   ~/ppa-hunt2/subjects/0831101_confba02
 
 When the analysis finishes, open FSLview::
 
   $ fslview &
 
-Click File>Open Standard and accept the default. Click File>Add, and select *~/ppa-hunt/analysis/secondlevel/localizer_hrf.gfeat/cope4.feat/stats/zstat1.nii.gz*. 
+Click File>Open Standard and accept the default. Click File>Add, and select *~/ppa-hunt2/analysis/secondlevel/localizer_hrf.gfeat/cope4.feat/stats/zstat1.nii.gz*. 
 
 **Summary**::
 
@@ -466,7 +471,7 @@ Templating the second-level analysis
 
 .. admonition:: you are here
 
-   ~/ppa-hunt/subjects/0831101_confba02
+   ~/ppa-hunt2/subjects/0831101_confba02
    
 While we're here, we are also going to template the second-level analysis so we can have it ready for future subjects. This way we can do the entire analysis for a new subject in just a few commands. Start by copying the *design.fsf* file for the analysis we just ran to *fsf*, and give it a ".template" extension::
 
@@ -494,7 +499,7 @@ Find the line that says "# 4D AVW data or FEAT directory (1)". Replace it and th
 
   <?php for ($i=0; $i < count($runs); $i++) { ?>
   # 4D AVW data or FEAT directory (<?= $i+1 ?>)
-  set feat_files(<?= $i+1 ?>) "<?= $SUBJ_DIR ?>/<?= $SUBJ ?>/analysis/firstlevel/<?= $runs[$i] ?>"
+  set feat_files(<?= $i+1 ?>) "<?= $SUBJECTS_DIR ?>/<?= $SUBJ ?>/analysis/firstlevel/<?= $runs[$i] ?>"
 
   <?php } ?>
 
@@ -527,7 +532,7 @@ Automating the second-level analysis
 
 .. admonition:: you are here
 
-   ~/ppa-hunt/subjects/0831101_confba02
+   ~/ppa-hunt2/subjects/0831101_confba02
 
 Now that we have a template for the second-level localizer analysis fsf file, all that's left is to render it and run FEAT on the rendered fsf file. Open up the *localizer.sh* script we made earlier with your text editor::
 
@@ -535,7 +540,7 @@ Now that we have a template for the second-level localizer analysis fsf file, al
 
 .. admonition:: you are here
 
-   ~/ppa-hunt/subjects/0831101_confba02
+   ~/ppa-hunt2/subjects/0831101_confba02
 
 Copy these lines into localizer.sh at the end::
   
@@ -553,7 +558,7 @@ Copy these lines into localizer.sh at the end::
     <?php
     \$OUTPUT_DIR = '$output_dir';
     \$STANDARD_BRAIN = '$STANDARD_BRAIN';
-    \$SUBJECTS_DIR = '$PROJECT_DIR/$SUBJECT_DIR';
+    \$SUBJECTS_DIR = '$PROJECT_DIR/$SUBJECTS_DIR';
     "
 
     echo '$subjects = array();'
@@ -568,9 +573,9 @@ Copy these lines into localizer.sh at the end::
 
   # Form a complete template by prepending variable definitions to the template,
   # then render it with PHP and run FEAT on the rendered fsf file.
-  fsf_template=$FSF_DIR/localizer_hrf_secondlevel.fsf.template
-  fsf_file=$FSF_DIR/localizer_hrf_secondlevel.fsf
-  output_dir=analysis/secondlevel/localizer_hrf.gfeat
+  fsf_template=$SUBJECT_DIR/$FSF_DIR/localizer_hrf_secondlevel.fsf.template
+  fsf_file=$SUBJECT_DIR/$FSF_DIR/localizer_hrf_secondlevel.fsf
+  output_dir=$SUBJECT_DIR/analysis/secondlevel/localizer_hrf.gfeat
   define_vars $output_dir | cat - "$fsf_template" | php > "$fsf_file"
   feat "$fsf_file"
 
@@ -595,7 +600,7 @@ A webpage should open in your browser showing FEAT's progress. Because we manual
 
 .. admonition:: you are here
 
-   ~/ppa-hunt/subjects/0831101_confba02
+   ~/ppa-hunt2/subjects/0831101_confba02
 
 Congratulations on analyzing your first subject with NeuroPipe! Now, we'll do it again, but much of the work has already been done. First, move back into the project directory::
 
@@ -611,8 +616,8 @@ Then, move into that subject's directory::
  
 This subject's stimuli order was slightly different. Instead of beginning with face images, their first set of stimuli were house images. They therefore have different face and house regressor files. They're provided for you already::
 
-  $ curl -k https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/0831102_confba02_house.txt > design/house.txt
-  $ curl -k https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/0831102_confba02_face.txt > design/face.txt
+  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831102_confba02_house.txt > design/house.txt
+  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831102_confba02_face.txt > design/face.txt
 
 We already made a template for the localizer run that works for different subjects, edited scripts/render-fsf-templates.sh to make a unique design file for each run, and created localizer.sh to run the two Feat analyses. Because we already copied these files into *~/protoype*, these changes will be present in the new subject's directory. All that's left is to render the templates and then run the analysis! First, fill in the templates::
 
@@ -639,8 +644,8 @@ FEAT should be churning away on the new data. Take some time to look over the QA
   $ cd ../../
   $ ./scaffold 0831102_confba02
   $ cd subjects/0831102_confba02
-  $ curl -k https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/0831102_confba02_house.txt > design/house.txt
-  $ curl -k https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/0831102_confba02_face.txt > design/face.txt
+  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831102_confba02_house.txt > design/house.txt
+  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831102_confba02_face.txt > design/face.txt
   $ scripts/render-fsf-templates.sh
   $ ls fsf
   $ cp /exanet/ntb/packages/neuropipe/example_data/0831102_confba02.raw.tar.gz data/raw.tar.gz
@@ -652,7 +657,7 @@ Combining within-subjects analyses into a group analysis
 
 .. admonition:: you are here
 
-   ~/ppa-hunt/subjects/0831101_confba02
+   ~/ppa-hunt2/subjects/0831101_confba02
 
 Now that we've found the PPAs for two subjects individually, it's time to perform a group analysis to learn how reliable the PPA location is across these subjects. We'll use FEAT again to run what it calls a "higher-level analysis", which takes the information from those "first-level" analyses that we just did. The process will be very similar to that in `GLM analysis with FEAT (first-level)`_. When running within-subjects analyses, we stored FEAT folders, scripts, and fsf files in the subjects's folders; now that we're doing group analyses, we'll store all of those under *~/group*.
 
@@ -667,7 +672,7 @@ Move up to the root project folder, then to the group folder::
 
 .. admonition:: you are here
 
-   ~/ppa-hunt/group
+   ~/ppa-hunt2/group
 
 Launch FEAT::
 
@@ -677,7 +682,7 @@ Launch FEAT::
 The Data tab
 ''''''''''''
 
-Change the drop-down in the top left from "First-level analysis" to "Higher-level analysis". This will change the stuff you see below. Set "Number of inputs" to 2, because we're combining 2 within-subjects analyses, then click "Select FEAT directories". For the first directory, select *~/ppa-hunt/subjects/0831101_confba02/analysis/secondlevel/localizer_hrf.gfeat*, and for the second, select *~/ppa-hunt/subjects/0831102_confba02/analysis/secondlevel/localizer_hrf.gfeat*. Set the output directory to *~/ppa-hunt/group/analysis/localizer_hrf*.
+Change the drop-down in the top left from "First-level analysis" to "Higher-level analysis". This will change the stuff you see below. Set "Number of inputs" to 2, because we're combining 2 within-subjects analyses, then click "Select FEAT directories". For the first directory, select *~/ppa-hunt2/subjects/0831101_confba02/analysis/secondlevel/localizer_hrf.gfeat*, and for the second, select *~/ppa-hunt2/subjects/0831102_confba02/analysis/secondlevel/localizer_hrf.gfeat*. Set the output directory to *~/ppa-hunt2/group/analysis/localizer_hrf*.
 
 Go to the Stats tab.
 
@@ -697,13 +702,13 @@ Finding the group's PPA
 
 .. admonition:: you are here
 
-   ~/ppa-hunt/group
+   ~/ppa-hunt2/group
 
 When the analysis finishes, open FSLview::
 
   $ fslview &
 
-Click File>Open Standard and accept the default. Click File>Add, and select *~/ppa-hunt/group/analysis/localizer_hrf.gfeat/cope4.feat/stats/zstat1.nii.gz*. 
+Click File>Open Standard and accept the default. Click File>Add, and select *~/ppa-hunt2/group/analysis/localizer_hrf.gfeat/cope4.feat/stats/zstat1.nii.gz*. 
 
 Automating the group analysis
 =============================
@@ -716,7 +721,7 @@ Templating the group fsf file
 
 .. admonition:: you are here
 
-   ~/ppa-hunt/group
+   ~/ppa-hunt2/group
 
 Just like when we ran a second-level analysis on two localizer runs for each subject, to template a higher-level fsf file, we'll need to repeat whole sections of the fsf file for each input going into the group analysis. In this case, each input is a subject instead of a run. Like before, we'll use PHP_ to render the templates, and write loops_ for those sections of the template that need repeating for each subject.
 
@@ -741,7 +746,7 @@ Find the line that says "# 4D AVW data or FEAT directory (1)". Replace it and th
 
   <?php for ($i=0; $i < count($subjects); $i++) { ?>
   # 4D AVW data or FEAT directory (<?= $i+1 ?>)
-  set feat_files(<?= $i+1 ?>) "<?= $SUBJ_DIR ?>/<?= $subjects[$i] ?>/analysis/secondlevel/localizer_hrf.gfeat"
+  set feat_files(<?= $i+1 ?>) "<?= $SUBJECTS_DIR ?>/<?= $subjects[$i] ?>/analysis/secondlevel/localizer_hrf.gfeat"
 
   <?php } ?>
 
@@ -773,7 +778,7 @@ Automating the group analysis
 
 .. admonition:: you are here
 
-   ~/ppa-hunt/group
+   ~/ppa-hunt2/group
 
 Now that we have a template for the group localizer analysis fsf file, all that's left is to render it and run FEAT on the rendered fsf file. Move up to the project directory and make a file in *scripts* called *group-localizer.sh* with your text editor::
 
@@ -782,7 +787,7 @@ Now that we have a template for the group localizer analysis fsf file, all that'
 
 .. admonition:: you are here
 
-   ~/ppa-hunt
+   ~/ppa-hunt2
 
 Copy these lines into *scripts/group-localizer.sh*::
 
@@ -800,7 +805,7 @@ Copy these lines into *scripts/group-localizer.sh*::
     <?php
     \$OUTPUT_DIR = '$output_dir';
     \$STANDARD_BRAIN = '$STANDARD_BRAIN';
-    \$SUBJECTS_DIR = '$PROJECT_DIR/$SUBJECT_DIR';
+    \$SUBJECTS_DIR = '$PROJECT_DIR/$SUBJECTS_DIR';
     "
 
     echo '$subjects = array();'
@@ -815,9 +820,9 @@ Copy these lines into *scripts/group-localizer.sh*::
 
   # Form a complete template by prepending variable definitions to the template,
   # then render it with PHP and run FEAT on the rendered fsf file.
-  fsf_template=$GROUP_DIR/fsf/localizer_hrf_thirdlevel.fsf.template
-  fsf_file=$GROUP_DIR/fsf/localizer_hrf_thirdlevel.fsf
-  output_dir=$GROUP_DIR/analysis/localizer_hrf.gfeat
+  fsf_template=$PROJECT_DIR/fsf/localizer_hrf_thirdlevel.fsf.template
+  fsf_file=$PROJECT_DIR/fsf/localizer_hrf_thirdlevel.fsf
+  output_dir=$PROJECT_DIR/$GROUP_DIR/analysis/localizer_hrf.gfeat
   define_vars $output_dir | cat - "$fsf_template" | php > "$fsf_file"
   feat "$fsf_file"
 
@@ -827,7 +832,7 @@ Save and close the script, then run it to test that everything works::
 
   $ bash scripts/group-localizer.sh
 
-A webpage should open in your browser showing FEAT's progress. Because we manually ran this analysis and put its output into *~/ppa-hunt/group/analysis/localizer_hrf.gfeat*, FEAT should have created a new directory at *~/ppa-hunt/group/analysis/localizer_hrf+.gfeat*, and be showing you the analysis running in that directory.
+A webpage should open in your browser showing FEAT's progress. Because we manually ran this analysis and put its output into *~/ppa-hunt2/group/analysis/localizer_hrf.gfeat*, FEAT should have created a new directory at *~/ppa-hunt2/group/analysis/localizer_hrf+.gfeat*, and be showing you the analysis running in that directory.
 
 **Summary**::
 
@@ -841,11 +846,11 @@ Automating the entire analysis
 
 .. admonition:: you are here
 
-   ~/ppa-hunt
+   ~/ppa-hunt2
 
 Our goal was to run the entire analysis with a single command, to make it easy to reproduce. We're close. Open *analyze.sh* in your text editor::
 
-  $ nano analyze.sh
+  $ nano analyze-group.sh
 
 You see that this script loads settings by sourcing *globals.sh*, runs each subject's individual analysis, then has a space for us to run scripts to do our group analysis. After the comment marking where to run group analyses, add this line::
 
@@ -855,16 +860,16 @@ Save and exit. That's it! To test this out, first delete any pre-existing subjec
 
   $ rm -rf subjects/*/analysis/firstlevel/*
   $ rm -rf subjects/*/analysis/secondlevel/*
-  $ rm -rf group/analysis/firstlevel/*
+  $ rm -rf group/analysis/*
 
 Now run the whole analysis::
 
-  $ bash analyze.sh
+  $ ./analyze-group.sh
 
 **Summary**::
 
   $ nano analyze.sh
   $ rm -rf subjects/*/analysis/firstlevel/*
   $ rm -rf subjects/*/analysis/secondlevel/*
-  $ rm -rf group/analysis/firstlevel/*
-  $ bash analyze.sh
+  $ rm -rf group/analysis/*
+  $ ./analyze-group.sh
