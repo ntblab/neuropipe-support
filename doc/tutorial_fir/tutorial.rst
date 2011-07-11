@@ -21,7 +21,7 @@ If you've worked through the introductory tutorial, you are ready to use this tu
 
 Before you begin, make sure that you have a copy of your project folder (here, it's called 'fir-proj'). 
 
-Using a FIR model to analyze fMRI data is useful when you 1) are looking to fit as much of your brain data as possible into a model, and 2)do not want to make any assumptions about the shape of the brain's response to your stimuli. This task looks for subdued brain response, or 'adaptation,' when subjects are shown repeated patterns of scene images.  Since the response to these patterns may not look like the canonical hemodynamic response, we'll go with an FIR model instead. In this analysis, we will pick a time window around each trial, and run a GLM to model the response at several time points within the window.
+Using a FIR model to analyze fMRI data is useful when you 1) are looking to fit as much of your brain data as possible into a model, and 2) do not want to make any assumptions about the shape of the brain's response to your stimuli. This task looks for subdued brain response, or 'adaptation,' when subjects are shown repeated patterns of scene images.  Since the response to these patterns may not look like the canonical hemodynamic response, we'll go with an FIR model instead. In this analysis, we will pick a time window around each trial, and run a GLM to model the response at several time points within the window.
 
 Analyzing a subject
 ===================
@@ -75,13 +75,13 @@ Open *README.txt* again::
 
 Next, we need to fill out *run-order.txt* with the order of MRI sequences that were completed for this subject. One has already been made for you, so go ahead and run this command to get it:: 
 
- $ curl https://github.com/ntblab/neuropipe-support/raw/rc-0.2/doc/tutorial_fir/run-order.txt > run-order.txt
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/0223101_conatt01_run-order.txt > run-order.txt
 
 To check that *run-order.txt* came through all right, hit "q" to get out of *README.txt*, and run this command::
 
  $ less run-order.txt
  
-You will see that some scans that aren't relevant to this tutorial have been marked with 'ERROR_RUN' so they will not be unzipped and prepped for analysis. Now, put a copy of *run-order.txt* in *prototype/copy/*. That directory is special. Any file or folder in it will be copied into each new subject directory that's created by *scaffold*.
+You will see that some scans that aren't relevant to this tutorial have been marked with 'ERROR_RUN' so they will not be unzipped and prepped for analysis. Now, put a copy of *run-order.txt* in *prototype/copy/*. That directory is special. Any file or folder in it will be copied into each new subject directory that's created by *scaffold*::
 
  $ cp run-order.txt ../../prototype/copy/run-order.txt
  
@@ -122,7 +122,7 @@ Use the "(What's this?)" links to figure out what all the diagnostics mean. When
 **Summary**::
 
   $ less README.txt
-  $ curl https://github.com/ntblab/neuropipe-support/raw/rc-0.2/doc/tutorial_fir/run-order.txt > run-order.txt
+  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/0223101_conatt01_run-order.txt > run-order.txt
   $ less run-order.txt
   $ less README.txt
   $ less analyze.sh

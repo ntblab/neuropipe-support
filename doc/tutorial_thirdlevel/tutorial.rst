@@ -847,7 +847,7 @@ If the text following "STANDARD_BRAIN=" differs from what you copied out of the 
 
 Save and close the script, then run it to test that everything works::
 
-  $ bash scripts/group-localizer.sh
+  $ scripts/group-localizer.sh
 
 A webpage should open in your browser showing FEAT's progress. Because we manually ran this analysis and put its output into *~/ppa-hunt2/group/analysis/localizer_hrf.gfeat*, FEAT should have created a new directory at *~/ppa-hunt2/group/analysis/localizer_hrf+.gfeat*, and be showing you the analysis running in that directory.
 
@@ -868,9 +868,13 @@ Our goal was to run the entire analysis with a single command, to make it easy t
 
   $ nano analyze-group.sh
 
-You see that this script loads settings by sourcing *globals.sh*, runs each subject's individual analysis, then has a space for us to run scripts to do our group analysis. After the comment marking where to run group analyses, add this line::
+You see that this script loads settings by sourcing *globals.sh*, runs each subject's individual analysis, then has a space for us to run scripts to do our group analysis. First, after the line that runs analyze.sh for each subject, add this line::
 
-  bash scripts/group-localizer.sh
+ $ bash scripts/wait-for-feat.sh $SUBJECTS_DIR/$subj/analysis/secondlevel/localizer_hrf.gfeat
+
+That line makes the thirdlevel Feat analysis wait for both subjects' secondlevel analyses to finish before beginning. Finally, after the comment marking where to run group analyses, add this line::
+
+ $ bash scripts/group-localizer.sh
 
 Save and exit. That's it! To test this out, first delete any pre-existing subject and group analyses::
 
