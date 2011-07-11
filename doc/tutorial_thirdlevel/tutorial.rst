@@ -208,9 +208,7 @@ When making these design files for your own projects, do not use a Windows machi
 
 .. _`problems with line endings`: http://en.wikipedia.org/wiki/Newline#Common_problems
 
-To use these files to specify the design, click the "Full model setup" button. Set EV name to "house". FSL calls regressors EV's, short for Explanatory Variables. Set "Basic shape" to "Custom (3 column format)" and select *design/house.txt*. That file on its own describes a square wave; to account for the shape of the BOLD response, we convolve it with another function that models the hemodynamic response to a stimulus. Set "Convolution" to "Double-Gamma HRF". Now to set up the face regressor set "Number of original EVs" to 2 and click to tab 2.
-
-.. image:: https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/feat-stats-ev1.png
+To use these files to specify the design, click the "Full model setup" button. Set "EV name" to "house". FSL calls regressors EV's, short for Explanatory Variables. Set "Basic shape" to "Custom (3 column format)" and select *design/house.txt*. That file on its own describes a square wave; to account for the shape of the BOLD response, we convolve it with another function that models the hemodynamic response to a stimulus. Set "Convolution" to "Double-Gamma HRF". Now to set up the face regressor set "Number of original EVs" to 2 and click to tab 2.
 
 Set EV name to "face". Set "Basic shape" to "Custom (3 column format)" and select *design/face.txt*. Change "Convolution" to "Double-Gamma HRF", like we did for the house regressor.
 
@@ -218,7 +216,10 @@ Set EV name to "face". Set "Basic shape" to "Custom (3 column format)" and selec
 
 Now go to the "Contrasts & F-tests" tab. Increase "Contrasts" to 4. There is now a matrix of number fields with a row for each contrast and a column for each EV. You specify a contrast as a linear combination of the parameter estimates on each regressor. We'll make one contrast to show the main effect of the face regressor, one to show the main effect of the house regressor, one to show where the house regressor is greater than the face regressor, and one to show where the face regressor is greater:
 
-* Set the 1st row's title to "face", it's "EV1" value to 1, and it's "EV2" value to 0. * Set the 2nd row's title to "house", it's "EV1" value to 0, and it's "EV2" value to 1. * Set the 3rd row's title to "face>house", it's "EV1" value to 1, and it's "EV2" value to -1. * Set the 4th row's title to "house>face", it's "EV1" value to -1, and it's "EV2" value to 1.
+* Set the 1st row's title to "house", it's "EV1" value to 1, and it's "EV2" value to 0. 
+* Set the 2nd row's title to "face", it's "EV1" value to 0, and it's "EV2" value to 1. 
+* Set the 3rd row's title to "house>face", it's "EV1" value to 1, and it's "EV2" value to -1. 
+* Set the 4th row's title to "face>house", it's "EV1" value to -1, and it's "EV2" value to 1.
 
 .. image:: https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/feat-stats-contrasts-and-f-tests.png
 
@@ -230,11 +231,11 @@ Go to the Registration tab.
 
 **Summary**::
 
-$ mkdir design
-$ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831101_confba02_house.txt > design/house.txt
-$ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831101_confba02_face.txt > design/face.txt
-$ less design/house.txt
-$ less design/face.txt
+$ mkdir design/run1
+$ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831101_confba02_house.txt > design/run1/house.txt
+$ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831101_confba02_face.txt > design/run1/face.txt
+$ less design/run1/house.txt
+$ less design/run1/face.txt
 
 
 The Registration tab
@@ -246,7 +247,7 @@ The Registration tab
 
 Different subjects have different shaped brains, and may have been in different positions in the scanner. To compare the data collected from different subjects, for each subject we compute the transformation that best moves and warps their data to match a standard brain, apply those transformations, then compare each subject in this "standard space". This Registration tab is where we set the parameters used to compute the transformation; we won't actually apply the transformation until we get to group analysis.
 
-FEAT should already have a "Standard space" image selected; leave it with the default, but change the drop-down menu from "Normal search" to "Full search", or this subject's brain will be misregistered. Check "Initial structural image", and select the file *subjects/0831101_confba02/data/nifti/0831101_confba02_t1_flash01.nii.gz*. Change the drop-down menu from "Normal search" to "No search," and change the other menu from "7 DOF" to "3 DOF (translation only)." Check "Main structural image", and select the file *subjects/0831101_confba02/data/nifti/0831101_confba02_t1_mprage01.nii.gz*.
+FEAT should already have a "Standard space" image selected; leave it with the default, but change the drop-down menu from "Normal search" to "Full search", and set the other menu to "7 DOF" or this subject's brain will be misregistered. Check "Initial structural image", and select the file *subjects/0831101_confba02/data/nifti/0831101_confba02_t1_flash01.nii.gz*. Change the drop-down menu from "Normal search" to "No search," and change the other menu to "7 DOF". Check "Main structural image", and select the file *subjects/0831101_confba02/data/nifti/0831101_confba02_t1_mprage01.nii.gz*. Make sure "Normal search" and "6 DOF" are set for the main structural image.
 
 The subject's functional data is first registered to the initial structural image, then that is registered to the main structural image, which is then registered to the standard space image. All this indirection is necessary because registration can fail, and it's more likely to fail if you try to go directly from the functional data to standard space.
 
@@ -266,10 +267,7 @@ Launch FSLView::
 
   $ fslview
 
-Click File>Open... and select *analysis/firstlevel/localizer_hrf.feat/mean_func.nii.gz*; this is an image of the mean signal intensity at each voxel over the course of the run. We use it as a background to overlay a contrast image on. Click File>Add... *analysis/firstlevel/localizer_hrf.feat/stats/zstat4.nii.gz*. *zstat3.nii.gz* is an image of z-statistics for the house>face contrast being different from 0, so high intensity values in a voxel indicate that the house regressor caught much more of the variance in fMRI signal at that voxel than the face regressor. To find the PPA, we'll look for regions with really high values in *zstat4.nii.gz*. To include only these regions in the overlay, set the Min threshold at the top of FSLView to something like 8, then click around in the brain to see what regions had contrast z-stats at that threshold or above. Look for a bilateral pair of regions with zstat's at a high threshold, around the middle of the brain; that'll be the PPA.
-
-
-
+Click File>Open... and select *analysis/firstlevel/localizer_hrf.feat/mean_func.nii.gz*; this is an image of the mean signal intensity at each voxel over the course of the run. We use it as a background to overlay a contrast image on. Click File>Add... *analysis/firstlevel/localizer_hrf.feat/stats/zstat3.nii.gz*. *zstat3.nii.gz* is an image of z-statistics for the house>face contrast being different from 0, so high intensity values in a voxel indicate that the house regressor caught much more of the variance in fMRI signal at that voxel than the face regressor. To find the PPA, we'll look for regions with really high values in *zstat3.nii.gz*. To include only these regions in the overlay, set the Min threshold at the top of FSLView to something like 8, then click around in the brain to see what regions had contrast z-stats at that threshold or above. Look for a bilateral pair of regions with zstat's at a high threshold, around the middle of the brain; that'll be the PPA.
 
 Repeating the analysis for a second run
 ========================================
@@ -302,6 +300,8 @@ Make the following replacements and save the file. Be sure to include the spaces
   #. on the line starting with "set feat_files(1)", replace all of the text inside the quotes with "<?= $DATA_FILE_PREFIX ?>"
   #. on the line starting with "set initial_highres_files(1) ", replace all of the text inside the quotes with "<?= $INITIAL_HIGHRES_FILE ?>"
   #. on the line starting with "set highres_files(1)", replace all of the text inside the quotes with "<?= $HIGHRES_FILE ?>"
+  #. on the line starting with "set fmri(custom1)", replace all of the text inside the quotes with "<?= $EV1 ?>"
+  #. on the line starting with "set fmri(custom2)", replace all of the text inside the quotes with "<?= $EV2 ?>"
 
 Those bits you replaced with placeholders are the parameters that must change when analyzing a different run, a new subject, or using a different computer. After saving the file, copy it to the prototype so it's available for future subjects::
 
@@ -335,6 +335,8 @@ It consists of a function called render_firstlevel, which we'll use to render th
                     $NIFTI_DIR/${SUBJ}_localizer01 \
                     $NIFTI_DIR/${SUBJ}_t1_flash01.nii.gz \
                     $NIFTI_DIR/${SUBJ}_t1_mprage01.nii.gz \
+                    $DESIGN_DIR/run1/house.txt \
+                    $DESIGN_DIR/run1/face.txt \
                     > $FSF_DIR/localizer_hrf_01.fsf
 
   render_firstlevel $FSF_DIR/localizer_hrf.fsf.template \
@@ -343,6 +345,8 @@ It consists of a function called render_firstlevel, which we'll use to render th
                     $NIFTI_DIR/${SUBJ}_localizer02 \
                     $NIFTI_DIR/${SUBJ}_t1_flash01.nii.gz \
                     $NIFTI_DIR/${SUBJ}_t1_mprage01.nii.gz \
+                    $DESIGN_DIR/run2/house.txt \
+                    $DESIGN_DIR/run2/face.txt \
                     > $FSF_DIR/localizer_hrf_02.fsf
                     
 That hunk of code calls the function render_firstlevel, passing it the values to substitute for the template's placeholders. Each chunk of code will create a new design.fsf file, one for each localizer run. This will be useful when analyzing the next subject's data. The values in this script use a bunch of completely-uppercase variables, which are defined in *globals.sh*.  Examine *globals.sh*::
