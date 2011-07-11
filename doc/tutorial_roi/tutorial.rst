@@ -26,6 +26,10 @@ In this tutorial, we will take the data that was analyzed in the previous tutori
 Picking ROIs
 ============
 
+.. admonition:: you are here
+
+   ~/ppa-hunt/subjects/0223101_conatt01
+
 First, you have to pick the coordinates of the ROIs you are interested in analyzing. These areas have already been chosen for you; since this study was interested in adaptation in scene-selective areas of the brain, we will be looking at the right and left parahippocampal place area (PPA), retrosplenial cortex (RSC), and transverse occipital sulcus (TOS). These brain regions need to be organized in a text file with one region per line. The list has already been made for you::
 
  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_roi/roi_regions.txt > design/roi_regions.txt
