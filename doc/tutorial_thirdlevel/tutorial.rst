@@ -23,7 +23,7 @@ In this tutorial, you are interested in running an HRF analysis on two separate 
 Analyzing a subject
 ===================
 
-We'll start by analyzing a single subject. Make sure you have created a project folder to work in (see the intro tutorial for help).
+We'll start by analyzing a single subject. Make sure you have created a project folder to work in (see the intro tutorial for help). The name of the project for this tutorial is 'ppa-hunt2'.
 
 
 Setting up
@@ -35,12 +35,12 @@ Setting up
 
 Our subject ID is "0831101_confba02", so run this command::
 
-  $ ./scaffold 0831101_confba02
+ $ ./scaffold 0831101_confba02
 
 *scaffold* tells you that it made a subject directory at *subjects/0831101_confba02* and that you should read the *README.txt* file there if this is your first time setting up a subject. Move into the subject's directory, and do what it says::
 
-  $ cd subjects/0831101_confba02
-  $ less README.txt
+ $ cd subjects/0831101_confba02
+ $ less README.txt
 
 .. admonition:: you are here
 
@@ -48,7 +48,7 @@ Our subject ID is "0831101_confba02", so run this command::
 
 This *README.txt* says your first step is to get some DICOM data and put it in a Gzipped TAR archive at *data/raw.tar.gz*. Like I mentioned, the data has already been collected. It's even TAR-ed and Gzipped. Hit "q" to quit *README.txt* and get the data with this command (NOTE: you must be on on a node, on rondo for this to work)::
 
-  $ cp /exanet/ntb/packages/neuropipe/example_data/0831101_confba02.raw.tar.gz data/raw.tar.gz
+ $ cp /exanet/ntb/packages/neuropipe/example_data/0831101_confba02.raw.tar.gz data/raw.tar.gz
 
 Email ntblab@gmail.com to request access to this data if you can't use the above command. NOTE: *cp* just copies files, and here we've directed it to copy data that was prepared for this tutorial; it doesn't work in general to retrieve data after you've done a scan. On rondo at Princeton, you can use *~/prototype/link/scripts/retrieve-data-from-sun.sh* (which appears at *~/subjects/SUBJ/scripts/retrieve-data-from-sun.sh*) to get your data, as long as your subject's folder name matches the subject ID used during for your scan session.
 
@@ -76,29 +76,29 @@ Preparing your data for analysis
 
 Open *README.txt* again::
 
-  $ less README.txt
+ $ less README.txt
 
 It says that we should proceed by doing various transformations on the data, and then running a quality assurance tool to make sure the data is usable. The transformations make the data more palatable to FSL_, which we will use for analysis. As *README.txt* says, you do all that with the command *analyze.sh*. Before running that, see what it does::
 
-$ less analyze.sh
+ $ less analyze.sh
 
 .. _FSL: http://www.fmrib.ox.ac.uk/fsl/
 
 Look at the body of the script, and notice it just runs another script: *prep.sh*. Hit "q" to quit *analyze.sh* and read *prep.sh*::
 
-$ less prep.sh
+ $ less prep.sh
 
 *prep.sh* calls four other scripts: one to do those transformations on the data, one to run the quality assurance tools, one to perform some more transformations on the data, and one called *render-fsf-templates.sh*. Don't worry about that last one for now--we'll cover it later. If you'd like, open those first three scripts to see what they do. Otherwise, press on::
 
-  $ ./analyze.sh
+ $ ./analyze.sh
 
 Once *analyze.sh* completes, look around *data/nifti*::
 
-  $ ls data/nifti
+ $ ls data/nifti
 
 There should be a pair of .bxh/.nii.gz files for each pulse sequence listed in *run-order.txt*, excluding the sequences called ERROR_RUN. Open the .nii.gz files with FSLView_, if you'd like, using a command like this::
 
-$ fslview data/nifti/0831101_confba02_t1_mprage01.nii.gz
+ $ fslview data/nifti/0831101_confba02_t1_mprage01.nii.gz
 
 .. _FSLView: http://www.fmrib.ox.ac.uk/fsl/fslview/index.html
 
@@ -110,16 +110,15 @@ Use the "(What's this?)" links to figure out what all the diagnostics mean. When
 
 **Summary**::
 
-  $ less README.txt
-  $ less run-order.txt
-  $ less README.txt
-  $ less analyze.sh
-  $ less prep.sh
-  $ ./analyze.sh
-  $ ls data/nifti
-  $ fslview data/nifti/0831101_confba02_t1_mprage01.nii.gz
-  $ firefox data/qa/index.html
-
+ $ less README.txt
+ $ less run-order.txt
+ $ less README.txt
+ $ less analyze.sh
+ $ less prep.sh
+ $ ./analyze.sh
+ $ ls data/nifti
+ $ fslview data/nifti/0831101_confba02_t1_mprage01.nii.gz
+ $ firefox data/qa/index.html
 
 GLM analysis with FEAT (first-level)
 ------------------------------------
@@ -159,7 +158,7 @@ The Data tab
 
 ~/ppa-hunt2/subjects/0831101_confba02
 
-Click "Select 4D data" and select the file *data/nifti/0831101_confba02_localizer01.nii.gz*; FEAT will analyze this data. Set "Output directory" to *analysis/firstlevel/localizer_hrf_01*; FEAT will put the results of its analysis in this folder, but with ".feat" appended, or "+.feat" appended if this is the second analysis with this name that you've run. FEAT should have detected "Total volumes" as 221, but it may have mis-detected "TR (s)" as 3.0; if so, change that to 1.5, because this experiment had a TR length of 1.5 seconds. Because *protocol.txt* indicated there were 6 seconds of disdaqs (volumes of data at the start of the run that are discarded because the scanner needs a few seconds to settle down), and TR length is 1.5s, set "Delete volumes" to 4. Set "High pass filter cutoff (s)" to 128 to remove slow drifts from your signal.
+Click "Select 4D data" and select the file *data/nifti/0831101_confba02_localizer01.nii.gz*; FEAT will analyze this data. Set "Output directory" to *analysis/firstlevel/localizer_hrf_01*; FEAT will put the results of its analysis in this folder, but with ".feat" appended, or "+.feat" appended if this is the second analysis with this name that you've run. FEAT should have detected "Total volumes" as 294, but it may have mis-detected "TR (s)" as 3.0; if so, change that to 1.5, because this experiment had a TR length of 1.5 seconds. Because *protocol.txt* indicated there were 6 seconds of disdaqs (volumes of data at the start of the run that are discarded because the scanner needs a few seconds to settle down), and TR length is 1.5s, set "Delete volumes" to 4. Set "High pass filter cutoff (s)" to 128 to remove slow drifts from your signal.
 
 .. image:: https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/feat-data.png
 
@@ -195,20 +194,20 @@ We will specify this design using text files in FEAT's 3-column format: we make 
 
 These design files are provided for you. Make a directory to put them in, then download the files::
 
- $ mkdir design
- $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831101_confba02_house.txt >design/house.txt
- $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831101_confba02_face.txt >design/face.txt
+ $ mkdir design/run1
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831101_confba02_house1.txt >design/run1/house.txt
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831101_confba02_face1.txt >design/run1/face.txt
 
 Examine each of these files and refer to *protocol.txt* as necessary::
 
- $ less design/house.txt
- $ less design/face.txt
+ $ less design/run1/house.txt
+ $ less design/run1/face.txt
 
 When making these design files for your own projects, do not use a Windows machine or you will likely have `problems with line endings`_.
 
 .. _`problems with line endings`: http://en.wikipedia.org/wiki/Newline#Common_problems
 
-To use these files to specify the design, click the "Full model setup" button. Set "EV name" to "house". FSL calls regressors EV's, short for Explanatory Variables. Set "Basic shape" to "Custom (3 column format)" and select *design/house.txt*. That file on its own describes a square wave; to account for the shape of the BOLD response, we convolve it with another function that models the hemodynamic response to a stimulus. Set "Convolution" to "Double-Gamma HRF". Now to set up the face regressor set "Number of original EVs" to 2 and click to tab 2.
+To use these files to specify the design, click the "Full model setup" button. Set "EV name" to "house". FSL calls regressors EV's, short for Explanatory Variables. Set "Basic shape" to "Custom (3 column format)" and select *design/run1/house.txt*. That file on its own describes a square wave; to account for the shape of the BOLD response, we convolve it with another function that models the hemodynamic response to a stimulus. Set "Convolution" to "Double-Gamma HRF". Now to set up the face regressor set "Number of original EVs" to 2 and click to tab 2.
 
 Set EV name to "face". Set "Basic shape" to "Custom (3 column format)" and select *design/face.txt*. Change "Convolution" to "Double-Gamma HRF", like we did for the house regressor.
 
@@ -232,8 +231,8 @@ Go to the Registration tab.
 **Summary**::
 
 $ mkdir design/run1
-$ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831101_confba02_house.txt > design/run1/house.txt
-$ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831101_confba02_face.txt > design/run1/face.txt
+$ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831101_confba02_house1.txt > design/run1/house.txt
+$ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831101_confba02_face1.txt > design/run1/face.txt
 $ less design/run1/house.txt
 $ less design/run1/face.txt
 
@@ -247,7 +246,7 @@ The Registration tab
 
 Different subjects have different shaped brains, and may have been in different positions in the scanner. To compare the data collected from different subjects, for each subject we compute the transformation that best moves and warps their data to match a standard brain, apply those transformations, then compare each subject in this "standard space". This Registration tab is where we set the parameters used to compute the transformation; we won't actually apply the transformation until we get to group analysis.
 
-FEAT should already have a "Standard space" image selected; leave it with the default, but change the drop-down menu from "Normal search" to "Full search", and set the other menu to "7 DOF" or this subject's brain will be misregistered. Check "Initial structural image", and select the file *subjects/0831101_confba02/data/nifti/0831101_confba02_t1_flash01.nii.gz*. Change the drop-down menu from "Normal search" to "No search," and change the other menu to "7 DOF". Check "Main structural image", and select the file *subjects/0831101_confba02/data/nifti/0831101_confba02_t1_mprage01.nii.gz*. Make sure "Normal search" and "6 DOF" are set for the main structural image.
+FEAT should already have a "Standard space" image selected; leave it with the default, but change the drop-down menu from "Normal search" to "Full search", and set the other menu to "7 DOF" or this subject's brain will be misregistered. Check "Initial structural image", and select the file *data/nifti/0831101_confba02_t1_flash01.nii.gz*. Change the drop-down menu from "Normal search" to "No search," and change the other menu to "7 DOF". Check "Main structural image", and select the file *data/nifti/0831101_confba02_t1_mprage01.nii.gz*. Make sure "Normal search" and "6 DOF" are set for the main structural image.
 
 The subject's functional data is first registered to the initial structural image, then that is registered to the main structural image, which is then registered to the standard space image. All this indirection is necessary because registration can fail, and it's more likely to fail if you try to go directly from the functional data to standard space.
 
@@ -397,6 +396,22 @@ After the line that runs *prep.sh*, add this line::
 *analyze.sh* is linked to *~/prototype/link/analyze.sh*, so the change you just made will be reflected in *analyze.sh* in all current and future subject directories. Now we can test that it works. First, remove the finished analysis folder::
 
  $ rm -rf analysis/firstlevel/*
+ 
+ **Summary**::
+
+  $ nano scripts/localizer.sh
+  $ cp scripts/localizer.sh ../../prototype/link/scripts
+  $ nano analyze.sh
+  $ rm -rf analysis/firstlevel/*
+
+Preparing for Feat
+------------------
+
+Before we start the analysis, we need the regressor files for house and face blocks for the second run, since the order of house and face blocks are different. These design files are provided for you. Make a directory to put them in, then download the files::
+
+ $ mkdir design/run2
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831101_confba02_house2.txt >design/run2/house.txt
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831101_confba02_face2.txt >design/run2/face.txt
 
 Then, run our newly updated analysis that deals with both localizer runs::
 
@@ -406,11 +421,10 @@ Feat should be churning away, and two webpages should open in your browser showi
 
 **Summary**::
 
-  $ nano scripts/localizer.sh
-  $ cp scripts/localizer.sh ../../prototype/link/scripts
-  $ nano analyze.sh
-  $ rm -rf analysis/firstlevel/*
-  $ ./analyze.sh
+ $ mkdir design/run2
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831101_confba02_house2.txt >design/run2/house.txt
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831101_confba02_face2.txt >design/run2/face.txt
+ $ ./analyze.sh
 
 Collapsing across the two localizer runs
 ========================================
@@ -548,42 +562,46 @@ Now that we have a template for the second-level localizer analysis fsf file, al
 
 Copy these lines into localizer.sh at the end::
   
-  # Wait for two first-level analyses to finish
-  scripts/wait-for-feat.sh $ANALYSIS_DIR/firstlevel/localizer_hrf_01.feat
-  scripts/wait-for-feat.sh $ANALYSIS_DIR/firstlevel/localizer_hrf_02.feat
-  
-  STANDARD_BRAIN=/usr/share/fsl/data/standard/MNI152_T1_2mm_brain.nii.gz
-  
-  # This function defines variables needed to render higher-level fsf templates.
-  function define_vars {
-    output_dir=$1
+	# Wait for two first-level analyses to finish
+	scripts/wait-for-feat.sh $FIRSTLEVEL_DIR/localizer_hrf_01.feat
+	scripts/wait-for-feat.sh $FIRSTLEVEL_DIR/localizer_hrf_02.feat
+	
+	STANDARD_BRAIN=/usr/share/fsl/data/standard/MNI152_T1_2mm_brain.nii.gz
+	
+	pushd $SUBJECT_DIR
+	subj_dir=$(pwd)
+	
+	# This function defines variables needed to render higher-level fsf templates.
+	function define_vars {
+	 output_dir=$1
+	
+	 echo "
+	 <?php
+	 \$OUTPUT_DIR = '$output_dir';
+	 \$STANDARD_BRAIN = '$STANDARD_BRAIN';
+	 \$SUBJECTS_DIR = '$subj_dir';
+	 \$SUBJ = '$SUBJ';
+	 "
+	
+	 echo '$runs = array();'
+	 for runs in `ls $FIRSTLEVEL_DIR/`; do
+	   echo "array_push(\$runs, '$runs');";
+	 done
+	
+	 echo "
+	 ?>
+	 "
+	}
+	
+	# Form a complete template by prepending variable definitions to the template,
+	# then render it with PHP and run FEAT on the rendered fsf file.
+	fsf_template=$subj_dir/$FSF_DIR/localizer_hrf_secondlevel.fsf.template
+	fsf_file=$subj_dir/$FSF_DIR/localizer_hrf_secondlevel.fsf
+	output_dir=$subj_dir/analysis/secondlevel/localizer_hrf.gfeat
+	define_vars $output_dir | cat - "$fsf_template" | php > "$fsf_file"
+	feat "$fsf_file"
 
-    echo "
-    <?php
-    \$OUTPUT_DIR = '$output_dir';
-    \$STANDARD_BRAIN = '$STANDARD_BRAIN';
-    \$SUBJECTS_DIR = '$PROJECT_DIR/$SUBJECTS_DIR';
-    "
-
-    echo '$subjects = array();'
-    for subj in $ALL_SUBJECTS; do
-      echo "array_push(\$subjects, '$subj');";
-    done
-
-    echo "
-    ?>
-    "
-  }
-
-  # Form a complete template by prepending variable definitions to the template,
-  # then render it with PHP and run FEAT on the rendered fsf file.
-  fsf_template=$SUBJECT_DIR/$FSF_DIR/localizer_hrf_secondlevel.fsf.template
-  fsf_file=$SUBJECT_DIR/$FSF_DIR/localizer_hrf_secondlevel.fsf
-  output_dir=$SUBJECT_DIR/analysis/secondlevel/localizer_hrf.gfeat
-  define_vars $output_dir | cat - "$fsf_template" | php > "$fsf_file"
-  feat "$fsf_file"
-
-  popd > /dev/null  # return to whatever directory this script was run from
+	popd > /dev/null  # return to whatever directory this script was run from
 
 If the text following "STANDARD_BRAIN=" differs from what you copied out of the fsf file in the previous section, replace it with that text you copied.
 
