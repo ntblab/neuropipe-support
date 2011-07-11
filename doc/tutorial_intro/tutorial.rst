@@ -74,6 +74,7 @@ Conventions used in these tutorials
 
    ~/ppa-hunt/subjects/
  
+- Note for those that are working on these tutorials on rondo: when you've qrsh'ed onto a node, you cannot download files from github. So, anytime you use the curl command to retrieve files for the tutorial, make sure you are on the head node (exit out of the node you've been assigned). You can qrsh back to a node to run the rest of the analyses.
 
 Architecture of NeuroPipe
 -------------------------
