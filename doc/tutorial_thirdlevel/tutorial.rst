@@ -517,7 +517,6 @@ Find the line that says "# 4D AVW data or FEAT directory (1)". Replace it and th
 
   <?php for ($i=0; $i < count($runs); $i++) { ?>
   # 4D AVW data or FEAT directory (<?= $i+1 ?>)
-
   set feat_files(<?= $i+1 ?>) "<?= $SUBJECTS_DIR ?>/analysis/firstlevel/<?= $runs[$i] ?>"
 
   <?php } ?>
@@ -604,8 +603,11 @@ Copy these lines into localizer.sh at the end::
 	output_dir=$subj_dir/analysis/secondlevel/localizer_hrf.gfeat
 	define_vars $output_dir | cat - "$fsf_template" | php > "$fsf_file"
 	feat "$fsf_file"
-
+	
+	cp -R $FIRSTLEVEL_DIR/localizer_hrf_01.feat/reg analysis/secondlevel/localizer_hrf.gfeat
+	
 	popd > /dev/null  # return to whatever directory this script was run from
+
 
 If the text following "STANDARD_BRAIN=" differs from what you copied out of the fsf file in the previous section, replace it with that text you copied.
 
@@ -712,7 +714,7 @@ Launch FEAT::
 The Data tab
 ''''''''''''
 
-Change the drop-down in the top left from "First-level analysis" to "Higher-level analysis". This will change the stuff you see below. Set "Number of inputs" to 2, because we're combining 2 within-subjects analyses, then click "Select FEAT directories". For the first directory, select *~/ppa-hunt2/subjects/0831101_confba02/analysis/secondlevel/localizer_hrf.gfeat*, and for the second, select *~/ppa-hunt2/subjects/0831102_confba02/analysis/secondlevel/localizer_hrf.gfeat*. Set the output directory to *~/ppa-hunt2/group/analysis/localizer_hrf*.
+Change the drop-down in the top left from "First-level analysis" to "Higher-level analysis". This will change the stuff you see below. Set "Number of inputs" to 2, because we're combining 2 within-subjects analyses, then click "Select FEAT directories". Let's say we're interested in the house>scene contrast. Then, for the first directory, select *~/ppa-hunt2/subjects/0831101_confba02/analysis/secondlevel/localizer_hrf.gfeat/cope3.feat*, and for the second, select *~/ppa-hunt2/subjects/0831102_confba02/analysis/secondlevel/localizer_hrf.gfeat/cope3.feat*. Set the output directory to *~/ppa-hunt2/group/analysis/localizer_hrf*.
 
 Go to the Stats tab.
 
@@ -726,19 +728,7 @@ Click "Model setup wizard", leave it on the default option of "single group aver
 
 .. image:: https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/group-feat-stats.png
 
-
-Finding the group's PPA
------------------------
-
-.. admonition:: you are here
-
-   ~/ppa-hunt2/group
-
-When the analysis finishes, open FSLview::
-
-  $ fslview &
-
-Click File>Open Standard and accept the default. Click File>Add, and select *analysis/localizer_hrf.gfeat/cope4.feat/stats/zstat1.nii.gz*. 
+When the analysis is finished, check the logs to make sure everything looks normal -- for example, that the two subjects' brains were registered correctly to standard space.
 
 Automating the group analysis
 =============================
@@ -751,13 +741,13 @@ Templating the group fsf file
 
 .. admonition:: you are here
 
-   ~/ppa-hunt2/group
+   ~/ppa-hunt2/
 
 Just like when we ran a second-level analysis on two localizer runs for each subject, to template a higher-level fsf file, we'll need to repeat whole sections of the fsf file for each input going into the group analysis. In this case, each input is a subject instead of a run. Like before, we'll use PHP_ to render the templates, and write loops_ for those sections of the template that need repeating for each subject.
 
 Start by copying the *design.fsf* file for the group analysis we just ran to *~/group/fsf*, and give it a ".template" extension::
 
-  $ cp analysis/localizer_hrf.gfeat/design.fsf fsf/localizer_hrf_thirdlevel.fsf.template
+  $ cp group/analysis/localizer_hrf.gfeat/design.fsf fsf/localizer_hrf_thirdlevel.fsf.template
 
 Now, open *fsf/localizer_hrf_thirdlevel.fsf.template* in your favorite text editor::
 
@@ -783,7 +773,8 @@ Find the line that says "# 4D AVW data or FEAT directory (1)". Replace it and th
 Find the line that says "# Higher-level EV value for EV 1 and input 1". Replace it and the next 4 lines with::
 
   <?php for ($i=1; $i < count($subjects)+1; $i++) { ?>
-  # Higher-level EV value for EV 1 and input <?= $i ?> 
+  # Higher-level EV value for EV 1 and input <?= $i ?>
+  
   set fmri(evg<?= $i ?>.1) 1
 
   <?php } ?>
@@ -792,6 +783,7 @@ Find the line that says "# Group membership for input 1". Replace it and the nex
 
   <?php for ($i=1; $i < count($subjects)+1; $i++) { ?>
   # Group membership for input <?= $i ?> 
+  
   set fmri(groupmem.<?= $i ?>) 1
 
   <?php } ?>
@@ -808,16 +800,11 @@ Automating the group analysis
 
 .. admonition:: you are here
 
-   ~/ppa-hunt2/group
-
-Now that we have a template for the group localizer analysis fsf file, all that's left is to render it and run FEAT on the rendered fsf file. Move up to the project directory and make a file in *scripts* called *group-localizer.sh* with your text editor::
-
-  $ cd ..
-  $ nano scripts/group-localizer.sh
-
-.. admonition:: you are here
-
    ~/ppa-hunt2
+
+Now that we have a template for the group localizer analysis fsf file, all that's left is to render it and run FEAT on the rendered fsf file. Make a file in *scripts* called *group-localizer.sh* with your text editor::
+
+  $ nano scripts/group-localizer.sh
 
 Copy these lines into *scripts/group-localizer.sh*::
 
@@ -866,9 +853,8 @@ A webpage should open in your browser showing FEAT's progress. Because we manual
 
 **Summary**::
 
-  $ cd ../..
   $ nano scripts/group-localizer.sh
-  $ bash scripts/group-localizer.sh
+  $ scripts/group-localizer.sh
 
 
 Automating the entire analysis
