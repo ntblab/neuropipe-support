@@ -542,13 +542,13 @@ Find the line that says "# Group membership for input 1". Replace it and the nex
 
 Save the file. Now, so that we have access to this file for future subjects, let's copy it to *prototype/copy*::
 
-  $ cp analysis/localizer_hrf.gfeat/design.fsf fsf/localizer_hrf_secondlevel.fsf.template
+  $ cp fsf/localizer_hrf_secondlevel.fsf ../../prototype/copy/fsf/
 
 **Summary**::
 
   $ cp analysis/secondlevel/localizer_hrf.gfeat/design.fsf fsf/localizer_hrf_secondlevel.fsf.template
   $ nano fsf/localizer_hrf_secondlevel.fsf.template
-  $ cp analysis/localizer_hrf.gfeat/design.fsf fsf/localizer_hrf_secondlevel.fsf.template
+  $ cp fsf/localizer_hrf_secondlevel.fsf.template ../../prototype/copy/fsf/
 
 Automating the second-level analysis
 ------------------------------------
