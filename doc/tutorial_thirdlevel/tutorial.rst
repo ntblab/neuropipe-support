@@ -517,6 +517,7 @@ Find the line that says "# 4D AVW data or FEAT directory (1)". Replace it and th
 
   <?php for ($i=0; $i < count($runs); $i++) { ?>
   # 4D AVW data or FEAT directory (<?= $i+1 ?>)
+
   set feat_files(<?= $i+1 ?>) "<?= $SUBJECTS_DIR ?>/<?= $SUBJ ?>/analysis/firstlevel/<?= $runs[$i] ?>"
 
   <?php } ?>
@@ -525,6 +526,7 @@ Find the line that says "# Higher-level EV value for EV 1 and input 1". Replace 
 
   <?php for ($i=1; $i < count($runs)+1; $i++) { ?>
   # Higher-level EV value for EV 1 and input <?= $i ?> 
+
   set fmri(evg<?= $i ?>.1) 1
 
   <?php } ?>
@@ -533,6 +535,7 @@ Find the line that says "# Group membership for input 1". Replace it and the nex
 
   <?php for ($i=1; $i < count($runs)+1; $i++) { ?>
   # Group membership for input <?= $i ?> 
+
   set fmri(groupmem.<?= $i ?>) 1
 
   <?php } ?>
