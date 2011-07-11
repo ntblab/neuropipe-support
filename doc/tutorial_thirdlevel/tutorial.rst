@@ -246,7 +246,7 @@ The Registration tab
 
 Different subjects have different shaped brains, and may have been in different positions in the scanner. To compare the data collected from different subjects, for each subject we compute the transformation that best moves and warps their data to match a standard brain, apply those transformations, then compare each subject in this "standard space". This Registration tab is where we set the parameters used to compute the transformation; we won't actually apply the transformation until we get to group analysis.
 
-FEAT should already have a "Standard space" image selected; leave it with the default, but change the drop-down menu from "Normal search" to "Full search", and set the other menu to "7 DOF" or this subject's brain will be misregistered. Check "Initial structural image", and select the file *data/nifti/0831101_confba02_t1_flash01.nii.gz*. Change the drop-down menu from "Normal search" to "No search," and change the other menu to "7 DOF". Check "Main structural image", and select the file *data/nifti/0831101_confba02_t1_mprage01.nii.gz*. Make sure "Normal search" and "6 DOF" are set for the main structural image.
+FEAT should already have a "Standard space" image selected; leave it with the default, but change the drop-down menu from "Normal search" to "Full search", and set the other menu to "12 DOF" or this subject's brain will be misregistered. Check "Initial structural image", and select the file *data/nifti/0831101_confba02_t1_flash01.nii.gz*. Keep the drop-down menu at "Normal search" and change the other menu to "6 DOF". Check "Main structural image", and select the file *data/nifti/0831101_confba02_t1_mprage01.nii.gz*. Make sure "Normal search" and "6 DOF" are set for the main structural image as well.
 
 The subject's functional data is first registered to the initial structural image, then that is registered to the main structural image, which is then registered to the standard space image. All this indirection is necessary because registration can fail, and it's more likely to fail if you try to go directly from the functional data to standard space.
 
@@ -549,7 +549,7 @@ Save the file.
 
 
 Automating the second-level analysis
------------------------------
+------------------------------------
 
 .. admonition:: you are here
 
@@ -571,7 +571,7 @@ Copy these lines into localizer.sh at the end::
 	
 	STANDARD_BRAIN=/usr/share/fsl/data/standard/MNI152_T1_2mm_brain.nii.gz
 	
-	pushd $SUBJECT_DIR
+	pushd $SUBJECT_DIR > /dev/null
 	subj_dir=$(pwd)
 	
 	# This function defines variables needed to render higher-level fsf templates.
@@ -620,7 +620,7 @@ A webpage should open in your browser showing FEAT's progress. Because we manual
   $ bash scripts/localizer.sh
 
  
- Repeating the analysis for a new subject
+Repeating the analysis for a new subject
 ======================================== 
 
 .. admonition:: you are here
@@ -641,8 +641,12 @@ Then, move into that subject's directory::
  
 This subject's stimuli order was slightly different. Instead of beginning with face images, their first set of stimuli were house images. They therefore have different face and house regressor files. They're provided for you already::
 
-  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831102_confba02_house.txt > design/house.txt
-  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831102_confba02_face.txt > design/face.txt
+  $ mkdir design/run1
+  $ mkdir design/run2
+  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831102_confba02_house1.txt > design/run1/house.txt
+  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831102_confba02_face1.txt > design/run1/face.txt
+  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831102_confba02_house2.txt > design/run2/house.txt
+  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831102_confba02_face2.txt > design/run2/face.txt
 
 We already made a template for the localizer run that works for different subjects, edited scripts/render-fsf-templates.sh to make a unique design file for each run, and created localizer.sh to run the two Feat analyses. Because we already copied these files into *~/protoype*, these changes will be present in the new subject's directory. All that's left is to render the templates and then run the analysis! First, fill in the templates::
 
@@ -669,8 +673,12 @@ FEAT should be churning away on the new data. Take some time to look over the QA
   $ cd ../../
   $ ./scaffold 0831102_confba02
   $ cd subjects/0831102_confba02
-  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831102_confba02_house.txt > design/house.txt
-  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831102_confba02_face.txt > design/face.txt
+  $ mkdir design/run1
+  $ mkdir design/run2
+  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831102_confba02_house1.txt > design/run1/house.txt
+  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831102_confba02_face1.txt > design/run1/face.txt
+  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831102_confba02_house2.txt > design/run2/house.txt
+  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831102_confba02_face2.txt > design/run2/face.txt
   $ scripts/render-fsf-templates.sh
   $ ls fsf
   $ cp /exanet/ntb/packages/neuropipe/example_data/0831102_confba02.raw.tar.gz data/raw.tar.gz
