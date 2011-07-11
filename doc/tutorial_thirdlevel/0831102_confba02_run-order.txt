@@ -40,7 +40,7 @@ ERROR_RUN
 ERROR_RUN 
 ERROR_RUN
 localizer01 294
-localizer01 294
+localizer02 294
 t1_flash01
 ERROR_RUN 
 ERROR_RUN

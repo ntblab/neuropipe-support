@@ -540,13 +540,15 @@ Find the line that says "# Group membership for input 1". Replace it and the nex
 
   <?php } ?>
 
-Save the file.
+Save the file. Now, so that we have access to this file for future subjects, let's copy it to *prototype/copy*::
+
+  $ cp analysis/localizer_hrf.gfeat/design.fsf fsf/localizer_hrf_secondlevel.fsf.template
 
 **Summary**::
 
   $ cp analysis/secondlevel/localizer_hrf.gfeat/design.fsf fsf/localizer_hrf_secondlevel.fsf.template
   $ nano fsf/localizer_hrf_secondlevel.fsf.template
-
+  $ cp analysis/localizer_hrf.gfeat/design.fsf fsf/localizer_hrf_secondlevel.fsf.template
 
 Automating the second-level analysis
 ------------------------------------
@@ -638,6 +640,10 @@ Then, move into that subject's directory::
 
  $ cd subjects/0831102_confba02
  
+This subject's run-order file looks a bit different, so in this case putting a template in *prototype/copy* isn't helpful. The file has been made for you already::
+
+  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831102_confba02_run-order.txt > run-order.txt
+
 This subject's stimuli order was slightly different. Instead of beginning with face images, their first set of stimuli were house images. They therefore have different face and house regressor files. They're provided for you already::
 
   $ mkdir design/run1
@@ -647,15 +653,7 @@ This subject's stimuli order was slightly different. Instead of beginning with f
   $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831102_confba02_house2.txt > design/run2/house.txt
   $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831102_confba02_face2.txt > design/run2/face.txt
 
-We already made a template for the localizer run that works for different subjects, edited scripts/render-fsf-templates.sh to make a unique design file for each run, and created localizer.sh to run the two Feat analyses. Because we already copied these files into *~/protoype*, these changes will be present in the new subject's directory. All that's left is to render the templates and then run the analysis! First, fill in the templates::
-
-  $ scripts/render-fsf-templates.sh
-  
-Now you can see that there are two design files waiting to go in *fsf*::
-
-  $ ls fsf
-
-Get the subject's data (NOTE: you must be on rondo for this to work)::
+We already made a template for the localizer run that works for different subjects, edited scripts/render-fsf-templates.sh to make a unique design file for each run, and created localizer.sh to run the two Feat analyses. Because we already copied these files into *~/protoype*, these changes will be present in the new subject's directory. All that's left is to collect the data and then run the analysis! First, get the subject's data (NOTE: you must be on rondo for this to work)::
 
   $ cp /exanet/ntb/packages/neuropipe/example_data/0831102_confba02.raw.tar.gz data/raw.tar.gz
 
@@ -740,7 +738,7 @@ When the analysis finishes, open FSLview::
 
   $ fslview &
 
-Click File>Open Standard and accept the default. Click File>Add, and select *~/ppa-hunt2/group/analysis/localizer_hrf.gfeat/cope4.feat/stats/zstat1.nii.gz*. 
+Click File>Open Standard and accept the default. Click File>Add, and select *analysis/localizer_hrf.gfeat/cope4.feat/stats/zstat1.nii.gz*. 
 
 Automating the group analysis
 =============================
