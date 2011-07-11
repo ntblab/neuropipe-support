@@ -27,14 +27,14 @@ Analyzing a subject
 
 We'll start by analyzing a single subject. To prepare for that, you'll need to know the order of the scans that were collected for subjects that took thsi experiment. A *run-order.txt* file is already made for you. Download that file and take a look::
 
-  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_intro/run-order.txt > prototype/copy/run-order.txt
+  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_secondlevel/run-order.txt > prototype/copy/run-order.txt
   $ less prototype/copy/run-order.txt
   
 Note that ERROR_RUN is listed for each scan that is irrelevant to this tutorial.
 
 **Summary**::
 
-  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_intro/run-order.txt > prototype/copy/run-order.txt
+  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_secondlevel/run-order.txt > prototype/copy/run-order.txt
   $ less prototype/copy/run-order.txt
 
 Setting up
