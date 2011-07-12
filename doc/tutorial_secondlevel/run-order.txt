@@ -33,9 +33,9 @@
 #   the unnecessary runs (usually the last 5) 
 #
 # EXAMPLE RUN ORDER FOLLOWS. CUSTOMIZE THIS TO YOUR PROJECT
-circle_localizer01
-circle_localizer02
-circle_localizer03
+ERROR_RUN
+ERROR_RUN
+ERROR_RUN
 sagittal_scout01
 t1_flash01
 ERROR_RUN

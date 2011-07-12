@@ -78,23 +78,18 @@ Let's open *roi.sh* up again and see what it does. (It's always a good idea to k
 
  $ less scripts/roi.sh
 
-First, the script reads in the ROI information we supply with our two text files. Then, it calls *transform-coords-dest.sh*, which transforms the coordinates of the peak voxels of each ROI into the space of the run(s) that you're interested in running this analysis on. Those are specified by adding feat directories as options to the command.
+First, the script reads in the ROI information we supply with our two text files. Then, it calls *transform-coords-dest.sh*, which transforms the coordinates of the peak voxels of each ROI into the space of the run(s) that you're interested in running this analysis on. This way, the coordinates that you collected earlier, on a localizer run, will line up with the same regions in the runs you're extracting information from.
+Those runs are specified by adding one or more feat directories as options to the command.
 
-Now that your ROI coordinates are situating in the space of the run, the script pulls out the 'cope' files from the run, which contain time series information based on the contrasts that you set up when modeling the run in a GLM. Then, it calls *transform-to-psc.sh* to convert the signal intensity in each cope file to percent signal change. 
+Now that your ROI coordinates are correctly aligned to your run of interest, the script pulls out the 'cope' files from the run, which contain time series information based on the contrasts that you set up when modeling the run in a GLM. Then, it calls *transform-to-psc.sh* to convert the signal intensity in each cope file to percent signal change. 
 
 Then, *roi.sh* calls *extract-stat-at-coords.sh*, which extracts the time course of your ROI coordinates for each time point of each cope, and organizes them as a csv file. And finally, the data is loaded into R to be organized for future use as well.
 
-So, let's do it!
+So, let's do it! If you've completed the FIR tutorial, you can try this out on the two 'encoding_fir' runs that you've analyzed already.
 
  $ scripts/roi.sh analysis/firstlevel/encoding_fir01.feat analysis/firstlevel/encoding_fir02.feat
  
-You should now have cvs files in *results/roi* along with an .Rdat file that can be loaded into R for running statistics or plotting your data. For example, you can plot the time course for each ROI for visual comparison between experiment conditions, and also differences in the activity of each brain region.
-
-.. image:: https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_roi/ggplot2-graph.png
-
-And, after running this ROI analysis on the data from two runs each from 18 subjects, we can start to see a difference in the BOLD response caused by adaptation -- that is, when a novel image was presented after a series of two objects that had been previously shown (RC_NFI), no adaptation occurs because the sequence of images is not learned. Likewise, when a series of two novel images are presented before an image that has already been shown (NC_RFI), since the sequence of images as never been learned before, no adaptation appears. However, when a series of three images appear in an order that has been previously shown (RC_RFI), the appearance of the third image is expected, and adaptation is present. We can see this in the decreased BOLD peak in the time course for that category.
-
-.. image:: https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_roi/ggplot2-graph-all.png
+You should now have cvs files in *results/roi* along with an .Rdat file that can be loaded into R, Excel, or another program of your choice, either for running statistics or plotting your data. From here on out, your analysis will depend on the aims of your study. Good luck!
 
 
 

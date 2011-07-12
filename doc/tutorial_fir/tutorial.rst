@@ -75,7 +75,7 @@ Open *README.txt* again::
 
 Next, we need to fill out *run-order.txt* with the order of MRI sequences that were completed for this subject. One has already been made for you, so go ahead and run this command to get it:: 
 
- $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/0223101_conatt01_run-order.txt > run-order.txt
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/run-order.txt > run-order.txt
 
 To check that *run-order.txt* came through all right, hit "q" to get out of *README.txt*, and run this command::
 
@@ -122,7 +122,7 @@ Use the "(What's this?)" links to figure out what all the diagnostics mean. When
 **Summary**::
 
   $ less README.txt
-  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/0223101_conatt01_run-order.txt > run-order.txt
+  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/run-order.txt > run-order.txt
   $ less run-order.txt
   $ less README.txt
   $ less analyze.sh
@@ -169,7 +169,7 @@ The Data tab
 
 Click "Select 4D data" and select the file *data/nifti/0223101_conatt01_encoding01.nii.gz*; FEAT will analyze this data. Set "Output directory" to *analysis/firstlevel/encoding_fir01*; FEAT will put the results of its analysis in this folder, but with ".feat" appended, or "+.feat" appended if this is the second analysis with this name that you've run. FEAT should have detected "Total volumes" as 355, but it may have mis-detected "TR (s)" as 3.0; if so, change that to 1.5, because this experiment had a TR length of 1.5 seconds. Because *protocol.txt* indicated there were 9 seconds of disdaqs (volumes of data at the start of the run that are discarded because the scanner needs a few seconds to settle down), and TR length is 1.5s, set "Delete volumes" to 6. Set "High pass filter cutoff (s)" to 128 to remove slow drifts from your signal.
 
-.. image:: https://github.com/ntblab/neuroipe-support/raw/dev/doc/tutorial_fir/feat-data.png
+.. image:: https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_fir/feat-data.png
 
 Go to the Pre-stats tab.
 
@@ -197,7 +197,12 @@ The Stats tab
 
 Check "Add motion parameters to model"; this makes regressors from estimates of the subject's motion, which hopefully absorb variance in the signal due to transient motion. To account for the variance in the signal due to the experimental manipulation, we define regressors based on the design, as described in *protocol.txt*. *protocol.txt* says that subjects viewed an uninterrupted stream of images, making an indoor/outdoor decision for one image every 1.5 seconds.
 
-Unbeknownst to the participants, the images were structured in such a way that each image fell into 1 of 12 categories determined by the structure of preceding images. If you're interested in the design of this experiment and the motivations behind it, check out **PAPER REFERENCE**. We will therefore have 12 regressors in this model.
+Unbeknownst to the participants, the images were structured in such a way that each image fell into 1 of 12 categories determined by the structure of preceding images. We are going to focus on 4 of the catgories of images, and therefore will have 4 regressors in this model:
+
+1. NC_NFI: last of a set of 3 images, where the 2 preceeding images are novel and the third is novel as well
+2. NC_RFI: last of a set of 3 images, where the 2 preceeding images are novel but the third has been seen before
+3. RC_RFI: last of a set of 3 images, where the 2 preceeding images are repeated (have been seen before) and the third is repeated as well
+4. RC_NFI: last of a set of 3 images, where the 2 preceeding images are repeated but the third is novel
 
 We will specify this design using text files in FEAT's 3-column format: we make 1 text file per regressor, each with one line per stimulus occurance belonging to that regressor. Each line has 3 numbers, separated by whitespace. The first number indicates the onset time in seconds of the period. The second number indicates the duration of the period. The third number indicates the height of the regressor during the period; always set this to 1 unless you know what you're doing. See `FEAT's documentation`_ for more details.
 
@@ -225,22 +230,19 @@ Click on Tab 1. Set one EV name to match the name of one of our text files. In t
 
 .. image:: https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_fir/feat-stats-ev4.png
 
-Now go to the "Contrasts & F-tests" tab. Increase "Contrasts" to 8. There is now a matrix of number fields with a row for each contrast and a column for each EV. You specify a contrast as a linear combination of the parameter estimates on each regressor. We'll make one contrast to show the main effect of each regressor, and a few more to look at the difference in brain activity between certain regressors or regressor combinations:
+Now go to the "Contrasts & F-tests" tab. Increase "Contrasts" to 5. There is now a matrix of number fields with a row for each contrast and a column for each EV. You specify a contrast as a linear combination of the parameter estimates on each regressor. We'll make one contrast to show the main effect of each regressor, and also one to look at the difference in brain activity between certain regressors. The idea here is that you can look at the differences between regressors or even groups of regressors by creating a contrast for a particular relationship you're interested in:
 
 * Set the 1st row's title to "NC_NFI", its "EV1" value to 1, and leave the rest of the EV values at 0. 
 * Set the 2nd row's title to "NC_RFI", its "EV2" value to 1, and leave the rest at 0.
 * Set the 3rd row's title to "RC_NFI", its "EV3" value to 1, and leave the rest at 0.
 * Set the 4rd row's title to "RC_RFI", its "EV4" value to 1, and leave the rest at 0.
 * Set the 5th row's title to "NC_RFI-RC_RFI", its "EV2" value to 1, its "EV4" value to -1, and leave the rest at 0. 
-* Set the 6th row's title to "NFI-RC_RFI", its "EV1" and "EV3" values to .5, its "EV4" value to -1, and leave the rest at 0.
-* Set the 7th row's title to "NFI-NC_RFI", its "EV1" and "EV3" values to .5, its "EV2" value to -1, and leave the rest at 0.
-* Set the 8th row's title to "(RC_NFI-RC_RFI)-(NC_NFI-NC_RFI)", its "EV1" and "EV4" values to -.5, its "EV2" and "EV3" values to .5, and leave the rest at 0.
 
 .. image:: https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_fir/feat-stats-contrasts.png
 
-Close that window, and FEAT shows you a graph of your model. If it's different from the one below, check you followed the instructions correctly.
+Click 'Done', and FEAT shows you a graph of your model. If it's different from the one below, check you followed the instructions correctly.
 
-.. image:: https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_fir/feat-model-graph.png
+.. image:: https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_fir/feat-graph-model.png
 
 Go to the Registration tab.
 
@@ -266,9 +268,9 @@ FEAT should already have a "Standard space" image selected; leave it with the de
 
 The subject's functional data is first registered to the initial structural image, then that is registered to the main structural image, which is then registered to the standard space image. All this indirection is necessary because registration can fail, and it's more likely to fail if you try to go directly from the functional data to standard space.
 
-.. image:: https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_fir/feat-registration.png
+.. image:: https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_fir/feat-reg.png
 
-That's it! Hit Go. A webpage should open in your browser showing FEAT's progress. Once it's done, this webpage provides a useful summary of the analysis you just ran with FEAT. Later, we'll make a webpage for this subject to gather information like this FEAT report, the QA results, and plots summarizing this subject's data.
+That's it! Hit Go. A webpage should open in your browser showing FEAT's progress. Once it's done, this webpage provides a useful summary of the analysis you just ran with FEAT. Before continuing on, be sure to check through the logs to make sure that no errors have occured.
 
 
 Repeating the analysis for a second run
@@ -303,9 +305,9 @@ Make the following replacements and save the file. Be sure to include the spaces
   #. on the line starting with "set initial_highres_files(1) ", replace all of the text inside the quotes with "<?= $INITIAL_HIGHRES_FILE ?>"
   #. on the line starting with "set highres_files(1)", replace all of the text inside the quotes with "<?= $HIGHRES_FILE ?>"
   #. on the line starting wth "set fmri(custom1)", replace all the text inside the quotes with "<?= $EV_DIR ?>/NC_NFI.txt"
-  #. on the line starting wth "set fmri(custom1)", replace all the text inside the quotes with "<?= $EV_DIR ?>/NC_RFI.txt"
-  #. on the line starting wth "set fmri(custom1)", replace all the text inside the quotes with "<?= $EV_DIR ?>/RC_NFI.txt"
-  #. on the line starting wth "set fmri(custom1)", replace all the text inside the quotes with "<?= $EV_DIR ?>/RC_RFI.txt"
+  #. on the line starting wth "set fmri(custom2)", replace all the text inside the quotes with "<?= $EV_DIR ?>/NC_RFI.txt"
+  #. on the line starting wth "set fmri(custom3)", replace all the text inside the quotes with "<?= $EV_DIR ?>/RC_NFI.txt"
+  #. on the line starting wth "set fmri(custom4)", replace all the text inside the quotes with "<?= $EV_DIR ?>/RC_RFI.txt"
 
 
 Those bits you replaced with placeholders are the parameters that must change when analyzing a different run, a new subject, or using a different computer. After saving the file, copy it to the prototype so it's available for future subjects::
@@ -339,6 +341,8 @@ It consists of a function called render_firstlevel, which we'll use to render th
                     $NIFTI_DIR/${SUBJ}_encoding01 \
                     $NIFTI_DIR/${SUBJ}_t1_flash01.nii.gz \
                     $NIFTI_DIR/${SUBJ}_t1_mprage01.nii.gz \
+                    . \
+                    . \
                     $EV_DIR/encoding1 \
                     > $FSF_DIR/encoding_fir01.fsf
 
@@ -348,6 +352,8 @@ It consists of a function called render_firstlevel, which we'll use to render th
                     $NIFTI_DIR/${SUBJ}_encoding02 \
                     $NIFTI_DIR/${SUBJ}_t1_flash01.nii.gz \
                     $NIFTI_DIR/${SUBJ}_t1_mprage01.nii.gz \
+                    . \
+                    . \
                     $EV_DIR/encoding2 \
                     > $FSF_DIR/encoding_fir02.fsf
                     
@@ -435,6 +441,6 @@ What comes next
 
    ~/fir-proj/subjects/0223101_conatt01
 
-FIR results are usually not very illuminating at this point, but now you have information about this subject's response to different regressors, in an 18 second window consisting of 12 timepoints.  The results start to emerge as you collapse the results from each regressor across the time points that were specified in the FIR model. This can be done with the whole brain or with individual ROIs. Check out the ROI tutorial if you'd like to continue analyzing this data using an ROI analysis of the PPA.
+You now have information about this subject's response to different regressors, in an 18 second window consisting of 12 timepoints. From here, your analysis will vary according to the aims of your study. Furthermore, because we copied the scripts used in this analysis in the *prototype* folders, you are now in a position to analyze more subject data simply by collecting data, creating run-specific regressor files, and running *analyze.sh*.
 
-Furthermore, because we copied the scripts used in this analysis in the *prototype* folders, you are now in a position to analyze more subject data simply by collecting data and running *analyze.sh*.
+If you're are also interested in extracting timecourse information from specific regions of interest within the brain, you can check out the ROI tutorial and use the data you've just analyzed.

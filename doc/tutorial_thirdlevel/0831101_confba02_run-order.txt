@@ -28,9 +28,9 @@
 #   each fieldmap you ran
 
 # EXAMPLE RUN ORDER FOLLOWS. CUSTOMIZE THIS TO YOUR PROJECT
-circle_localizer01
-circle_localizer02
-circle_localizer03
+ERROR_RUN
+ERROR_RUN
+ERROR_RUN
 ERROR_RUN
 ERROR_RUN
 ERROR_RUN
