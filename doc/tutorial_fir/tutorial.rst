@@ -443,4 +443,4 @@ What comes next
 
 You now have information about this subject's response to different regressors, in an 18 second window consisting of 12 timepoints. From here, your analysis will vary according to the aims of your study. Furthermore, because we copied the scripts used in this analysis in the *prototype* folders, you are now in a position to analyze more subject data simply by collecting data, creating run-specific regressor files, and running *analyze.sh*.
 
-If you're are also interested in extracting timecourse information from specific regions of interest within the brain, you can check out the ROI tutorial and use the data you've just analyzed.
+If you're also interested in extracting timecourse information from specific regions of interest within the brain, you can check out the ROI tutorial and use the data you've just analyzed.
