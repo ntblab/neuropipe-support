@@ -334,8 +334,8 @@ It consists of a function called render_firstlevel, which we'll use to render th
                     $NIFTI_DIR/${SUBJ}_localizer01 \
                     $NIFTI_DIR/${SUBJ}_t1_flash01.nii.gz \
                     $NIFTI_DIR/${SUBJ}_t1_mprage01.nii.gz \
-                    $DESIGN_DIR/run1/house.txt \
-                    $DESIGN_DIR/run1/face.txt \
+                    $EV_DIR/run1/house.txt \
+                    $EV_DIR/run1/face.txt \
                     > $FSF_DIR/localizer_hrf_01.fsf
 
   render_firstlevel $FSF_DIR/localizer_hrf.fsf.template \
@@ -344,8 +344,8 @@ It consists of a function called render_firstlevel, which we'll use to render th
                     $NIFTI_DIR/${SUBJ}_localizer02 \
                     $NIFTI_DIR/${SUBJ}_t1_flash01.nii.gz \
                     $NIFTI_DIR/${SUBJ}_t1_mprage01.nii.gz \
-                    $DESIGN_DIR/run2/house.txt \
-                    $DESIGN_DIR/run2/face.txt \
+                    $EV_DIR/run2/house.txt \
+                    $EV_DIR/run2/face.txt \
                     > $FSF_DIR/localizer_hrf_02.fsf
                     
 That hunk of code calls the function render_firstlevel, passing it the values to substitute for the template's placeholders. Each chunk of code will create a new design.fsf file, one for each localizer run. This will be useful when analyzing the next subject's data. The values in this script use a bunch of completely-uppercase variables, which are defined in *globals.sh*.  Examine *globals.sh*::
