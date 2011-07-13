@@ -10,11 +10,14 @@ scaffold
 scripts
   holds scripts that support your across-subject analyses
 
-analysis
+group
+  holds group-level analysis and results
+
+group/analysis
   holds intermediary files made by your across-subject analyses, such as those
   produced by FSL
 
-results
+group/results
   holds the results of your across-subject analyses, such as plots and tables
   of statistical test results
 

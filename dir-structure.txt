@@ -2,8 +2,9 @@
   |--protocol.txt
   |--scaffold.sh
   |--scripts/
-  |--analysis/
-  |--results/
+  |--group/
+  	 |--analysis/
+ 	 |--results/
   |--design/
   |--fsf/
   |--subjects/

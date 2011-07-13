@@ -30,15 +30,9 @@ Picking ROIs
 
    ~/ppa-hunt/subjects/0223101_conatt01
 
-First, you have to pick the coordinates of the ROIs you are interested in analyzing. These areas have already been chosen for you; since this study was interested in adaptation in scene-selective areas of the brain, we will be looking at the right and left parahippocampal place area (PPA), retrosplenial cortex (RSC), and transverse occipital sulcus (TOS). These brain regions need to be organized in a text file with one region per line. The list has already been made for you::
+First, you have to pick the coordinates of the ROIs you are interested in analyzing. These areas have already been chosen for you; since this study was interested in adaptation in scene-selective areas of the brain, we will be looking at the right and left parahippocampal place area (PPA), retrosplenial cortex (RSC), and transverse occipital sulcus (TOS). 
 
- $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_roi/roi_regions.txt > design/roi_regions.txt
- 
-Open this file and note that each area is designated in one word, with one ROI per line. The first letter of each ROI is 'r' or 'l', depending on whether the ROI is in the right or left hemisphere. This format is important if you wish to use neuropipe scripts to run your ROI analysis::
-
- $ less design/roi_regions.txt
-
-Then the coordinates of these areas need to be chosen. Normally, you will run some sort of localizing sequence to activate a certain part of the brain, and then pick the peak voxels in those areas.  Those coordinates have already been chosen for you::
+Then the coordinates of these areas need to be chosen. Normally, you will run some sort of localizing sequence to activate a certain part of the brain, and then pick the peak voxels in those areas.  Those coordinates have already been picked for you::
 
  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_roi/roi.txt > design/roi.txt
  
@@ -46,12 +40,19 @@ This file needs to be formatted in 3 columns, with one line for each ROI and 1 c
 
  $ less design/roi.txt
  
+Finally, we need some information about the location of these coordinates within the brain volume that we picked them found. This way, we can tranform the location of the coordinates from the space of the localizer run to the space of the runs that our time courses will be extracted from. Normally this information will be created and stored in the Feat directory of your localizer run, in a file called *example_func.nii.gz*. For the purposes of this tutorial, we will simulate the localizer run's Feat directory and then provide the file for you::
+
+ $ mkdir -p analysis/firstlevel/localizer_hrf.feat/reg
+ $ cp /exanet/ntb/packages/neuropipe/example_data/0223101_conatt01_example_func.nii.gz analysis/firstlevel/localizer_hrf.feat/reg/example_func.nii.gz
+ 
+ Note: to copy the file, you must qrsh onto a node if you're working from Rondo. If you are working outside of Princeton University, or can't access the file, email ntblab@princeton.edu for help.
+ 
 **Summary**::
 
- $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_roi/roi_regions.txt > design/roi_regions.txt
- $ less design/roi_regions.txt
  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_roi/roi.txt > design/roi.txt
  $ less design/roi.txt
+ $ mkdir p- analysis/firstlevel/localizer_hrf.feat/reg
+ $ cp /exanet/ntb/packages/neuropipe/example_data/0223101_conatt01_example_func.nii.gz analysis/firstlevel/localizer_hrf.feat/reg/example_func.nii.gz
 
 Preparing for ROI analysis
 ==========================
@@ -60,15 +61,16 @@ Finally, we are ready to look through *roi.sh*, located in the *scripts* folder.
 
  $ less scripts/roi.sh
  
-The information in the header says to make sure that the variables needed to run this script need to be set in globals.sh. These include the locations of the two text files we just made. Let's check *globals.sh* to see where these files should be located::
+The information in the header says to make sure that the variables needed to run this script need to be set in globals.sh. These include the location of the text file we just made. Let's check *globals.sh* to see where this file should be located::
 
- $ nano globals.sh
+ $ less globals.sh
 
-The paths and file names of *roi_regions.txt* and *roi.txt* match what is listed in *globals.sh*, so our ROI script will be able to find those files when it needs them. While we're in there, make sure that the other parameters in *roi.sh* are correctly filled in. Since the data we're using (from our FIR model) had an 18 second window, FIR_LAG should start at lag 0 and end at lag 17, just like it does in *globals.sh*. The kernel size and type are also what we'll be using for this analysis. For your own projects, once you decide on the length of your window, and your kernel information, *globals.sh* is the place to set it.
+The path and file name of *roi.txt* match what is listed in *globals.sh*, so our ROI script will be able to find that file when it needs them. While we're in there, make sure that the other parameters in *roi.sh* are correctly filled in. The kernel size and type are also what we'll be using for this analysis. For your own projects, once you decide on your kernel information, *globals.sh* is the place to set it.
 
 **Summary**::
+
  $ less scripts/roi.sh
- $ nano globals.sh
+ $ less globals.sh
 
 
 The mysterious inner workings of *roi.sh*
@@ -83,13 +85,13 @@ Those runs are specified by adding one or more feat directories as options to th
 
 Now that your ROI coordinates are correctly aligned to your run of interest, the script pulls out the 'cope' files from the run, which contain time series information based on the contrasts that you set up when modeling the run in a GLM. Then, it calls *transform-to-psc.sh* to convert the signal intensity in each cope file to percent signal change. 
 
-Then, *roi.sh* calls *extract-stat-at-coords.sh*, which extracts the time course of your ROI coordinates for each time point of each cope, and organizes them as a csv file. And finally, the data is loaded into R to be organized for future use as well.
+Finally, *roi.sh* calls *extract-stat-at-coords.sh*, which extracts the time course of your ROI coordinates for each time point of each cope, and organizes them as one csv file per analyzed run.
 
 So, let's do it! If you've completed the FIR tutorial, you can try this out on the two 'encoding_fir' runs that you've analyzed already.
 
  $ scripts/roi.sh analysis/firstlevel/encoding_fir01.feat analysis/firstlevel/encoding_fir02.feat
  
-You should now have cvs files in *results/roi* along with an .Rdat file that can be loaded into R, Excel, or another program of your choice, either for running statistics or plotting your data. From here on out, your analysis will depend on the aims of your study. Good luck!
+You should now have cvs files in *results/roi* that can be imported into R, Excel, or another program of your choice, either for running statistics or plotting your data. From here on out, your analysis will depend on the aims of your study. Good luck!
 
 
 
