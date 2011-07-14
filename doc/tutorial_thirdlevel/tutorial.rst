@@ -598,6 +598,7 @@ Copy these lines into localizer.sh at the end::
 	feat "$fsf_file"
 	
 	cp -R $FIRSTLEVEL_DIR/localizer_hrf_01.feat/reg analysis/secondlevel/localizer_hrf.gfeat
+	cp $FIRSTLEVEL_DIR/localizer_hrf_01.feat/example_func.nii.gz analysis/secondlevel/localizer_hrf.gfeat
 	
 	popd > /dev/null  # return to whatever directory this script was run from
 
