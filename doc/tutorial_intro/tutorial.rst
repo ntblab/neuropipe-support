@@ -30,10 +30,10 @@ This quick introduction walks you through the structure of neuropipe, what you n
 - FIR_: analysis for one subject using finite impulse basis functions, with a within-subject higher-level analysis
 - ROI_: an explanation of how time-course information from specific regions of interest can be extracted from functional runs
 
-.. _secondlevel: https://github.com/ntblab/neuropipe-support/edit/dev/doc/tutorial_secondlevel/tutorial.rst
-.. _thirdlevel: https://github.com/ntblab/neuropipe-support/edit/dev/doc/tutorial_thirdlevel/tutorial.rst
-.. _FIR: https://github.com/ntblab/neuropipe-support/edit/dev/doc/tutorial_fir/tutorial.rst
-.. _ROI: https://github.com/ntblab/neuropipe-support/edit/dev/doc/tutorial_roi/tutorial.rst
+.. _secondlevel: https://github.com/ntblab/neuropipe-support/blob/dev/doc/tutorial_secondlevel/tutorial.rst
+.. _thirdlevel: https://github.com/ntblab/neuropipe-support/blob/dev/doc/tutorial_thirdlevel/tutorial.rst
+.. _FIR: https://github.com/ntblab/neuropipe-support/blob/dev/doc/tutorial_fir/tutorial.rst
+.. _ROI: https://github.com/ntblab/neuropipe-support/blob/dev/doc/tutorial_roi/tutorial.rst
 
 Prerequisites
 -------------
