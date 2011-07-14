@@ -23,13 +23,17 @@ Introduction
 
 NeuroPipe is a framework for reproducible fMRI analysis projects with FSL. It's designed for group (across-subjects) analyses built on top of within-subjects analyses that are mainly identical. If this (or a subset of it) describes your project, NeuroPipe will help you implement your analyses and run them with a single command. This simplifies debugging, by letting you quickly make a fix and test it. And, it lets others re-run your analysis to verify your work is correct, or to build upon your project once you've finished it.
 
-This quick introduction walks you through the structure of neuropipe, what you need to know in order to use it, and how to set it up for the study of your choice. After reading this introduction, you can then use the more advanced tutorials to learn several types of analyses:
+This quick introduction walks you through the structure of neuropipe, what you need to know in order to use it, and how to set it up for the study of your choice. After reading this introduction, you can then use the more advanced tutorials to work through several types of analyses:
 
-- a within-subjects analysis on one subject, repeating that analysis for a second subject, and then running a group analysis across both of these subjects
-- a within-subjects analysis on two subjects, where a within-subject higher-level analysis needs to be completed before running a group analysis
-- an FIR analysis for one subject, with a within-subject higher-level analysis
-- a regions of interest (ROI) analysis for one subject
+- secondlevel_: a within-subjects analysis on one subject, repeating that analysis for a second subject, and then running a group analysis across both of these subjects
+- thirdlevel_: a within-subjects analysis on two subjects, where a within-subject higher-level analysis needs to be completed before running a group analysis
+- FIR_: analysis for one subject using finite impulse basis functions, with a within-subject higher-level analysis
+- ROI_: an explanation of how time-course information from specific regions of interest can be extracted from functional runs
 
+.. _secondlevel: https://github.com/ntblab/neuropipe-support/edit/dev/doc/tutorial_secondlevel/tutorial.rst
+.. _thirdlevel: https://github.com/ntblab/neuropipe-support/edit/dev/doc/tutorial_thirdlevel/tutorial.rst
+.. _FIR: https://github.com/ntblab/neuropipe-support/edit/dev/doc/tutorial_fir/tutorial.rst
+.. _ROI: https://github.com/ntblab/neuropipe-support/edit/dev/doc/tutorial_roi/tutorial.rst
 
 Prerequisites
 -------------
