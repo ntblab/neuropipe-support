@@ -105,7 +105,7 @@ Look at the body of the script, and notice it just runs another script: *prep.sh
 
   $ ./analyze.sh
 
-Once *analyze.sh* completes, look around *data/nifti*::
+Once *analyze.sh* completes (and it may take awhile, since it's working on so many tasks), look around *data/nifti*::
 
   $ ls data/nifti
 
@@ -226,10 +226,10 @@ Set EV name to "face". Set "Basic shape" to "Custom (3 column format)" and selec
 
 Now go to the "Contrasts & F-tests" tab. Increase "Contrasts" to 4. There is now a matrix of number fields with a row for each contrast and a column for each EV. You specify a contrast as a linear combination of the parameter estimates on each regressor. We'll make one contrast to show the main effect of the face regressor, one to show the main effect of the scene regressor, one to show where the scene regressor is greater than the face regressor, and one to show where the face regressor is greater:
 
-* Set the 1st row's title to "scene", it's "EV1" value to 1, and it's "EV2" value to 0.
-* Set the 2nd row's title to "face", it's "EV1" value to 0, and it's "EV2" value to 1.
-* Set the 3rd row's title to "scene>face", it's "EV1" value to 1, and it's "EV2" value to -1.
-* Set the 4th row's title to "face>scene", it's "EV1" value to -1, and it's "EV2" value to 1.
+* Set the 1st row's title to "scene", its "EV1" value to 1, and its "EV2" value to 0.
+* Set the 2nd row's title to "face", its "EV1" value to 0, and its "EV2" value to 1.
+* Set the 3rd row's title to "scene>face", its "EV1" value to 1, and its "EV2" value to -1.
+* Set the 4th row's title to "face>scene", its "EV1" value to -1, and its "EV2" value to 1.
 
 .. image:: https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_secondlevel/feat-stats-contrasts-and-f-tests.png
 
@@ -256,9 +256,9 @@ The Registration tab
 
 Different subjects have different shaped brains, and may have been in different positions in the scanner. To compare the data collected from different subjects, for each subject we compute the transformation that best moves and warps their data to match a standard brain, apply those transformations, then compare each subject in this "standard space". This Registration tab is where we set the parameters used to compute the transformation; we won't actually apply the transformation until we get to group analysis.
 
-FEAT should already have a "Standard space" image selected; leave it with the default, but change the drop-down menu from "Normal search" to "No search", or this subject's brain will be misregistered. Check "Initial structural image", and select the file *data/nifti/0608101_conatt02_t1_flash01.nii.gz*. Check "Main structural image", and select the file *data/nifti/0608101_conatt02_t1_mprage_sag01.nii.gz*.
-
 The subject's functional data is first registered to the initial structural image, then that is registered to the main structural image, which is then registered to the standard space image. All this indirection is necessary because registration can fail, and it's more likely to fail if you try to go directly from the functional data to standard space.
+
+FEAT should already have a "Standard space" image selected; leave it with the default, but change the drop-down menu from "Normal search" to "No search", or this subject's brain will be misregistered. Check "Initial structural image", and select the file *data/nifti/0608101_conatt02_t1_flash01.nii.gz*. Check "Main structural image", and select the file *data/nifti/0608101_conatt02_t1_mprage_sag01.nii.gz*.
 
 .. image:: https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_secondlevel/feat-registration.png
 
@@ -276,7 +276,7 @@ Launch FSLView::
 
   $ fslview
 
-Click File>Open... and select *analysis/firstlevel/localizer_hrf.feat/mean_func.nii.gz*; this is an image of the mean signal intensity at each voxel over the course of the run. We use it as a background to overlay a contrast image on. Click File>Add... *analysis/firstlevel/localizer_hrf.feat/stats/zstat3.nii.gz*. *zstat3.nii.gz* is an image of z-statistics for the scene>face contrast being different from 0, so high intensity values in a voxel indicate that the scene regressor caught much more of the variance in fMRI signal at that voxel than the face regressor. To find the PPA, we'll look for regions with really high values in *zstat3.nii.gz*. To include only these regions in the overlay, set the Min threshold at the top of FSLView to something like 8, then click around in the brain to see what regions had contrast z-stats at that threshold or above. Look for a bilateral pair of regions with zstat's at a high threshold, around the middle of the brain; that'll be the PPA.
+Click File>Open... and select *analysis/firstlevel/localizer_hrf.feat/mean_func.nii.gz*; this is an image of the mean signal intensity at each voxel over the course of the run. We use it as a background to overlay a contrast image on. Click File>Add... *analysis/firstlevel/localizer_hrf.feat/stats/zstat3.nii.gz*. *zstat3.nii.gz* is an image of z-statistics for the scene>face contrast being different from 0, so high intensity values in a voxel indicate that the scene regressor caught much more of the variance in fMRI signal at that voxel than the face regressor. To find the PPA, we'll look for regions with really high values in *zstat3.nii.gz*. To include only these regions in the overlay, set the Min threshold at the top of FSLView to something like 6 or 7, then click around in the brain to see what regions had contrast z-stats at that threshold or above. Look for a bilateral pair of regions with zstat's at a high threshold, around the middle of the brain; that'll be the PPA.
 
 .. image:: https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_secondlevel/fslview-ppa.png
 
@@ -466,7 +466,7 @@ Launch FEAT::
 The Data tab
 ''''''''''''
 
-Change the drop-down in the top left from "First-level analysis" to "Higher-level analysis". This will change the stuff you see below. Set "Number of inputs" to 2, because we're combining 2 within-subjects analyses, then click "Select FEAT directories". For the first directory, select *~/ppa-hunt/subjects/0608101_conatt02/analysis/firstlevel/localizer_hrf.feat*, and for the second, select *~/ppa-hunt/subjects/0608102_conatt02/analysis/firstlevel/localizer_hrf.feat*. Set the output directory to *~/ppa-hunt/group/analysis/localizer_hrf*.
+Change the drop-down in the top left from "First-level analysis" to "Higher-level analysis". This will change the layout of the rest of the tab. Set "Number of inputs" to 2, because we're combining 2 within-subjects analyses, then click "Select FEAT directories". For the first directory, select *~/ppa-hunt/subjects/0608101_conatt02/analysis/firstlevel/localizer_hrf.feat*, and for the second, select *~/ppa-hunt/subjects/0608102_conatt02/analysis/firstlevel/localizer_hrf.feat*. Set the output directory to *~/ppa-hunt/group/analysis/localizer_hrf*.
 
 Go to the Stats tab.
 
@@ -476,7 +476,7 @@ Go to the Stats tab.
 The Stats tab
 '''''''''''''
 
-Click "Model setup wizard", leave it on the default option of "single group average", and click "Process". That's it! Hit "Go" to run the analysis.
+Click "Model setup wizard", leave it on the default option of "single group average", and click "Process". Make sure the top drop-down menu it set to 'Mixed Effects: FLAME 1.' That's it! Hit "Go" to run the analysis.
 
 .. image:: https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_secondlevel/group-feat-stats.png
 
@@ -492,7 +492,7 @@ When the analysis finishes, open FSLview::
 
   $ fslview &
 
-Click File>Open Standard and accept the default. Click File>Add, and select *~/ppa-hunt/group/analysis/localizer_hrf.gfeat/cope3.feat/stats/zstat1.nii.gz*. 
+Click File>Open Standard and accept the default. Click File>Add, and select *~/ppa-hunt/group/analysis/localizer_hrf.gfeat/cope3.feat/stats/zstat1.nii.gz*. Set the minimum threshold to 6 or 7, and you should see the PPA in the same bilaterial posterior area as before.
 
 
 Automating the group analysis
@@ -540,7 +540,7 @@ Find the line that says "# 4D AVW data or FEAT directory (1)". Replace it and th
 
   <?php } ?>
 
-Find the line that says "# Higher-level EV value for EV 1 and input 1". Replace it and the next 4 lines with::
+Again, the inserted PHP code should completely replace the two original blocks of code that dictate 'group membership' for each subject. Since we are averaging across the subjects' data, they will all belong to the same 'group'. Next, find the line that says "# Higher-level EV value for EV 1 and input 1". Replace it and the next 4 lines with::
 
   <?php for ($i=1; $i < count($subjects)+1; $i++) { ?>
   # Higher-level EV value for EV 1 and input <?= $i ?> 

@@ -23,8 +23,7 @@ In this tutorial, you are interested in running an HRF analysis on two separate 
 Analyzing a subject
 ===================
 
-We'll start by analyzing a single subject. Make sure you have created a project folder to work in (see the intro tutorial for help). The name of the project for this tutorial is 'ppa-hunt2'.
-
+We'll start by analyzing a single subject. Make sure you have created a project folder to work in (see the intro tutorial for help). The name of the project for this tutorial is 'ppa-hunt2'. We will start by setting up a folder to store this subject's brain data, as well as information about the design and analysis of the data. Then we convert the data to NIFTI and run some quality assurance tests. Finally, we will set up a GLM model in Feat for one of the functional runs that were collected.
 
 Setting up
 ----------
@@ -50,9 +49,9 @@ This *README.txt* says your first step is to get some DICOM data and put it in a
 
  $ cp /exanet/ntb/packages/neuropipe/example_data/0831101_confba02.raw.tar.gz data/raw.tar.gz
 
-Email ntblab@gmail.com to request access to this data if you can't use the above command. NOTE: *cp* just copies files, and here we've directed it to copy data that was prepared for this tutorial; it doesn't work in general to retrieve data after you've done a scan. On rondo at Princeton, you can use *~/prototype/link/scripts/retrieve-data-from-sun.sh* (which appears at *~/subjects/SUBJ/scripts/retrieve-data-from-sun.sh*) to get your data, as long as your subject's folder name matches the subject ID used during for your scan session.
+Email ntblab@gmail.com to request access to this data if you can't use the above command. NOTE: *cp* just copies files, and here we've directed it to copy data that was prepared specifically for this tutorial; it doesn't work in general to retrieve data after you've done a scan. On rondo at Princeton, you can use *~/prototype/link/scripts/retrieve-data-from-sun.sh* (which appears at *~/subjects/SUBJECT/scripts/retrieve-data-from-sun.sh*) to get your data, as long as your subject's folder name matches the subject ID used during for your scan session.
 
-We also need to know the order of the scans that were collected for this subject. Download this file to see it::
+We also need to know the order of the scans that were collected for this subject. Download this file to see it (remember, if you're working on rondo, you cannot use the curl command on a node; exit to the headnode to collect the file)::
 
  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831101_confba02_run-order.txt > run-order.txt
  
@@ -92,7 +91,7 @@ Look at the body of the script, and notice it just runs another script: *prep.sh
 
  $ ./analyze.sh
 
-Once *analyze.sh* completes, look around *data/nifti*::
+Once *analyze.sh* completes (and it will take some time to finish, so be patient)cd , look around *data/nifti*::
 
  $ ls data/nifti
 
@@ -215,10 +214,10 @@ Set EV name to "face". Set "Basic shape" to "Custom (3 column format)" and selec
 
 Now go to the "Contrasts & F-tests" tab. Increase "Contrasts" to 4. There is now a matrix of number fields with a row for each contrast and a column for each EV. You specify a contrast as a linear combination of the parameter estimates on each regressor. We'll make one contrast to show the main effect of the face regressor, one to show the main effect of the house regressor, one to show where the house regressor is greater than the face regressor, and one to show where the face regressor is greater:
 
-* Set the 1st row's title to "house", it's "EV1" value to 1, and it's "EV2" value to 0. 
-* Set the 2nd row's title to "face", it's "EV1" value to 0, and it's "EV2" value to 1. 
-* Set the 3rd row's title to "house>face", it's "EV1" value to 1, and it's "EV2" value to -1. 
-* Set the 4th row's title to "face>house", it's "EV1" value to -1, and it's "EV2" value to 1.
+* Set the 1st row's title to "house", its "EV1" value to 1, and its "EV2" value to 0. 
+* Set the 2nd row's title to "face", its "EV1" value to 0, and its "EV2" value to 1. 
+* Set the 3rd row's title to "house>face", its "EV1" value to 1, and its "EV2" value to -1. 
+* Set the 4th row's title to "face>house", its "EV1" value to -1, and its "EV2" value to 1.
 
 .. image:: https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/feat-stats-contrasts-and-f-tests.png
 
@@ -246,9 +245,9 @@ The Registration tab
 
 Different subjects have different shaped brains, and may have been in different positions in the scanner. To compare the data collected from different subjects, for each subject we compute the transformation that best moves and warps their data to match a standard brain, apply those transformations, then compare each subject in this "standard space". This Registration tab is where we set the parameters used to compute the transformation; we won't actually apply the transformation until we get to group analysis.
 
-FEAT should already have a "Standard space" image selected; leave it with the default, but change the drop-down menu from "Normal search" to "Full search", and set the other menu to "12 DOF" or this subject's brain will be misregistered. Check "Initial structural image", and select the file *data/nifti/0831101_confba02_t1_flash01.nii.gz*. Keep the drop-down menu at "Normal search" and change the other menu to "6 DOF". Check "Main structural image", and select the file *data/nifti/0831101_confba02_t1_mprage01.nii.gz*. Make sure "Normal search" and "6 DOF" are set for the main structural image as well.
-
 The subject's functional data is first registered to the initial structural image, then that is registered to the main structural image, which is then registered to the standard space image. All this indirection is necessary because registration can fail, and it's more likely to fail if you try to go directly from the functional data to standard space.
+
+FEAT should already have a "Standard space" image selected; leave it with the default, but change the drop-down menu from "Normal search" to "Full search", and set the other menu to "12 DOF" or this subject's brain will be misregistered. Check "Initial structural image", and select the file *data/nifti/0831101_confba02_t1_flash01.nii.gz*. Keep the drop-down menu at "Normal search" and change the other menu to "6 DOF". Check "Main structural image", and select the file *data/nifti/0831101_confba02_t1_mprage01.nii.gz*. Make sure "Normal search" and "6 DOF" are set for the main structural image as well.
 
 .. image:: https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/feat-registration.png
 
@@ -334,8 +333,8 @@ It consists of a function called render_firstlevel, which we'll use to render th
                     $NIFTI_DIR/${SUBJ}_localizer01 \
                     $NIFTI_DIR/${SUBJ}_t1_flash01.nii.gz \
                     $NIFTI_DIR/${SUBJ}_t1_mprage01.nii.gz \
-                    $DESIGN_DIR/run1/house.txt \
-                    $DESIGN_DIR/run1/face.txt \
+                    $EV_DIR/run1/house.txt \
+                    $EV_DIR/run1/face.txt \
                     > $FSF_DIR/localizer_hrf_01.fsf
 
   render_firstlevel $FSF_DIR/localizer_hrf.fsf.template \
@@ -344,8 +343,8 @@ It consists of a function called render_firstlevel, which we'll use to render th
                     $NIFTI_DIR/${SUBJ}_localizer02 \
                     $NIFTI_DIR/${SUBJ}_t1_flash01.nii.gz \
                     $NIFTI_DIR/${SUBJ}_t1_mprage01.nii.gz \
-                    $DESIGN_DIR/run2/house.txt \
-                    $DESIGN_DIR/run2/face.txt \
+                    $EV_DIR/run2/house.txt \
+                    $EV_DIR/run2/face.txt \
                     > $FSF_DIR/localizer_hrf_02.fsf
                     
 That hunk of code calls the function render_firstlevel, passing it the values to substitute for the template's placeholders. Each chunk of code will create a new design.fsf file, one for each localizer run. This will be useful when analyzing the next subject's data. The values in this script use a bunch of completely-uppercase variables, which are defined in *globals.sh*.  Examine *globals.sh*::
@@ -451,7 +450,7 @@ Launch FEAT::
 The Data tab
 ''''''''''''
 
-Change the drop-down in the top left from "First-level analysis" to "Higher-level analysis". This will change the stuff you see below. Set "Number of inputs" to 2, because we're combining 2 run analyses, then click "Select FEAT directories". For the first directory, select *analysis/firstlevel/localizer_hrf_01.feat*, and for the second, select *analysis/firstlevel/localizer_hrf_02.feat*. Set the output directory to *analysis/secondlevel/localizer_hrf*.
+Change the drop-down in the top left from "First-level analysis" to "Higher-level analysis". This will change the layout of the rest of the data tab. Set "Number of inputs" to 2, because we're combining 2 run analyses, then click "Select FEAT directories". For the first directory, select *analysis/firstlevel/localizer_hrf_01.feat*, and for the second, select *analysis/firstlevel/localizer_hrf_02.feat*. Set the output directory to *analysis/secondlevel/localizer_hrf*.
 
 Go to the Stats tab.
 
@@ -461,7 +460,7 @@ Go to the Stats tab.
 The Stats tab
 '''''''''''''
 
-Click "Model setup wizard", leave it on the default option of "single group average", and click "Process". That's it! Hit "Go" to run the analysis.
+Change the first option to 'Fixed Effects,' and then click "Model setup wizard". Leave it on the default option of "single group average", and click "Process". That's it! Hit "Go" to run the analysis.
 
 .. image:: https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/secondlevel-feat-stats.png
 
@@ -477,7 +476,7 @@ When the analysis finishes, open FSLview::
 
   $ fslview &
 
-Click File>Open Standard and accept the default. Click File>Add, and select *~/ppa-hunt2/analysis/secondlevel/localizer_hrf.gfeat/cope4.feat/stats/zstat1.nii.gz*. 
+Click File>Open Standard and accept the default. Click File>Add, and select *analysis/secondlevel/localizer_hrf.gfeat/cope3.feat/stats/zstat1.nii.gz*. Set the minimum threshold to 6 or 7, and you should see the PPA in the same bilaterial posterior area as before.
 
 **Summary**::
 
@@ -513,7 +512,7 @@ Make the following replacements and save the file. Be sure to include the spaces
 
 Those were the parts of the template that won't vary with the number of subjects; now we template the parts that will, using loops. 
 
-Find the line that says "# 4D AVW data or FEAT directory (1)". Replace it and the next 4 lines with::
+Find the line that says "# 4D AVW data or FEAT directory (1)". Replace it and the next 4 lines (including spaces) with::
 
   <?php for ($i=0; $i < count($runs); $i++) { ?>
   # 4D AVW data or FEAT directory (<?= $i+1 ?>)
@@ -521,7 +520,7 @@ Find the line that says "# 4D AVW data or FEAT directory (1)". Replace it and th
 
   <?php } ?>
 
-Find the line that says "# Higher-level EV value for EV 1 and input 1". Replace it and the next 4 lines with::
+That chunk of code will essentially replace the two groups of original code that set the second-level Feat directories. Then, similarly, find the line that says "# Higher-level EV value for EV 1 and input 1". Replace it and the next 4 lines with::
 
   <?php for ($i=1; $i < count($runs)+1; $i++) { ?>
   # Higher-level EV value for EV 1 and input <?= $i ?> 
@@ -530,7 +529,7 @@ Find the line that says "# Higher-level EV value for EV 1 and input 1". Replace 
 
   <?php } ?>
 
-Find the line that says "# Group membership for input 1". Replace it and the next 4 lines with::
+Again, the inserted PHP code should completely replace the two original blocks of code that dictate 'group membership' for each run. Since we are averaging across both runs, they will all belong to the same 'group'. Next, find the line that says "# Group membership for input 1". Replace it and the next 4 lines with::
 
   <?php for ($i=1; $i < count($runs)+1; $i++) { ?>
   # Group membership for input <?= $i ?> 
@@ -541,7 +540,7 @@ Find the line that says "# Group membership for input 1". Replace it and the nex
 
 Save the file. Now, so that we have access to this file for future subjects, let's copy it to *prototype/copy*::
 
-  $ cp fsf/localizer_hrf_secondlevel.fsf ../../prototype/copy/fsf/
+  $ cp fsf/localizer_hrf_secondlevel.fsf.template ../../prototype/copy/fsf/
 
 **Summary**::
 
@@ -724,7 +723,7 @@ Go to the Stats tab.
 The Stats tab
 '''''''''''''
 
-Click "Model setup wizard", leave it on the default option of "single group average", and click "Process". That's it! Hit "Go" to run the analysis.
+Click "Model setup wizard", leave it on the default option of "single group average", and click "Process". Keep the drop-down menu on 'Mixed Effecs: FLAME 1.' That's it! Hit "Go" to run the analysis.
 
 .. image:: https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/group-feat-stats.png
 
@@ -743,7 +742,7 @@ Templating the group fsf file
 
    ~/ppa-hunt2/
 
-Just like when we ran a second-level analysis on two localizer runs for each subject, to template a higher-level fsf file, we'll need to repeat whole sections of the fsf file for each input going into the group analysis. In this case, each input is a subject instead of a run. Like before, we'll use PHP_ to render the templates, and write loops_ for those sections of the template that need repeating for each subject.
+Just like when we ran a second-level analysis on two localizer runs for each subject, to template a higher-level fsf file, we'll need to repeat whole sections of the fsf file for each input going into the group analysis. In this case, each input is a subject instead of a run. Like before, we'll use PHP to render the templates, and write loops for those sections of the template that need repeating for each subject.
 
 Start by copying the *design.fsf* file for the group analysis we just ran to *~/group/fsf*, and give it a ".template" extension::
 
@@ -770,7 +769,7 @@ Find the line that says "# 4D AVW data or FEAT directory (1)". Replace it and th
 
   <?php } ?>
 
-Find the line that says "# Higher-level EV value for EV 1 and input 1". Replace it and the next 4 lines with::
+The inserted PHP code should replace two chunks of the original Feat code.  Find the line that says "# Higher-level EV value for EV 1 and input 1". Replace it and the next 4 lines with::
 
   <?php for ($i=1; $i < count($subjects)+1; $i++) { ?>
   # Higher-level EV value for EV 1 and input <?= $i ?>
@@ -779,7 +778,7 @@ Find the line that says "# Higher-level EV value for EV 1 and input 1". Replace 
 
   <?php } ?>
 
-Find the line that says "# Group membership for input 1". Replace it and the next 4 lines with::
+Again, the inserted PHP code should replace two chunks of the original Feat code. Now find the line that says "# Group membership for input 1". Replace it and the next 4 lines with::
 
   <?php for ($i=1; $i < count($subjects)+1; $i++) { ?>
   # Group membership for input <?= $i ?> 
@@ -788,7 +787,7 @@ Find the line that says "# Group membership for input 1". Replace it and the nex
 
   <?php } ?>
 
-Save the file.
+Again, two sets of Feat code should have been replaced by the PHP code. Save the file.
 
 **Summary**::
 

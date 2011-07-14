@@ -26,7 +26,7 @@ Using a FIR model to analyze fMRI data is useful when you 1) are looking to fit 
 Analyzing a subject
 ===================
 
-We'll start by analyzing a single subject.
+We'll start by analyzing a single subject. First, we will create a folder to hold all of the subjects' data, analyses, and results. Then, will convert the brain data to a FSL-compatible format and run some quality assurance tests. Finally, we'll set up the GLM model using FSL's Feat program.
 
 
 Setting up
@@ -103,7 +103,7 @@ Look at the body of the script, and notice it just runs another script: *prep.sh
 
   $ ./analyze.sh
 
-Once *analyze.sh* completes, look around *data/nifti*::
+Once *analyze.sh* completes (and it may take awhile, since it's doing so many tasks), look around *data/nifti*::
 
   $ ls data/nifti
 
@@ -197,12 +197,7 @@ The Stats tab
 
 Check "Add motion parameters to model"; this makes regressors from estimates of the subject's motion, which hopefully absorb variance in the signal due to transient motion. To account for the variance in the signal due to the experimental manipulation, we define regressors based on the design, as described in *protocol.txt*. *protocol.txt* says that subjects viewed an uninterrupted stream of images, making an indoor/outdoor decision for one image every 1.5 seconds.
 
-Unbeknownst to the participants, the images were structured in such a way that each image fell into 1 of 12 categories determined by the structure of preceding images. We are going to focus on 4 of the catgories of images, and therefore will have 4 regressors in this model:
-
-1. NC_NFI: last of a set of 3 images, where the 2 preceeding images are novel and the third is novel as well
-2. NC_RFI: last of a set of 3 images, where the 2 preceeding images are novel but the third has been seen before
-3. RC_RFI: last of a set of 3 images, where the 2 preceeding images are repeated (have been seen before) and the third is repeated as well
-4. RC_NFI: last of a set of 3 images, where the 2 preceeding images are repeated but the third is novel
+Unbeknownst to the participants, the images were structured in such a way that each image fell into 1 of 12 categories determined by the structure of preceding images. We are going to focus on 4 of the catgories of images, and therefore will have 4 regressors in this model (NC_NFI, NC_RFI, RC_NFI, and RC_RFI). If you are interested in hearing about the details of this study's design, please email ntblab@princeton.edu.
 
 We will specify this design using text files in FEAT's 3-column format: we make 1 text file per regressor, each with one line per stimulus occurance belonging to that regressor. Each line has 3 numbers, separated by whitespace. The first number indicates the onset time in seconds of the period. The second number indicates the duration of the period. The third number indicates the height of the regressor during the period; always set this to 1 unless you know what you're doing. See `FEAT's documentation`_ for more details.
 
@@ -264,9 +259,9 @@ The Registration tab
 
 Different subjects have different shaped brains, and may have been in different positions in the scanner. To compare the data collected from different subjects, for each subject we compute the transformation that best moves and warps their data to match a standard brain, apply those transformations, then compare each subject in this "standard space". This Registration tab is where we set the parameters used to compute the transformation; we won't actually apply the transformation until we get to group analysis.
 
-FEAT should already have a "Standard space" image selected; leave it with the default settings. Check "Initial structural image", and select the file *subjects/0223101_conatt01/data/nifti/0223101_conatt01_t1_flash01.nii.gz*. Change the drop-down menu from "7 DOF" to "3 DOF (translation only)", or this subject's functional brain will be mis-matched to its initial structual image. Check "Main structural image", and select the file *subjects/0223101_conatt01/data/nifti/0223101_conatt01_t1_mprage01.nii.gz*.
-
 The subject's functional data is first registered to the initial structural image, then that is registered to the main structural image, which is then registered to the standard space image. All this indirection is necessary because registration can fail, and it's more likely to fail if you try to go directly from the functional data to standard space.
+
+FEAT should already have a "Standard space" image selected; leave it with the default settings. Check "Initial structural image", and select the file *subjects/0223101_conatt01/data/nifti/0223101_conatt01_t1_flash01.nii.gz*. Change the drop-down menu from "7 DOF" to "3 DOF (translation only)", or this subject's functional brain will be mis-matched to its initial structual image. Check "Main structural image", and select the file *subjects/0223101_conatt01/data/nifti/0223101_conatt01_t1_mprage01.nii.gz*.
 
 .. image:: https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_fir/feat-reg.png
 
