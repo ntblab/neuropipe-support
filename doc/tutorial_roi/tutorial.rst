@@ -45,7 +45,7 @@ Finally, we need some information about the location of these coordinates within
  $ mkdir -p analysis/firstlevel/localizer_hrf.feat/reg
  $ cp /exanet/ntb/packages/neuropipe/example_data/0223101_conatt01_example_func.nii.gz analysis/firstlevel/localizer_hrf.feat/reg/example_func.nii.gz
  
- Note: to copy the file, you must qrsh onto a node if you're working from Rondo. If you are working outside of Princeton University, or can't access the file, email ntblab@princeton.edu for help.
+Note: to copy the file, you must qrsh onto a node if you're working from Rondo. If you are working outside of Princeton University, or can't access the file, email ntblab@princeton.edu for help.
  
 **Summary**::
 
@@ -73,10 +73,10 @@ The path and file name of *roi.txt* match what is listed in *globals.sh*, so our
  $ less globals.sh
 
 
-The mysterious inner workings of *roi.sh*
-=========================================
+The inner workings of *roi.sh*
+==============================
 
-Let's open *roi.sh* up again and see what it does. (It's always a good idea to know what you are doing to your data!)::
+Let's open *roi.sh* up again and see what it does::
 
  $ less scripts/roi.sh
 
@@ -87,11 +87,11 @@ Now that your ROI coordinates are correctly aligned to your run of interest, the
 
 Finally, *roi.sh* calls *extract-stat-at-coords.sh*, which extracts the time course of your ROI coordinates for each time point of each cope, and organizes them as one csv file per analyzed run.
 
-So, let's do it! If you've completed the FIR tutorial, you can try this out on the two 'encoding_fir' runs that you've analyzed already.
+So, let's do it! If you've completed the FIR tutorial, you can try this out on the two 'encoding_fir' runs that you've analyzed already::
 
  $ scripts/roi.sh analysis/firstlevel/encoding_fir01.feat analysis/firstlevel/encoding_fir02.feat
  
-You should now have cvs files in *results/roi* that can be imported into R, Excel, or another program of your choice, either for running statistics or plotting your data. From here on out, your analysis will depend on the aims of your study. Good luck!
+You should now have comma-delimited cvs files in *results/roi*.The top row of each file lists the cope file that each time point is extracted from, and the first three colums of the data are the coordinates of your ROIs in standard space. This file can now be imported into R, Excel, or another program of your choice, either for running statistics or plotting your data.  From here on out, your analysis will depend on the aims of your study. Good luck!
 
 
 
