@@ -378,12 +378,6 @@ Then fill it with this text::
   
 The first line says that this is a BASH script. The second line loads variables from *globals.sh*. The the last two lines call *feat*, which runs FEAT without the graphical interface. The argument passed to *feat* is the path to the fsf file for it to use. Notice that the path is specified with a variable "$FSF_DIR", which is defined in *globals.sh*.
 
-To make this script available in future subject directories, copy it to the prototype::
-
- $ cp scripts/localizer.sh ../../prototype/link/scripts
-
-Remember, *prototype/link* holds files that should be identical in each subject's directory. Any file in that directory will be linked into each new subject's directory: when a linked file is changed in one subject's directory (or in *prototype/link*), the change is immediately reflected in all other links to that file.
-
 Now that we have a script for running the GLM analysis, we'll call it from *analyze.sh* so that one command does the entire analysis. Open *analyze.sh* in your text editor::
 
  $ nano analyze.sh
@@ -610,7 +604,13 @@ Copy these lines into localizer.sh at the end::
 
 If the text following "STANDARD_BRAIN=" differs from what you copied out of the fsf file in the previous section, replace it with that text you copied.
 
-Save and close the script, then run it to test that everything works::
+Save and close the script. To make this script available in future subject directories, copy it to the prototype::
+
+ $ cp scripts/localizer.sh ../../prototype/link/scripts
+
+Remember, *prototype/link* holds files that should be identical in each subject's directory. Any file in that directory will be linked into each new subject's directory: when a linked file is changed in one subject's directory (or in *prototype/link*), the change is immediately reflected in all other links to that file.
+
+Now, let's run it to test that everything works::
 
   $ bash scripts/localizer.sh
 
