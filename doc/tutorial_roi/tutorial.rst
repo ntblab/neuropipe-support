@@ -34,7 +34,7 @@ First, you have to pick the coordinates of the ROIs you are interested in analyz
 
 Then the coordinates of these areas need to be chosen. Normally, you will run some sort of localizing sequence to activate a certain part of the brain, and then pick the peak voxels in those areas.  Those coordinates have already been picked for you::
 
- $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_roi/roi.txt > design/roi.txt
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_roi/roi.txt > design/roi.txt
  
 This file needs to be formatted in 3 columns, with one line for each ROI and 1 column per coordinate direction (in x y z order).  Take a look::
 
@@ -49,7 +49,7 @@ Note: to copy the file, you must qrsh onto a node if you're working from Rondo. 
  
 **Summary**::
 
- $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_roi/roi.txt > design/roi.txt
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_roi/roi.txt > design/roi.txt
  $ less design/roi.txt
  $ mkdir p- analysis/firstlevel/localizer_hrf.feat/reg
  $ cp /exanet/ntb/packages/neuropipe/example_data/0223101_conatt01_example_func.nii.gz analysis/firstlevel/localizer_hrf.feat/reg/example_func.nii.gz
