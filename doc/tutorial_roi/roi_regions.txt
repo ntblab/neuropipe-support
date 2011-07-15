@@ -1,0 +1,6 @@
+rppa
+lppa
+rrsc
+lrsc
+rtos
+ltos

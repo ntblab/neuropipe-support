@@ -10,22 +10,32 @@ scaffold
 scripts
   holds scripts that support your across-subject analyses
 
-analysis
+group
+  holds group-level analysis and results
+
+group/analysis
   holds intermediary files made by your across-subject analyses, such as those
   produced by FSL
 
-results
+group/results
   holds the results of your across-subject analyses, such as plots and tables
   of statistical test results
 
+design
+ holds the intermediary files that are necessary for higher-level Feat analyses, 
+ such as nuisance or stimulus regressors, or ROI coordinate information
+
+fsf
+ holds design files and templates needed to run Feat across subjects
+
 subjects
   holds a directory for each of the subjects run in your experiment. see the
-  description of the subject-template dir for more details
+  description of the prototype directory for more details
 
-subject-template
-  holds the 'scaffolding' on which each subject's directory is based
+prototype
+  holds the 'scaffolding' information on which each subject's directory is based
 
-subject-template/copy
+prototype/copy
   holds files and directories that must exist in all subjects' directories, but
   that may differ between subjects. see subdirectory descriptions below for more
   details
@@ -34,18 +44,26 @@ subject-template/copy
   <<SUBJ_ID>> will have that replaced by the subject's ID before they are copied
   into the subject's directory
 
-subject-template/copy/data
+prototype/copy/data
   initially empty. provides a place for data to go when the subject is set up
 
-subject-template/copy/results
+prototype/copy/results
   initially empty. provides a place for plots and statistical results to go when
   the subject is set up
+  
+prototype/copy/design
+ initially empty. provides a place for intermediary files, such as nuisance
+ regressors or stimulus timecourse regressors
+ 
+prototype/copy/fsf
+ initially empty. provides a place for design files and templates needed to run
+ Feat
 
-subject-template/copy/scripts
+prototype/copy/scripts
   initially empty. provides a home for scripts that may need to be tweaked for
   each subject. see the README
 
-subject-template/link
+prototype/link
   holds files and directories that must exist in all subjects' directories, and
   that must be the same for all subjects, such as scripts that define your
   analysis at a high-level. all files under this directory will be linked in to
@@ -53,6 +71,6 @@ subject-template/link
   subject's directory, the changes will simultaneously occur to those files in
   all other subject's directories
 
-subject-template/link/README
+prototype/link/README
   describes how to customize the subject's directory. read this after setting
   up a new subject
