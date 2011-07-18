@@ -390,7 +390,7 @@ After the line that runs *prep.sh*, add this line::
 
  $ rm -rf analysis/firstlevel/*
  
- **Summary**::
+**Summary**::
 
   $ nano scripts/localizer.sh
   $ cp scripts/localizer.sh ../../prototype/link/scripts
@@ -678,8 +678,6 @@ FEAT should be churning away on the new data. Take some time to look over the QA
   $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_thirdlevel/0831102_confba02_face1.txt > design/run1/face.txt
   $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_thirdlevel/0831102_confba02_house2.txt > design/run2/house.txt
   $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_thirdlevel/0831102_confba02_face2.txt > design/run2/face.txt
-  $ scripts/render-fsf-templates.sh
-  $ ls fsf
   $ cp /exanet/ntb/packages/neuropipe/example_data/0831102_confba02.raw.tar.gz data/raw.tar.gz
   $ ./analyze.sh
 
@@ -766,7 +764,7 @@ Find the line that says "# 4D AVW data or FEAT directory (1)". Replace it and th
 
   <?php for ($i=0; $i < count($subjects); $i++) { ?>
   # 4D AVW data or FEAT directory (<?= $i+1 ?>)
-  set feat_files(<?= $i+1 ?>) "<?= $SUBJECTS_DIR ?>/<?= $subjects[$i] ?>/analysis/secondlevel/localizer_hrf.gfeat"
+  set feat_files(<?= $i+1 ?>) "<?= $SUBJECTS_DIR ?>/<?= $subjects[$i] ?>/analysis/secondlevel/localizer_hrf.gfeat/cope3.feat"
 
   <?php } ?>
 
