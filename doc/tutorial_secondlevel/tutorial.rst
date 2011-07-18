@@ -639,14 +639,11 @@ Automating the entire analysis
 
    ~/ppa-hunt
 
-Our goal was to run the entire analysis with a single command, to make it easy to reproduce. We're close. Open *analyze.sh* in your text editor::
+Our goal was to run the entire analysis with a single command, to make it easy to reproduce. We're close. Open *analyze-group.sh* in your text editor::
 
   $ nano analyze-group.sh
 
-You see that this script loads settings by sourcing *globals.sh*, runs each subject's individual analysis, then has a space for us to run scripts to do our group analysis. Add this line after so that Feat finishes for each subject before beginning the second-level analysis::
-
-
-
+You see that this script loads settings by sourcing *globals.sh*, runs each subject's individual analysis, then has a space for us to run scripts to do our group analysis. 
 
 After the comment marking where to run group analyses, add this line::
 
