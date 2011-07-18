@@ -17,11 +17,11 @@ NeuroPipe Tutorial
 Chapter 5 - ROI analysis of an adaptation study
 -----------------------------------------------
 
-If you've completed the FIR tutorial, or if you've collected and analyzed data using a FIR model, and would like to investigate brain activity in specific, pre-determined areas of the brain, you're in the right place. These regions can be chosen anatomically, by running a high resolution structural scan on a subject and outlining the area of the brain you're investigating, or functionally, by using a localizer sequence designed to activate the brain areas you're interested in. 
+If you've completed the FIR tutorial, or if you've collected and analyzed data in Feat, and would like to investigate brain activity in specific, pre-determined areas of the brain, you're in the right place. These regions can be chosen anatomically, by running a high resolution structural scan on a subject and outlining the area of the brain you're investigating, or functionally, by using a localizer sequence designed to activate the brain areas you're interested in. 
 
 For example, in this study, subjects completed a task that required attention to alternating blocks of either faces or houses. By using a GLM model to compare brain activity in response to faces or houses, we can identify areas of the brain that are face- or scene-selective. Then, we can look at a time series of those brain areas as the subjects complete a different task. 
 
-In this tutorial, we will take the data that was analyzed in the previous tutorial on FIR models, and then prepare a dataset of time series information about different regions of interest (ROIs) in the brain. That dataset can then be plotted to see differences in responses for different stimuli, adaptation effects, etc.
+In this tutorial, we will take the data that was analyzed in the previous tutorial on FIR models, and then prepare a dataset of time series information about different regions of interest (ROIs) in the brain. That dataset can then be plotted to see differences in responses for different stimuli, adaptation effects, etc.  ROI analyses are not limited to the contraints of this tutorial, however. ROI analyses are useful when you're looking for patterns of brain activity that may be too subtle to pick up in a whole-brain analysis, or when you want to look specifically at acivity in a pre-specified region. 
 
 Picking ROIs
 ============
@@ -87,7 +87,11 @@ Now that your ROI coordinates are correctly aligned to your run of interest, the
 
 Finally, *roi.sh* calls *extract-stat-at-coords.sh*, which extracts the time course of your ROI coordinates for each time point of each cope, and organizes them as one csv file per analyzed run.
 
-So, let's do it! If you've completed the FIR tutorial, you can try this out on the two 'encoding_fir' runs that you've analyzed already::
+So, let's do it! As an example, if you want to extract ROI timecourses from a analysis in *analysis/firstlevel/encoding_fir01.feat*, your command would look like this:
+
+ $ scripts/roi.sh analysis/firstlevel/encoding_fir01.feat
+
+If you've completed the FIR tutorial, you can try this out on the two 'encoding_fir' runs that you've analyzed already. If you'd like to add more Feat directories to be analyzed, just list the directories on the same line::
 
  $ scripts/roi.sh analysis/firstlevel/encoding_fir01.feat analysis/firstlevel/encoding_fir02.feat
  
