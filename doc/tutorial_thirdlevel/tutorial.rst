@@ -255,7 +255,7 @@ Different subjects have different shaped brains, and may have been in different 
 
 The subject's functional data is first registered to the initial structural image, then that is registered to the main structural image, which is then registered to the standard space image. All this indirection is necessary because registration can fail, and it's more likely to fail if you try to go directly from the functional data to standard space.
 
-Another way to aid registration is by skull stripping the anatomical images that are used. To do that, run the FSL command 'bet' on both images:
+Another way to aid registration is by skull stripping the anatomical images that are used. To do that, run the FSL command 'bet' on both images::
 
 $ bet data/nifti/0831101_confba02_t1_flash01.nii.gz data/nifti/0831101_confba02_t1_flash01_brain.nii.gz
 $ bet data/nifti/0831101_confba02_t1_mprage01.nii.gz data/nifti/0831101_confba02_t1_mprage01_brain.nii.gz
@@ -478,9 +478,15 @@ Go to the Stats tab.
 The Stats tab
 '''''''''''''
 
-Change the first option to 'Fixed Effects,' and then click "Model setup wizard". Leave it on the default option of "single group average", and click "Process". That's it! Hit "Go" to run the analysis.
+Change the first option to 'Fixed Effects,' and then click "Model setup wizard". Leave it on the default option of "single group average", and click "Process".
 
 .. image:: https://github.com/ntblab/neuropipe-support/raw/rc-0.3/doc/tutorial_thirdlevel/secondlevel-feat-stats.png
+
+
+The Post-stats tab
+''''''''''''''''''''
+
+Again, in the interest of saving space on Princeton's server (or in general), uncheck 'create time series plots' if you're not interested in seeing those plots. That's it! Hit "Go" to run the analysis.
 
 
 Finding the subject's PPA
@@ -748,13 +754,13 @@ The Stats tab
 
 Click "Model setup wizard", leave it on the default option of "single group average", and click "Process". Keep the drop-down menu on 'Mixed Effecs: FLAME 1.' 
 
+.. image:: https://github.com/ntblab/neuropipe-support/raw/rc-0.3/doc/tutorial_thirdlevel/group-feat-stats.png
+
 
 The Post-stats tab
 ''''''''''''''''''''
 
 Again, in the interest of saving space on Princeton's server (or in general), uncheck 'create time series plots' if you're not interested in seeing those plots. That's it! Hit "Go" to run the analysis.
-
-.. image:: https://github.com/ntblab/neuropipe-support/raw/rc-0.3/doc/tutorial_thirdlevel/group-feat-stats.png
 
 When the analysis is finished, check the logs to make sure everything looks normal -- for example, that the two subjects' brains were registered correctly to standard space.
 

@@ -144,7 +144,11 @@ Now that you have data, and of adequate quality, it's time to do an analysis. We
 
 .. _FEAT's manual: http://www.fmrib.ox.ac.uk/fsl/feat5/index.html
 
-To set the parameters of the analysis, you must know the experimental design. Open *protocol.txt* in the project directory and read it::
+To set the parameters of the analysis, you must know the experimental design. Download that information and put it in the project directory::
+
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_fir/protocol.txt > ../../protocol.txt
+ 
+Open *protocol.txt* in the project directory and read it::
 
  $ less ../../protocol.txt
 
@@ -246,8 +250,6 @@ Go to the post-stats tab. Again, in the interest of saving space on Princeton's 
 
 .. image:: https://github.com/ntblab/neuropipe-support/raw/rc-0.3/doc/tutorial_fir/feat-poststats.png
 
-Go to the Registration tab.
-
 **Summary**::
 
  $ mkdir design/encoding1
@@ -264,7 +266,7 @@ The Registration tab
 
    ~/fir-proj/subjects/0223101_conatt01
 
-Different subjects have different shaped brains, and may have been in different positions in the scanner. To compare the data collected from different subjects, for each subject we compute the transformation that best moves and warps their data to match a standard brain, apply those transformations, then compare each subject in this "standard space". This Registration tab is where we set the parameters used to compute the transformation; we won't actually apply the transformation until we get to group analysis.
+Next, go to the Registration tab. Different subjects have different shaped brains, and may have been in different positions in the scanner. To compare the data collected from different subjects, for each subject we compute the transformation that best moves and warps their data to match a standard brain, apply those transformations, then compare each subject in this "standard space". This Registration tab is where we set the parameters used to compute the transformation; we won't actually apply the transformation until we get to group analysis.
 
 The subject's functional data is first registered to the initial structural image, then that is registered to the main structural image, which is then registered to the standard space image. All this indirection is necessary because registration can fail, and it's more likely to fail if you try to go directly from the functional data to standard space.
 

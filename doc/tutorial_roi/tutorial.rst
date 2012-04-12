@@ -83,7 +83,9 @@ Let's open *roi.sh* up again and see what it does::
 First, the script reads in the ROI information we supply with our two text files. Then, it calls *transform-coords-dest.sh*, which transforms the coordinates of the peak voxels of each ROI into the space of the run(s) that you're interested in running this analysis on. This way, the coordinates that you collected earlier, on a localizer run, will line up with the same regions in the runs you're extracting information from.
 Those runs are specified by adding one or more feat directories as options to the command.
 
-Now that your ROI coordinates are correctly aligned to your run of interest, the script pulls out the 'cope' files from the run, which contain time series information based on the contrasts that you set up when modeling the run in a GLM. Then, it calls *transform-to-psc.sh* to convert the signal intensity in each cope file to percent signal change. 
+Now that your ROI coordinates are correctly aligned to your run of interest, the script pulls out the 'cope' files from the run, which contain time series information based on the contrasts that you set up when modeling the run in a GLM. Then, it calls *transform-to-psc.sh* to convert the signal intensity in each cope file to percent signal change. This command requires an input for the scaling factor that varies based on the type of analysis you've completed. For this analysis, we'll use 10, but ore information on how to calculate the scaling factor is `here`_:
+
+.. _`here`: http://mumford.bol.ucla.edu/perchange_guide.pdf 
 
 Finally, *roi.sh* calls *extract-stat-at-coords.sh*, which extracts the time course of your ROI coordinates for each time point of each cope, and organizes them as one csv file per analyzed run.
 
@@ -93,7 +95,7 @@ So, let's do it! As an example, if you want to extract ROI timecourses from a an
 
 If you've completed the FIR tutorial, you can try this out on the two 'encoding_fir' runs that you've analyzed already. If you'd like to add more Feat directories to be analyzed, just list the directories on the same line::
 
- $ scripts/roi.sh analysis/firstlevel/encoding_fir01.feat analysis/firstlevel/encoding_fir02.feat
+ $ scripts/roi.sh 10 analysis/firstlevel/encoding_fir01.feat analysis/firstlevel/encoding_fir02.feat
  
 You should now have comma-delimited cvs files in *results/roi*.The top row of each file lists the cope file that each time point is extracted from, and the first three colums of the data are the coordinates of your ROIs in standard space. This file can now be imported into R, Excel, or another program of your choice, either for running statistics or plotting your data.  From here on out, your analysis will depend on the aims of your study. Good luck!
 
