@@ -59,7 +59,7 @@ Our subject ID is "0608101_conatt02", so run this command::
 
 This *README.txt* says your first step is to get some DICOM data and put it in a Gzipped TAR archive at *data/raw.tar.gz*. Like I mentioned, the data has already been collected. It's even TAR-ed and Gzipped. Hit "q" to quit *README.txt* and get the data with this command (NOTE: you must qrsh to a node on rondo for this to work)::
 
-  $ cp /exanet/ntb/packages/neuropipe/example_data/0608101_conatt02.raw.tar.gz data/raw.tar.gz
+  $ cp /jukebox/ntb/packages/neuropipe/example_data/0608101_conatt02.raw.tar.gz data/raw.tar.gz
 
 If you are not a part of the Princeton University network, or if you are not permitted to copy this file, email ntblab@princeton.edu to request access to this data. NOTE: *cp* just copies files, and here we've directed it to copy data that was prepared for this tutorial; it doesn't work in general to retrieve data after you've done a scan. On rondo at Princeton, you can use *~/prototype/link/scripts/retrieve-data-from-sun.sh* (which appears at *~/subjects/SUBJ/scripts/retrieve-data-from-sun.sh*) to get your data, as long as your subject's folder name matches the subject ID used during for your scan session.
 
@@ -68,7 +68,7 @@ If you are not a part of the Princeton University network, or if you are not per
   $ ./scaffold 0608101_conatt02
   $ cd subjects/0608101_conatt02
   $ less README.txt
-  $ cp /exanet/ntb/packages/neuropipe/example_data/0608101_conatt02.raw.tar.gz data/raw.tar.gz
+  $ cp /jukebox/ntb/packages/neuropipe/example_data/0608101_conatt02.raw.tar.gz data/raw.tar.gz
 
 
 Preparing your data for analysis
@@ -247,6 +247,18 @@ Go to the Registration tab.
   $ less design/face.txt
 
 
+The Post-stats tab
+''''''''''''''''''''
+
+.. admonition:: you are here
+
+   ~/ppa-hunt/subjects/0608101_conatt02
+   
+This step is optional, but strongly recommended if you are working on Princeton's server (rondo). In order to save space on the server and avoid creating unnecessary files, uncheck 'create time series plots.'
+
+.. image:: https://github.com/ntblab/neuropipe-support/raw/rc-0.3/doc/tutorial_secondlevel/feat-poststats.png
+   
+
 The Registration tab
 ''''''''''''''''''''
 
@@ -258,7 +270,7 @@ Different subjects have different shaped brains, and may have been in different 
 
 The subject's functional data is first registered to the initial structural image, then that is registered to the main structural image, which is then registered to the standard space image. All this indirection is necessary because registration can fail, and it's more likely to fail if you try to go directly from the functional data to standard space.
 
-FEAT should already have a "Standard space" image selected; leave it with the default, but change the drop-down menu from "Normal search" to "No search", or this subject's brain will be misregistered. Check "Initial structural image", and select the file *data/nifti/0608101_conatt02_t1_flash01.nii.gz*. Check "Main structural image", and select the file *data/nifti/0608101_conatt02_t1_mprage_sag01.nii.gz*.
+FEAT should already have a "Standard space" image selected; leave it with the default, but change the drop-down menu from "Normal search" to "No search", or this subject's brain will be misregistered. Check "Initial structural image", and select the file *data/nifti/0608101_conatt02_t1_flash01.nii.gz*. Change the DOF from '3 (translation only)' to '6'. Check "Main structural image", and select the file *data/nifti/0608101_conatt02_t1_mprage_sag01.nii.gz*.
 
 .. image:: https://github.com/ntblab/neuropipe-support/raw/rc-0.3/doc/tutorial_secondlevel/feat-registration.png
 
@@ -414,7 +426,7 @@ Move into that subject's directory::
 
 Get the subject's data (NOTE: you must be on a node, on rondo for this to work)::
 
-  $ cp /exanet/ntb/packages/neuropipe/example_data/0608102_conatt02.raw.tar.gz data/raw.tar.gz
+  $ cp /jukebox/ntb/packages/neuropipe/example_data/0608102_conatt02.raw.tar.gz data/raw.tar.gz
 
 As before, if you don't have access to this file; email ntblab@princeton.edu to request access.
 
@@ -432,7 +444,7 @@ FEAT should be churning away on the new data.
   $ cd ../../
   $ ./scaffold 0608102_conatt02
   $ cd subjects/0608102_conatt02
-  $ cp /exanet/ntb/packages/neuropipe/example_data/0608102_conatt02.raw.tar.gz data/raw.tar.gz
+  $ cp /jukebox/ntb/packages/neuropipe/example_data/0608102_conatt02.raw.tar.gz data/raw.tar.gz
   $ ./analyze.sh
 
 
@@ -476,9 +488,15 @@ Go to the Stats tab.
 The Stats tab
 '''''''''''''
 
-Click "Model setup wizard", leave it on the default option of "single group average", and click "Process". Make sure the top drop-down menu it set to 'Mixed Effects: FLAME 1.' That's it! Hit "Go" to run the analysis.
+Click "Model setup wizard", leave it on the default option of "single group average", and click "Process". Make sure the top drop-down menu it set to 'Mixed Effects: FLAME 1.'
 
 .. image:: https://github.com/ntblab/neuropipe-support/raw/rc-0.3/doc/tutorial_secondlevel/group-feat-stats.png
+
+
+The Post-stats tab
+'''''''''''''
+
+Again, turn off the 'create time series plots' function to avoid making many unnecessary files, unless you specifically want them. And that's it! Hit "Go" to run the analysis.
 
 
 Finding the group's PPA
