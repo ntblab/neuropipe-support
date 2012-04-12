@@ -51,7 +51,7 @@ Our subject ID is "0223101_conatt01", so run this command::
 
 This *README.txt* says your first step is to get some DICOM data and put it in a Gzipped TAR archive at *data/raw.tar.gz*. This data has already been collected for you. Hit "q" to quit *README.txt* and get the data with this command (NOTE: you must be on rondo for this to work)::
 
-  $ cp /exanet/ntb/packages/neuropipe/example_data/0223101_conatt01.raw.tar.gz data/raw.tar.gz
+  $ cp /jukebox/ntb/packages/neuropipe/example_data/0223101_conatt01.raw.tar.gz data/raw.tar.gz
 
 Email ntblab@gmail.com to request access to this data if you cannot access it on your own. NOTE: *cp* just copies files, and here we've directed it to copy data that was prepared for this tutorial; it doesn't work in general to retrieve data after you've done a scan. On rondo at Princeton, you can use *~/prototype/link/scripts/retrieve-data-from-sun.sh* (which appears at *~/subjects/SUBJ/scripts/retrieve-data-from-sun.sh*) to get your data, as long as your subject's folder name matches the subject ID used during for your scan session.
 
@@ -60,7 +60,7 @@ Email ntblab@gmail.com to request access to this data if you cannot access it on
   $ ./scaffold 0223101_conatt01
   $ cd subjects/0223101_conatt01
   $ less README.txt
-  $ cp /exanet/ntb/packages/neuropipe/example_data/0223101_conatt01.raw.tar.gz data/raw.tar.gz
+  $ cp /jukebox/ntb/packages/neuropipe/example_data/0223101_conatt01.raw.tar.gz data/raw.tar.gz
 
 Preparing your data for analysis
 --------------------------------
@@ -238,6 +238,13 @@ Now go to the "Contrasts & F-tests" tab. Increase "Contrasts" to 5. There is now
 Click 'Done', and FEAT shows you a graph of your model. If it's different from the one below, check you followed the instructions correctly.
 
 .. image:: https://github.com/ntblab/neuropipe-support/raw/rc-0.3/doc/tutorial_fir/feat-graph-model.png
+
+The Post-stats tab
+''''''''''''''''''''
+
+Go to the post-stats tab. Again, in the interest of saving space on Princeton's server (or in general), uncheck 'create time series plots' if you're not interested in seeing those plots.
+
+.. image:: https://github.com/ntblab/neuropipe-support/raw/rc-0.3/doc/tutorial_fir/feat-poststats.png
 
 Go to the Registration tab.
 

@@ -47,7 +47,7 @@ Our subject ID is "0831101_confba02", so run this command::
 
 This *README.txt* says your first step is to get some DICOM data and put it in a Gzipped TAR archive at *data/raw.tar.gz*. Like I mentioned, the data has already been collected. It's even TAR-ed and Gzipped. Hit "q" to quit *README.txt* and get the data with this command (NOTE: you must be on on a node, on rondo for this to work)::
 
- $ cp /exanet/ntb/packages/neuropipe/example_data/0831101_confba02.raw.tar.gz data/raw.tar.gz
+ $ cp /jukebox/ntb/packages/neuropipe/example_data/0831101_confba02.raw.tar.gz data/raw.tar.gz
 
 Email ntblab@gmail.com to request access to this data if you can't use the above command. NOTE: *cp* just copies files, and here we've directed it to copy data that was prepared specifically for this tutorial; it doesn't work in general to retrieve data after you've done a scan. On rondo at Princeton, you can use *~/prototype/link/scripts/retrieve-data-from-sun.sh* (which appears at *~/subjects/SUBJECT/scripts/retrieve-data-from-sun.sh*) to get your data, as long as your subject's folder name matches the subject ID used during for your scan session.
 
@@ -62,7 +62,7 @@ ERROR_RUN is listed for any scans that are not relevant to this tutorial.
  $ ./scaffold 0831101_confba02
  $ cd subjects/0831101_confba02
  $ less README.txt
- $ cp /exanet/ntb/packages/neuropipe/example_data/0831101_confba02.raw.tar.gz data/raw.tar.gz
+ $ cp /jukebox/ntb/packages/neuropipe/example_data/0831101_confba02.raw.tar.gz data/raw.tar.gz
  $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_thirdlevel/0831101_confba02_run-order.txt > run-order.txt
 
 
@@ -225,7 +225,7 @@ Close that window, and FEAT shows you a graph of your model. If it's different f
 
 .. image:: https://github.com/ntblab/neuropipe-support/raw/rc-0.3/doc/tutorial_thirdlevel/feat-model-graph.png
 
-Go to the Registration tab.
+Go to the Post-stats tab.
 
 **Summary**::
 
@@ -234,6 +234,14 @@ $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_th
 $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_thirdlevel/0831101_confba02_face1.txt > design/run1/face.txt
 $ less design/run1/house.txt
 $ less design/run1/face.txt
+
+
+The Post-stats tab
+''''''''''''''''''''
+
+As has been mentioned before, in the interest of saving space on Princeton's server (or in general), uncheck 'create time series plots' if you're not interested in seeing those plots. This will prevent a lot of unnecessary files from being made. Next, go to the registration tab.
+
+.. image:: https://github.com/ntblab/neuropipe-support/raw/rc-0.3/doc/tutorial_thirdlevel/feat-poststats.png
 
 
 The Registration tab
@@ -247,11 +255,21 @@ Different subjects have different shaped brains, and may have been in different 
 
 The subject's functional data is first registered to the initial structural image, then that is registered to the main structural image, which is then registered to the standard space image. All this indirection is necessary because registration can fail, and it's more likely to fail if you try to go directly from the functional data to standard space.
 
-FEAT should already have a "Standard space" image selected; leave it with the default, but change the drop-down menu from "Normal search" to "Full search", and set the other menu to "12 DOF" or this subject's brain will be misregistered. Check "Initial structural image", and select the file *data/nifti/0831101_confba02_t1_flash01.nii.gz*. Keep the drop-down menu at "Normal search" and change the other menu to "6 DOF". Check "Main structural image", and select the file *data/nifti/0831101_confba02_t1_mprage01.nii.gz*. Make sure "Normal search" and "6 DOF" are set for the main structural image as well.
+Another way to aid registration is by skull stripping the anatomical images that are used. To do that, run the FSL command 'bet' on both images:
+
+$ bet data/nifti/0831101_confba02_t1_flash01.nii.gz data/nifti/0831101_confba02_t1_flash01_brain.nii.gz
+$ bet data/nifti/0831101_confba02_t1_mprage01.nii.gz data/nifti/0831101_confba02_t1_mprage01_brain.nii.gz
+
+FEAT should already have a "Standard space" image selected; leave it with the default, but change the drop-down menu from "Normal search" to "Full search", and set the other menu to "12 DOF" or this subject's brain will be misregistered. Check "Initial structural image", and select the file *data/nifti/0831101_confba02_t1_flash01_brain.nii.gz*. Keep the drop-down menu at "Normal search" and change the other menu to "6 DOF". Check "Main structural image", and select the file *data/nifti/0831101_confba02_t1_mprage01_brain.nii.gz*. Make sure "Normal search" and "6 DOF" are set for the main structural image as well.
 
 .. image:: https://github.com/ntblab/neuropipe-support/raw/rc-0.3/doc/tutorial_thirdlevel/feat-registration.png
 
 That's it! Hit Go. A webpage should open in your browser showing FEAT's progress. Once it's done, this webpage provides a useful summary of the analysis you just ran with FEAT. After making sure that no errors occurred during the analysis, let's continue hunting the PPA.
+
+**Summary**::
+
+$ bet data/nifti/0831101_confba02_t1_flash01.nii.gz data/nifti/0831101_confba02_t1_flash01_brain.nii.gz
+$ bet data/nifti/0831101_confba02_t1_mprage01.nii.gz data/nifti/0831101_confba02_t1_mprage01_brain.nii.gz
 
 
 Finding the PPA
@@ -298,8 +316,8 @@ Make the following replacements and save the file. Be sure to include the spaces
   #. on the line starting with "set feat_files(1)", replace all of the text inside the quotes with "<?= $DATA_FILE_PREFIX ?>"
   #. on the line starting with "set initial_highres_files(1) ", replace all of the text inside the quotes with "<?= $INITIAL_HIGHRES_FILE ?>"
   #. on the line starting with "set highres_files(1)", replace all of the text inside the quotes with "<?= $HIGHRES_FILE ?>"
-  #. on the line starting with "set fmri(custom1)", replace all of the text inside the quotes with "<?= $EV1 ?>"
-  #. on the line starting with "set fmri(custom2)", replace all of the text inside the quotes with "<?= $EV2 ?>"
+  #. on the line starting with "set fmri(custom1)", replace all of the text inside the quotes with "<?= $EV_DIR ?>/house.txt"
+  #. on the line starting with "set fmri(custom2)", replace all of the text inside the quotes with "<?= $EV_DIR ?>/face.txt"
 
 Those bits you replaced with placeholders are the parameters that must change when analyzing a different run, a new subject, or using a different computer. After saving the file, copy it to the prototype so it's available for future subjects::
 
@@ -331,20 +349,22 @@ It consists of a function called render_firstlevel, which we'll use to render th
                     $FIRSTLEVEL_DIR/localizer_hrf_01.feat \
                     $FSL_DIR/data/standard/MNI152_T1_2mm_brain \
                     $NIFTI_DIR/${SUBJ}_localizer01 \
-                    $NIFTI_DIR/${SUBJ}_t1_flash01.nii.gz \
-                    $NIFTI_DIR/${SUBJ}_t1_mprage01.nii.gz \
-                    $EV_DIR/run1/house.txt \
-                    $EV_DIR/run1/face.txt \
+                    $NIFTI_DIR/${SUBJ}_t1_flash01_brain.nii.gz \
+                    $NIFTI_DIR/${SUBJ}_t1_mprage01_brain.nii.gz \
+                    . \
+                    . \
+                    $EV_DIR/run1 \
                     > $FSF_DIR/localizer_hrf_01.fsf
 
   render_firstlevel $FSF_DIR/localizer_hrf.fsf.template \
                     $FIRSTLEVEL_DIR/localizer_hrf_02.feat \
                     $FSL_DIR/data/standard/MNI152_T1_2mm_brain \
                     $NIFTI_DIR/${SUBJ}_localizer02 \
-                    $NIFTI_DIR/${SUBJ}_t1_flash01.nii.gz \
-                    $NIFTI_DIR/${SUBJ}_t1_mprage01.nii.gz \
-                    $EV_DIR/run2/house.txt \
-                    $EV_DIR/run2/face.txt \
+                    $NIFTI_DIR/${SUBJ}_t1_flash01_brain.nii.gz \
+                    $NIFTI_DIR/${SUBJ}_t1_mprage01_brain.nii.gz \
+                    . \
+                    . \
+                    $EV_DIR/run2 \
                     > $FSF_DIR/localizer_hrf_02.fsf
                     
 That hunk of code calls the function render_firstlevel, passing it the values to substitute for the template's placeholders. Each chunk of code will create a new design.fsf file, one for each localizer run. This will be useful when analyzing the next subject's data. The values in this script use a bunch of completely-uppercase variables, which are defined in *globals.sh*.  Examine *globals.sh*::
@@ -373,10 +393,14 @@ Then fill it with this text::
 
   #!/bin/bash
   source globals.sh
+  
+  bet $NIFTI_DIR/${SUBJ}_t1_flash01.nii.gz $NIFTI_DIR/${SUBJ}_t1_flash01_brain.nii.gz
+  bet $NIFTI_DIR/${SUBJ}_t1_mprage01.nii.gz $NIFTI_DIR/${SUBJ}_t1_mprage01_brain.nii.gz
+
   feat $FSF_DIR/localizer_hrf_01.fsf
   feat $FSF_DIR/localizer_hrf_02.fsf
   
-The first line says that this is a BASH script. The second line loads variables from *globals.sh*. The the last two lines call *feat*, which runs FEAT without the graphical interface. The argument passed to *feat* is the path to the fsf file for it to use. Notice that the path is specified with a variable "$FSF_DIR", which is defined in *globals.sh*.
+The first line says that this is a BASH script. The second line loads variables from *globals.sh*. The next two lines skull strip the two anatomical images to be used for registration, and the last two lines call *feat*, which runs FEAT without the graphical interface. The argument passed to *feat* is the path to the fsf file for it to use. Notice that the path is specified with a variable "$FSF_DIR", which is defined in *globals.sh*.
 
 Now that we have a script for running the GLM analysis, we'll call it from *analyze.sh* so that one command does the entire analysis. Open *analyze.sh* in your text editor::
 
@@ -651,13 +675,13 @@ This subject's stimuli order was slightly different. Instead of beginning with f
   $ mkdir design/run1
   $ mkdir design/run2
   $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_thirdlevel/0831102_confba02_house1.txt > design/run1/house.txt
-  $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_thirdlevel/0831102_confba02_face1.txt > design/run1/face.txt
+  $ s
   $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_thirdlevel/0831102_confba02_house2.txt > design/run2/house.txt
   $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_thirdlevel/0831102_confba02_face2.txt > design/run2/face.txt
 
 We already made a template for the localizer run that works for different subjects, edited scripts/render-fsf-templates.sh to make a unique design file for each run, and created localizer.sh to run the two Feat analyses. Because we already copied these files into *~/protoype*, these changes will be present in the new subject's directory. All that's left is to collect the data and then run the analysis! First, get the subject's data (NOTE: you must be on rondo for this to work)::
 
-  $ cp /exanet/ntb/packages/neuropipe/example_data/0831102_confba02.raw.tar.gz data/raw.tar.gz
+  $ cp /jukebox/ntb/packages/neuropipe/example_data/0831102_confba02.raw.tar.gz data/raw.tar.gz
 
 As before, it will prompt you to enter a password; email ntblab@princeton.edu to request access to this data.
 
@@ -678,7 +702,7 @@ FEAT should be churning away on the new data. Take some time to look over the QA
   $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_thirdlevel/0831102_confba02_face1.txt > design/run1/face.txt
   $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_thirdlevel/0831102_confba02_house2.txt > design/run2/house.txt
   $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_thirdlevel/0831102_confba02_face2.txt > design/run2/face.txt
-  $ cp /exanet/ntb/packages/neuropipe/example_data/0831102_confba02.raw.tar.gz data/raw.tar.gz
+  $ cp /jukebox/ntb/packages/neuropipe/example_data/0831102_confba02.raw.tar.gz data/raw.tar.gz
   $ ./analyze.sh
 
 
@@ -722,11 +746,18 @@ Go to the Stats tab.
 The Stats tab
 '''''''''''''
 
-Click "Model setup wizard", leave it on the default option of "single group average", and click "Process". Keep the drop-down menu on 'Mixed Effecs: FLAME 1.' That's it! Hit "Go" to run the analysis.
+Click "Model setup wizard", leave it on the default option of "single group average", and click "Process". Keep the drop-down menu on 'Mixed Effecs: FLAME 1.' 
+
+
+The Post-stats tab
+''''''''''''''''''''
+
+Again, in the interest of saving space on Princeton's server (or in general), uncheck 'create time series plots' if you're not interested in seeing those plots. That's it! Hit "Go" to run the analysis.
 
 .. image:: https://github.com/ntblab/neuropipe-support/raw/rc-0.3/doc/tutorial_thirdlevel/group-feat-stats.png
 
 When the analysis is finished, check the logs to make sure everything looks normal -- for example, that the two subjects' brains were registered correctly to standard space.
+
 
 Automating the group analysis
 =============================
@@ -862,7 +893,7 @@ Automating the entire analysis
 
    ~/ppa-hunt2
 
-Our goal was to run the entire analysis with a single command, to make it easy to reproduce. We're close. Open *analyze.sh* in your text editor::
+Our goal was to run the entire analysis with a single command, to make it easy to reproduce. We're close. Open *analyze-group.sh* in your text editor::
 
   $ nano analyze-group.sh
 
