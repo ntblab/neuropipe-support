@@ -14,10 +14,10 @@ NeuroPipe Tutorial
 
 
 ---------------------------------------------------
-Chapter 3 - HRF analysis of multiple scan sequneces
+Chapter 3 - HRF analysis of multiple scan sequences
 ---------------------------------------------------
 
-In this tutorial, you are interested in running an HRF analysis on two separate subjects' data. However, both subjects completed two separate scan sequences while performing the same task. Here you will begin by analyzing the first 'run' of one a subject, and then template the analysis to automate the analysis of the second 'run'. Then you will run a second-level analysis of the two runs to combine the results. Then, you will create a template of the second-level analysis in order to replicate this analysis on the second subject. Finally, you will run a third-level analysis that combines the results of both subjects.
+In this tutorial, you are interested in running an HRF analysis on two separate subjects' data. However, both subjects completed two separate scan sequences while performing the same task. Here you will begin by analyzing the first 'run' of one subject, and then template the analysis to automate the analysis of the second 'run'. Then you will run a second-level analysis of the two runs to combine the results. Then, you will create a template of the second-level analysis in order to replicate this analysis on the second subject. Finally, you will run a third-level analysis that combines the results of both subjects.
 
 
 Analyzing a subject
@@ -47,7 +47,7 @@ Our subject ID is "0831101_confba02", so run this command::
 
 This *README.txt* says your first step is to get some DICOM data and put it in a Gzipped TAR archive at *data/raw.tar.gz*. Like I mentioned, the data has already been collected. It's even TAR-ed and Gzipped. Hit "q" to quit *README.txt* and get the data with this command (NOTE: you must be on on a node, on rondo for this to work)::
 
- $ cp /exanet/ntb/packages/neuropipe/example_data/0831101_confba02.raw.tar.gz data/raw.tar.gz
+ $ cp /jukebox/ntb/packages/neuropipe/example_data/0831101_confba02.raw.tar.gz data/raw.tar.gz
 
 Email ntblab@gmail.com to request access to this data if you can't use the above command. NOTE: *cp* just copies files, and here we've directed it to copy data that was prepared specifically for this tutorial; it doesn't work in general to retrieve data after you've done a scan. On rondo at Princeton, you can use *~/prototype/link/scripts/retrieve-data-from-sun.sh* (which appears at *~/subjects/SUBJECT/scripts/retrieve-data-from-sun.sh*) to get your data, as long as your subject's folder name matches the subject ID used during for your scan session.
 
@@ -55,15 +55,19 @@ We also need to know the order of the scans that were collected for this subject
 
  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831101_confba02_run-order.txt > run-order.txt
  
-ERROR_RUN is listed for any scans that are not relevant to this tutorial.
+ERROR_RUN is listed for any scans that are not relevant to this tutorial.  We will also copy this file into *prototype/copy* so that the next time we scaffold a subject, the run order file will already be in place::
+
+ $ cp run-order.txt ../../prototype/copy/run-order.txt
 
 **Summary**::
 
  $ ./scaffold 0831101_confba02
  $ cd subjects/0831101_confba02
  $ less README.txt
- $ cp /exanet/ntb/packages/neuropipe/example_data/0831101_confba02.raw.tar.gz data/raw.tar.gz
+ $ cp /jukebox/ntb/packages/neuropipe/example_data/0831101_confba02.raw.tar.gz data/raw.tar.gz
  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831101_confba02_run-order.txt > run-order.txt
+ $ cp run-order.txt ../../prototype/copy/run-order.txt
+
 
 
 Preparing your data for analysis
@@ -208,7 +212,7 @@ When making these design files for your own projects, do not use a Windows machi
 
 To use these files to specify the design, click the "Full model setup" button. Set "EV name" to "house". FSL calls regressors EV's, short for Explanatory Variables. Set "Basic shape" to "Custom (3 column format)" and select *design/run1/house.txt*. That file on its own describes a square wave; to account for the shape of the BOLD response, we convolve it with another function that models the hemodynamic response to a stimulus. Set "Convolution" to "Double-Gamma HRF". Now to set up the face regressor set "Number of original EVs" to 2 and click to tab 2.
 
-Set EV name to "face". Set "Basic shape" to "Custom (3 column format)" and select *design/face.txt*. Change "Convolution" to "Double-Gamma HRF", like we did for the house regressor.
+Set EV name to "face". Set "Basic shape" to "Custom (3 column format)" and select *design/run1/face.txt*. Change "Convolution" to "Double-Gamma HRF", like we did for the house regressor.
 
 .. image:: https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_thirdlevel/feat-stats-ev2.png
 
@@ -642,11 +646,7 @@ Then, move into that subject's directory::
 
  $ cd subjects/0831102_confba02
  
-This subject's run-order file looks a bit different, so in this case putting a template in *prototype/copy* isn't helpful. The file has been made for you already::
-
-  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831102_confba02_run-order.txt > run-order.txt
-
-This subject's stimuli order was slightly different. Instead of beginning with face images, their first set of stimuli were house images. They therefore have different face and house regressor files. They're provided for you already::
+Since we already put a copy of the first subject's run order file in *prototype/copy/*, we don't have to create a new one for this subject. However, this subject's stimuli order was slightly different. Instead of beginning with face images, their first set of stimuli were house images. They therefore have different face and house regressor files. They're provided for you already::
 
   $ mkdir design/run1
   $ mkdir design/run2
@@ -657,7 +657,7 @@ This subject's stimuli order was slightly different. Instead of beginning with f
 
 We already made a template for the localizer run that works for different subjects, edited scripts/render-fsf-templates.sh to make a unique design file for each run, and created localizer.sh to run the two Feat analyses. Because we already copied these files into *~/protoype*, these changes will be present in the new subject's directory. All that's left is to collect the data and then run the analysis! First, get the subject's data (NOTE: you must be on rondo for this to work)::
 
-  $ cp /exanet/ntb/packages/neuropipe/example_data/0831102_confba02.raw.tar.gz data/raw.tar.gz
+  $ cp /jukebox/ntb/packages/neuropipe/example_data/0831102_confba02.raw.tar.gz data/raw.tar.gz
 
 As before, it will prompt you to enter a password; email ntblab@princeton.edu to request access to this data.
 
@@ -678,7 +678,7 @@ FEAT should be churning away on the new data. Take some time to look over the QA
   $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831102_confba02_face1.txt > design/run1/face.txt
   $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831102_confba02_house2.txt > design/run2/house.txt
   $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_thirdlevel/0831102_confba02_face2.txt > design/run2/face.txt
-  $ cp /exanet/ntb/packages/neuropipe/example_data/0831102_confba02.raw.tar.gz data/raw.tar.gz
+  $ cp /jukebox/ntb/packages/neuropipe/example_data/0831102_confba02.raw.tar.gz data/raw.tar.gz
   $ ./analyze.sh
 
 
