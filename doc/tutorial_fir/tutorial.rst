@@ -51,7 +51,7 @@ Our subject ID is "0223101_conatt01", so run this command::
 
 This *README.txt* says your first step is to get some DICOM data and put it in a Gzipped TAR archive at *data/raw.tar.gz*. This data has already been collected for you. Hit "q" to quit *README.txt* and get the data with this command (NOTE: you must be on rondo for this to work)::
 
-  $ cp /exanet/ntb/packages/neuropipe/example_data/0223101_conatt01.raw.tar.gz data/raw.tar.gz
+  $ cp /jukebox/ntb/packages/neuropipe/example_data/0223101_conatt01.raw.tar.gz data/raw.tar.gz
 
 Email ntblab@gmail.com to request access to this data if you cannot access it on your own. NOTE: *cp* just copies files, and here we've directed it to copy data that was prepared for this tutorial; it doesn't work in general to retrieve data after you've done a scan. On rondo at Princeton, you can use *~/prototype/link/scripts/retrieve-data-from-sun.sh* (which appears at *~/subjects/SUBJ/scripts/retrieve-data-from-sun.sh*) to get your data, as long as your subject's folder name matches the subject ID used during for your scan session.
 
@@ -60,7 +60,7 @@ Email ntblab@gmail.com to request access to this data if you cannot access it on
   $ ./scaffold 0223101_conatt01
   $ cd subjects/0223101_conatt01
   $ less README.txt
-  $ cp /exanet/ntb/packages/neuropipe/example_data/0223101_conatt01.raw.tar.gz data/raw.tar.gz
+  $ cp /jukebox/ntb/packages/neuropipe/example_data/0223101_conatt01.raw.tar.gz data/raw.tar.gz
 
 Preparing your data for analysis
 --------------------------------
@@ -75,7 +75,7 @@ Open *README.txt* again::
 
 Next, we need to fill out *run-order.txt* with the order of MRI sequences that were completed for this subject. One has already been made for you, so go ahead and run this command to get it:: 
 
- $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/run-order.txt > run-order.txt
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_fir/run-order.txt > run-order.txt
 
 To check that *run-order.txt* came through all right, hit "q" to get out of *README.txt*, and run this command::
 
@@ -122,7 +122,7 @@ Use the "(What's this?)" links to figure out what all the diagnostics mean. When
 **Summary**::
 
   $ less README.txt
-  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/run-order.txt > run-order.txt
+  $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_fir/run-order.txt > run-order.txt
   $ less run-order.txt
   $ less README.txt
   $ less analyze.sh
@@ -144,7 +144,11 @@ Now that you have data, and of adequate quality, it's time to do an analysis. We
 
 .. _FEAT's manual: http://www.fmrib.ox.ac.uk/fsl/feat5/index.html
 
-To set the parameters of the analysis, you must know the experimental design. Open *protocol.txt* in the project directory and read it::
+To set the parameters of the analysis, you must know the experimental design. Download that information and put it in the project directory::
+
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_fir/protocol.txt > ../../protocol.txt
+ 
+Open *protocol.txt* in the project directory and read it::
 
  $ less ../../protocol.txt
 
@@ -169,7 +173,7 @@ The Data tab
 
 Click "Select 4D data" and select the file *data/nifti/0223101_conatt01_encoding01.nii.gz*; FEAT will analyze this data. Set "Output directory" to *analysis/firstlevel/encoding_fir01*; FEAT will put the results of its analysis in this folder, but with ".feat" appended, or "+.feat" appended if this is the second analysis with this name that you've run. FEAT should have detected "Total volumes" as 355, but it may have mis-detected "TR (s)" as 3.0; if so, change that to 1.5, because this experiment had a TR length of 1.5 seconds. Because *protocol.txt* indicated there were 9 seconds of disdaqs (volumes of data at the start of the run that are discarded because the scanner needs a few seconds to settle down), and TR length is 1.5s, set "Delete volumes" to 6. Set "High pass filter cutoff (s)" to 128 to remove slow drifts from your signal.
 
-.. image:: https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_fir/feat-data.png
+.. image:: https://github.com/ntblab/neuropipe-support/raw/rc-0.3/doc/tutorial_fir/feat-data.png
 
 Go to the Pre-stats tab.
 
@@ -183,7 +187,7 @@ The Pre-stats tab
 
 Change "Slice timing correction" to "Interleaved (0,2,4 ...", because slices were collected in this interleaved pattern. Leave the rest of the settings at their defaults.
 
-.. image:: https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_fir/feat-pre-stats.png
+.. image:: https://github.com/ntblab/neuropipe-support/raw/rc-0.3/doc/tutorial_fir/feat-pre-stats.png
 
 Go to the Stats tab.
 
@@ -206,10 +210,10 @@ We will specify this design using text files in FEAT's 3-column format: we make 
 These design files are provided for you. Make a directory to put them in, then download the files::
 
  $ mkdir design/encoding1
- $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/encoding1/NC_NFI.txt > design/encoding1/NC_NFI.txt
- $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/encoding1/NC_RFI.txt > design/encoding1/NC_RFI.txt
- $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/encoding1/RC_NFI.txt > design/encoding1/RC_NFI.txt
- $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/encoding1/RC_RFI.txt > design/encoding1/RC_RFI.txt
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_fir/encoding1/NC_NFI.txt > design/encoding1/NC_NFI.txt
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_fir/encoding1/NC_RFI.txt > design/encoding1/NC_RFI.txt
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_fir/encoding1/RC_NFI.txt > design/encoding1/RC_NFI.txt
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_fir/encoding1/RC_RFI.txt > design/encoding1/RC_RFI.txt
 
 Examine some of these files and check out the format::
 
@@ -223,7 +227,7 @@ To use these files to specify the design, click the "Full model setup" button. S
 
 Click on Tab 1. Set one EV name to match the name of one of our text files. In this case, we'll use NC_NFI. Set "Basic shape" to "Custom (3 column format)" and select *design/encoding1/NC_NFI.txt*. That file on its own describes a square wave; to apply the FIR parameters that we discussed earlier, we will set "Convolution" to "FIR basis function" and specify the number and duration of "impulses" that will be sampled for each stimulus onset. Set "Number" to 12 and "Window(s)" to 18. Now to set up the second regressor, click to tab 2. Complete each regressor with the same parameters, changing only the EV Name and the file used. Use this order of regressors: NC_NFI, NC_RFI, RC_NFI, RC_RFI::
 
-.. image:: https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_fir/feat-stats-ev4.png
+.. image:: https://github.com/ntblab/neuropipe-support/raw/rc-0.3/doc/tutorial_fir/feat-stats-ev4.png
 
 Now go to the "Contrasts & F-tests" tab. Increase "Contrasts" to 5. There is now a matrix of number fields with a row for each contrast and a column for each EV. You specify a contrast as a linear combination of the parameter estimates on each regressor. We'll make one contrast to show the main effect of each regressor, and also one to look at the difference in brain activity between certain regressors. The idea here is that you can look at the differences between regressors or even groups of regressors by creating a contrast for a particular relationship you're interested in:
 
@@ -233,21 +237,26 @@ Now go to the "Contrasts & F-tests" tab. Increase "Contrasts" to 5. There is now
 * Set the 4rd row's title to "RC_RFI", its "EV4" value to 1, and leave the rest at 0.
 * Set the 5th row's title to "NC_RFI-RC_RFI", its "EV2" value to 1, its "EV4" value to -1, and leave the rest at 0. 
 
-.. image:: https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_fir/feat-stats-contrasts.png
+.. image:: https://github.com/ntblab/neuropipe-support/raw/rc-0.3/doc/tutorial_fir/feat-stats-contrasts.png
 
 Click 'Done', and FEAT shows you a graph of your model. If it's different from the one below, check you followed the instructions correctly.
 
-.. image:: https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_fir/feat-graph-model.png
+.. image:: https://github.com/ntblab/neuropipe-support/raw/rc-0.3/doc/tutorial_fir/feat-graph-model.png
 
-Go to the Registration tab.
+The Post-stats tab
+''''''''''''''''''''
+
+Go to the post-stats tab. Again, in the interest of saving space on Princeton's server (or in general), uncheck 'create time series plots' if you're not interested in seeing those plots.
+
+.. image:: https://github.com/ntblab/neuropipe-support/raw/rc-0.3/doc/tutorial_fir/feat-poststats.png
 
 **Summary**::
 
  $ mkdir design/encoding1
- $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/encoding1/NC_NFI.txt > design/encoding1/NC_NFI.txt
- $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/encoding1/NC_RFI.txt > design/encoding1/NC_RFI.txt
- $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/encoding1/RC_NFI.txt > design/encoding1/RC_NFI.txt
- $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/encoding1/RC_RFI.txt > design/encoding1/RC_RFI.txt
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_fir/encoding1/NC_NFI.txt > design/encoding1/NC_NFI.txt
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_fir/encoding1/NC_RFI.txt > design/encoding1/NC_RFI.txt
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_fir/encoding1/RC_NFI.txt > design/encoding1/RC_NFI.txt
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_fir/encoding1/RC_RFI.txt > design/encoding1/RC_RFI.txt
  $ less design/encoding1/NC_NFI.txt
 
 The Registration tab
@@ -257,13 +266,13 @@ The Registration tab
 
    ~/fir-proj/subjects/0223101_conatt01
 
-Different subjects have different shaped brains, and may have been in different positions in the scanner. To compare the data collected from different subjects, for each subject we compute the transformation that best moves and warps their data to match a standard brain, apply those transformations, then compare each subject in this "standard space". This Registration tab is where we set the parameters used to compute the transformation; we won't actually apply the transformation until we get to group analysis.
+Next, go to the Registration tab. Different subjects have different shaped brains, and may have been in different positions in the scanner. To compare the data collected from different subjects, for each subject we compute the transformation that best moves and warps their data to match a standard brain, apply those transformations, then compare each subject in this "standard space". This Registration tab is where we set the parameters used to compute the transformation; we won't actually apply the transformation until we get to group analysis.
 
 The subject's functional data is first registered to the initial structural image, then that is registered to the main structural image, which is then registered to the standard space image. All this indirection is necessary because registration can fail, and it's more likely to fail if you try to go directly from the functional data to standard space.
 
 FEAT should already have a "Standard space" image selected; leave it with the default settings. Check "Initial structural image", and select the file *subjects/0223101_conatt01/data/nifti/0223101_conatt01_t1_flash01.nii.gz*. Change the drop-down menu from "7 DOF" to "3 DOF (translation only)", or this subject's functional brain will be mis-matched to its initial structual image. Check "Main structural image", and select the file *subjects/0223101_conatt01/data/nifti/0223101_conatt01_t1_mprage01.nii.gz*.
 
-.. image:: https://github.com/ntblab/neuropipe-support/raw/dev/doc/tutorial_fir/feat-reg.png
+.. image:: https://github.com/ntblab/neuropipe-support/raw/rc-0.3/doc/tutorial_fir/feat-reg.png
 
 That's it! Hit Go. A webpage should open in your browser showing FEAT's progress. Once it's done, this webpage provides a useful summary of the analysis you just ran with FEAT. Before continuing on, be sure to check through the logs to make sure that no errors have occured.
 
@@ -404,10 +413,10 @@ After the line that runs *prep.sh*, add this line::
 The second encoding run for this subject requires its own set of regressor files, since the order of images is different in the two runs. Grab the encoding files for the second run::
 
  $ mkdir design/encoding2
- $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/encoding2/NC_NFI.txt > design/encoding2/NC_NFI.txt
- $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/encoding2/NC_RFI.txt > design/encoding2/NC_RFI.txt
- $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/encoding2/RC_NFI.txt > design/encoding2/RC_NFI.txt
- $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/encoding2/RC_RFI.txt > design/encoding2/RC_RFI.txt
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_fir/encoding2/NC_NFI.txt > design/encoding2/NC_NFI.txt
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_fir/encoding2/NC_RFI.txt > design/encoding2/NC_RFI.txt
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_fir/encoding2/RC_NFI.txt > design/encoding2/RC_NFI.txt
+ $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_fir/encoding2/RC_RFI.txt > design/encoding2/RC_RFI.txt
 
 Then, run our newly updated analysis that deals with both encoding runs::
 
@@ -422,10 +431,10 @@ Feat should be churning away, and two webpages should open in your browser showi
   $ nano analyze.sh
   $ rm -rf analysis/firstlevel/*
   $ mkdir design/encoding2
-  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/encoding2/NC_NFI.txt > design/encoding2/NC_NFI.txt
-  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/encoding2/NC_RFI.txt > design/encoding2/NC_RFI.txt
-  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/encoding2/RC_NFI.txt > design/encoding2/RC_NFI.txt
-  $ curl -k https://raw.github.com/ntblab/neuropipe-support/dev/doc/tutorial_fir/encoding2/RC_RFI.txt > design/encoding2/RC_RFI.txt
+  $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_fir/encoding2/NC_NFI.txt > design/encoding2/NC_NFI.txt
+  $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_fir/encoding2/NC_RFI.txt > design/encoding2/NC_RFI.txt
+  $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_fir/encoding2/RC_NFI.txt > design/encoding2/RC_NFI.txt
+  $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_fir/encoding2/RC_RFI.txt > design/encoding2/RC_RFI.txt
   $ ./analyze.sh
 
 
