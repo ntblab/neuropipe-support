@@ -14,10 +14,10 @@ NeuroPipe Tutorial
 
 
 ---------------------------------------------------
-Chapter 3 - HRF analysis of multiple scan sequneces
+Chapter 3 - HRF analysis of multiple scan sequences
 ---------------------------------------------------
 
-In this tutorial, you are interested in running an HRF analysis on two separate subjects' data. However, both subjects completed two separate scan sequences while performing the same task. Here you will begin by analyzing the first 'run' of one a subject, and then template the analysis to automate the analysis of the second 'run'. Then you will run a second-level analysis of the two runs to combine the results. Then, you will create a template of the second-level analysis in order to replicate this analysis on the second subject. Finally, you will run a third-level analysis that combines the results of both subjects.
+In this tutorial, you are interested in running an HRF analysis on two separate subjects' data. However, both subjects completed two separate scan sequences while performing the same task. Here you will begin by analyzing the first 'run' of one subject, and then template the analysis to automate the analysis of the second 'run'. Then you will run a second-level analysis of the two runs to combine the results. Then, you will create a template of the second-level analysis in order to replicate this analysis on the second subject. Finally, you will run a third-level analysis that combines the results of both subjects.
 
 
 Analyzing a subject
@@ -55,7 +55,9 @@ We also need to know the order of the scans that were collected for this subject
 
  $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_thirdlevel/0831101_confba02_run-order.txt > run-order.txt
  
-ERROR_RUN is listed for any scans that are not relevant to this tutorial.
+ERROR_RUN is listed for any scans that are not relevant to this tutorial. Next, we'll copy the run order file into *prototype/copy* so that it will already in place for the next subject::
+
+ $ cp run-order.txt ../../prototype/copy/run-order.txt
 
 **Summary**::
 
@@ -64,6 +66,7 @@ ERROR_RUN is listed for any scans that are not relevant to this tutorial.
  $ less README.txt
  $ cp /jukebox/ntb/packages/neuropipe/example_data/0831101_confba02.raw.tar.gz data/raw.tar.gz
  $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_thirdlevel/0831101_confba02_run-order.txt > run-order.txt
+ $ cp run-order.txt ../../prototype/copy/run-order.txt
 
 
 Preparing your data for analysis
@@ -531,8 +534,8 @@ Make the following replacements and save the file. Be sure to include the spaces
  
   #. on the line starting with "set fmri(outputdir)", replace all of the text inside the quotes with "<?= $OUTPUT_DIR ?>"
   #. on the line starting with "set fmri(regstandard) ", copy or write down the text inside the quotes, then replace it with "<?= $STANDARD_BRAIN ?>"
-  #. on the line starting with "set fmri(npts)", replace the number at the end of the line with "<?= count($runs) ?>"
-  #. on the line starting with "set fmri(multiple)", replace the number at the end of the line with "<?= count($runs) ?>"
+  #. on the line starting with "set fmri(npts)", replace the number at the end of the line with "<?= count($runs) ?>" (not including the quotes)
+  #. on the line starting with "set fmri(multiple)", replace the number at the end of the line with "<?= count($runs) ?>" (not including the quotes)
 
 Those were the parts of the template that won't vary with the number of subjects; now we template the parts that will, using loops. 
 
@@ -540,6 +543,7 @@ Find the line that says "# 4D AVW data or FEAT directory (1)". Replace it and th
 
   <?php for ($i=0; $i < count($runs); $i++) { ?>
   # 4D AVW data or FEAT directory (<?= $i+1 ?>)
+
   set feat_files(<?= $i+1 ?>) "<?= $SUBJECTS_DIR ?>/analysis/firstlevel/<?= $runs[$i] ?>"
 
   <?php } ?>
@@ -672,16 +676,12 @@ Then, move into that subject's directory::
 
  $ cd subjects/0831102_confba02
  
-This subject's run-order file looks a bit different, so in this case putting a template in *prototype/copy* isn't helpful. The file has been made for you already::
-
-  $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_thirdlevel/0831102_confba02_run-order.txt > run-order.txt
-
-This subject's stimuli order was slightly different. Instead of beginning with face images, their first set of stimuli were house images. They therefore have different face and house regressor files. They're provided for you already::
+This subject's run-order file is already udpated since we copied the file from the first subject into *prototype/copy*. However, this subject's stimuli order was slightly different. Instead of beginning with face images, their first set of stimuli were house images. They therefore have different face and house regressor files. They're provided for you already::
 
   $ mkdir design/run1
   $ mkdir design/run2
   $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_thirdlevel/0831102_confba02_house1.txt > design/run1/house.txt
-  $ s
+  $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_thirdlevel/0831102_confba02_face1.txt > design/run1/face.txt
   $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_thirdlevel/0831102_confba02_house2.txt > design/run2/house.txt
   $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_thirdlevel/0831102_confba02_face2.txt > design/run2/face.txt
 
@@ -792,8 +792,8 @@ Make the following replacements and save the file. Be sure to include the spaces
  
   #. on the line starting with "set fmri(outputdir)", replace all of the text inside the quotes with "<?= $OUTPUT_DIR ?>"
   #. on the line starting with "set fmri(regstandard) ", copy or write down the text inside the quotes, then replace it with "<?= $STANDARD_BRAIN ?>"
-  #. on the line starting with "set fmri(npts)", replace the number at the end of the line with "<?= count($subjects) ?>"
-  #. on the line starting with "set fmri(multiple)", replace the number at the end of the line with "<?= count($subjects) ?>"
+  #. on the line starting with "set fmri(npts)", replace the number at the end of the line with "<?= count($subjects) ?>" (not including the quotes)
+  #. on the line starting with "set fmri(multiple)", replace the number at the end of the line with "<?= count($subjects) ?>" (not including the quotes)
 
 Those were the parts of the template that won't vary with the number of subjects; now we template the parts that will, using loops. 
 
@@ -801,6 +801,7 @@ Find the line that says "# 4D AVW data or FEAT directory (1)". Replace it and th
 
   <?php for ($i=0; $i < count($subjects); $i++) { ?>
   # 4D AVW data or FEAT directory (<?= $i+1 ?>)
+
   set feat_files(<?= $i+1 ?>) "<?= $SUBJECTS_DIR ?>/<?= $subjects[$i] ?>/analysis/secondlevel/localizer_hrf.gfeat/cope3.feat"
 
   <?php } ?>
