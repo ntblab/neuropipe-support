@@ -55,7 +55,7 @@ We also need to know the order of the scans that were collected for this subject
 
  $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_thirdlevel/0831101_confba02_run-order.txt > run-order.txt
  
-ERROR_RUN is listed for any scans that are not relevant to this tutorial. Next, we'll copy the run order file into *prototype/copy* so that it will already in place for the next subject::
+ERROR_RUN is listed for any scans that are not relevant to this tutorial.  We will also copy this file into *prototype/copy* so that the next time we scaffold a subject, the run order file will already be in place::
 
  $ cp run-order.txt ../../prototype/copy/run-order.txt
 
@@ -211,7 +211,7 @@ When making these design files for your own projects, do not use a Windows machi
 
 To use these files to specify the design, click the "Full model setup" button. Set "EV name" to "house". FSL calls regressors EV's, short for Explanatory Variables. Set "Basic shape" to "Custom (3 column format)" and select *design/run1/house.txt*. That file on its own describes a square wave; to account for the shape of the BOLD response, we convolve it with another function that models the hemodynamic response to a stimulus. Set "Convolution" to "Double-Gamma HRF". Now to set up the face regressor set "Number of original EVs" to 2 and click to tab 2.
 
-Set EV name to "face". Set "Basic shape" to "Custom (3 column format)" and select *design/face.txt*. Change "Convolution" to "Double-Gamma HRF", like we did for the house regressor.
+Set EV name to "face". Set "Basic shape" to "Custom (3 column format)" and select *design/run1/face.txt*. Change "Convolution" to "Double-Gamma HRF", like we did for the house regressor.
 
 .. image:: https://github.com/ntblab/neuropipe-support/raw/rc-0.3/doc/tutorial_thirdlevel/feat-stats-ev2.png
 
@@ -676,7 +676,7 @@ Then, move into that subject's directory::
 
  $ cd subjects/0831102_confba02
  
-This subject's run-order file is already udpated since we copied the file from the first subject into *prototype/copy*. However, this subject's stimuli order was slightly different. Instead of beginning with face images, their first set of stimuli were house images. They therefore have different face and house regressor files. They're provided for you already::
+Since we already put a copy of the first subject's run order file in *prototype/copy/*, we don't have to create a new one for this subject. However, this subject's stimuli order was slightly different. Instead of beginning with face images, their first set of stimuli were house images. They therefore have different face and house regressor files. They're provided for you already::
 
   $ mkdir design/run1
   $ mkdir design/run2
