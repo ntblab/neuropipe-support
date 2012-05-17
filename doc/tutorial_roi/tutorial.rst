@@ -40,7 +40,7 @@ This file needs to be formatted in 3 columns, with one line for each ROI and 1 c
 
  $ less design/roi.txt
  
-Finally, we need some information about the location of these coordinates within the brain volume that we picked them found. This way, we can tranform the location of the coordinates from the space of the localizer run to the space of the runs that our time courses will be extracted from. Normally this information will be created and stored in the Feat directory of your localizer run, in a file called *example_func.nii.gz*. For the purposes of this tutorial, we will simulate the localizer run's Feat directory and then provide the file for you::
+Finally, we need some information about the location of these coordinates within the brain volume that we picked them from. This way, we can tranform the location of the coordinates from the space of the localizer run to the space of the runs that our time courses will be extracted from. Normally this information will be created and stored in the Feat directory of your localizer run, in a file called *example_func.nii.gz*. For the purposes of this tutorial, we will simulate the localizer run's Feat directory and then provide the file for you::
 
  $ mkdir -p analysis/firstlevel/localizer_hrf.feat/reg
  $ cp /exanet/ntb/packages/neuropipe/example_data/0223101_conatt01_example_func.nii.gz analysis/firstlevel/localizer_hrf.feat/reg/example_func.nii.gz
@@ -83,7 +83,7 @@ Let's open *roi.sh* up again and see what it does::
 First, the script reads in the ROI information we supply with our two text files. Then, it calls *transform-coords-dest.sh*, which transforms the coordinates of the peak voxels of each ROI into the space of the run(s) that you're interested in running this analysis on. This way, the coordinates that you collected earlier, on a localizer run, will line up with the same regions in the runs you're extracting information from.
 Those runs are specified by adding one or more feat directories as options to the command.
 
-Now that your ROI coordinates are correctly aligned to your run of interest, the script pulls out the 'cope' files from the run, which contain time series information based on the contrasts that you set up when modeling the run in a GLM. Then, it calls *transform-to-psc.sh* to convert the signal intensity in each cope file to percent signal change. This command requires an input for the scaling factor that varies based on the type of analysis you've completed. For this analysis, we'll use 10, but ore information on how to calculate the scaling factor is `here`_:
+Now that your ROI coordinates are correctly aligned to your run of interest, the script pulls out the 'cope' files from the run, which contain time series information based on the contrasts that you set up when modeling the run in a GLM. Then, it calls *transform-to-psc.sh* to convert the signal intensity in each cope file to percent signal change. This command requires an input for the scaling factor that varies based on the type of analysis you've completed. For this analysis, we'll use 10, but more information on how to calculate the scaling factor is `here`_:
 
 .. _`here`: http://mumford.bol.ucla.edu/perchange_guide.pdf 
 
