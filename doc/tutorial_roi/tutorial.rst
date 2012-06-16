@@ -43,7 +43,7 @@ This file needs to be formatted in 3 columns, with one line for each ROI and 1 c
 Finally, we need some information about the location of these coordinates within the brain volume that we picked them from. This way, we can tranform the location of the coordinates from the space of the localizer run to the space of the runs that our time courses will be extracted from. Normally this information will be created and stored in the Feat directory of your localizer run, in a file called *example_func.nii.gz*. For the purposes of this tutorial, we will simulate the localizer run's Feat directory and then provide the file for you::
 
  $ mkdir -p analysis/firstlevel/localizer_hrf.feat/reg
- $ cp /exanet/ntb/packages/neuropipe/example_data/0223101_conatt01_example_func.nii.gz analysis/firstlevel/localizer_hrf.feat/reg/example_func.nii.gz
+ $ cp /jukebox/ntb/packages/neuropipe/example_data/0223101_conatt01_example_func.nii.gz analysis/firstlevel/localizer_hrf.feat/reg/example_func.nii.gz
  
 Note: to copy the file, you must qrsh onto a node if you're working from Rondo. If you are working outside of Princeton University, or can't access the file, email ntblab@princeton.edu for help.
  
@@ -52,7 +52,7 @@ Note: to copy the file, you must qrsh onto a node if you're working from Rondo. 
  $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_roi/roi.txt > design/roi.txt
  $ less design/roi.txt
  $ mkdir p- analysis/firstlevel/localizer_hrf.feat/reg
- $ cp /exanet/ntb/packages/neuropipe/example_data/0223101_conatt01_example_func.nii.gz analysis/firstlevel/localizer_hrf.feat/reg/example_func.nii.gz
+ $ cp /jukebox/ntb/packages/neuropipe/example_data/0223101_conatt01_example_func.nii.gz analysis/firstlevel/localizer_hrf.feat/reg/example_func.nii.gz
 
 Preparing for ROI analysis
 ==========================

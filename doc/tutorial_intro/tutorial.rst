@@ -56,7 +56,7 @@ In addition to basic familiarity with the UNIX command line, you'll need access 
 .. _FSL: http://www.fmrib.ox.ac.uk/fsl/
 .. _rondo: http://cluster-wiki.pni.princeton.edu/dokuwiki/
 
-In this tutorial, you use git to track changes to the example project. A full explanation of git and version control systems is the scope of the tutorial, so if you're unfamiliar with those, read chapters 1 and 2 of `Pro Git`_.
+In this tutorial, you use git to track changes to the example project. A full explanation of git and version control systems is beyond the scope of the tutorial, so if you're unfamiliar with those, read chapters 1 and 2 of `Pro Git`_.
 
 .. _`Pro Git`: http://progit.org/book/
 
