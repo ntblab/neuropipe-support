@@ -606,7 +606,8 @@ Copy these lines into localizer.sh::
 
   STANDARD_BRAIN=/usr/share/fsl/data/standard/MNI152_T1_2mm_brain.nii.gz
   
-  # This function defines variables needed to render higher-level fsf templates.
+  # This function defines variables needed to 
+  # render higher-level fsf templates.
   function define_vars {
     output_dir=$1
 
@@ -627,7 +628,8 @@ Copy these lines into localizer.sh::
     "
   }
 
-  # Form a complete template by prepending variable definitions to the template,
+  # Form a complete template by prepending variable 
+  # definitions to the template,
   # then render it with PHP and run FEAT on the rendered fsf file.
   fsf_template=$PROJECT_DIR/fsf/localizer_hrf.fsf.template
   fsf_file=$PROJECT_DIR/fsf/localizer_hrf.fsf

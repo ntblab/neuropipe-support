@@ -602,7 +602,8 @@ Copy these lines into localizer.sh at the end::
 	pushd $SUBJECT_DIR > /dev/null
 	subj_dir=$(pwd)
 	
-	# This function defines variables needed to render higher-level fsf templates.
+	# This function defines variables needed to render 
+	# higher-level fsf templates.
 	function define_vars {
 	 output_dir=$1
 	
@@ -623,7 +624,8 @@ Copy these lines into localizer.sh at the end::
 	 "
 	}
 	
-	# Form a complete template by prepending variable definitions to the template,
+	# Form a complete template by prepending variable 
+	# definitions to the template,
 	# then render it with PHP and run FEAT on the rendered fsf file.
 	fsf_template=$subj_dir/$FSF_DIR/localizer_hrf_secondlevel.fsf.template
 	fsf_file=$subj_dir/$FSF_DIR/localizer_hrf_secondlevel.fsf
