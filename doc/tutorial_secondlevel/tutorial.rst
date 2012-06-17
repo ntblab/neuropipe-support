@@ -510,7 +510,7 @@ When the analysis finishes, open FSLview::
 
   $ fslview &
 
-Click File>Open Standard and accept the default. Click File>Add, and select *~/ppa-hunt/group/analysis/localizer_hrf.gfeat/cope3.feat/stats/zstat1.nii.gz*. Set the minimum threshold to 6 or 7, and you should see the PPA in the same bilaterial posterior area as before.
+Click File>Open Standard and accept the default. Click File>Add, and select *~/ppa-hunt/group/analysis/localizer_hrf.gfeat/cope3.feat/stats/zstat1.nii.gz*. Set the minimum threshold to 2.3, and you should see the PPA in the same bilaterial posterior area as before.
 
 
 Automating the group analysis

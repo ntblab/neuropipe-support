@@ -481,7 +481,7 @@ Go to the Stats tab.
 The Stats tab
 '''''''''''''
 
-Change the first option to 'Fixed Effects,' and then click "Model setup wizard". Leave it on the default option of "single group average", and click "Process".
+Change the first option to 'Mixed Effects,' and then click "Model setup wizard". Leave it on the default option of "single group average", and click "Process".
 
 .. image:: https://github.com/ntblab/neuropipe-support/raw/rc-0.3/doc/tutorial_thirdlevel/secondlevel-feat-stats.png
 
