@@ -17,7 +17,8 @@ NeuroPipe Tutorial
 Chapter 4 - FIR analysis of an adaptation study
 -----------------------------------------------
 
-If you've worked through the introductory tutorial, you are ready to use this tutorial (no need to go through the HRF analysis tutorials to understand what's going on here).  In this study, you will be running an FIR analysis of a study for one subject. First, you will analyze the first subject's data, and then template the analysis workflow to use on the second subject's data. Then, you will run a second-level analysis that combines the data from both subjects, and create a template to automate the second-level analysis for future subjects.  
+If you've worked through the introductory tutorial, you are ready to use this tutorial (no need to go through the HRF analysis tutorials to understand what's going on here). In this study, you will be running an FIR analysis of a study for one subject. First, you will analyze the first subject's data, and then template the analysis workflow to use on the second subject's data. Then, you will run a second-level analysis that combines the data from both subjects, and create a template to automate the second-level analysis for future subjects.
+
 
 Before you begin, make sure that you have a copy of your project folder (here, it's called 'fir-proj'). 
 
