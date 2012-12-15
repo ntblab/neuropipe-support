@@ -61,7 +61,7 @@ This *README.txt* says your first step is to get some DICOM data and put it in a
 
   $ cp /jukebox/ntb/packages/neuropipe/example_data/0608101_conatt02.raw.tar.gz data/raw.tar.gz
 
-If you are not a part of the Princeton University network, or if you are not permitted to copy this file, email ntblab@princeton.edu to request access to this data. NOTE: *cp* just copies files, and here we've directed it to copy data that was prepared for this tutorial; it doesn't work in general to retrieve data after you've done a scan. On rondo at Princeton, you can use *~/prototype/link/scripts/retrieve-data-from-sun.sh* (which appears at *~/subjects/SUBJ/scripts/retrieve-data-from-sun.sh*) to get your data, as long as your subject's folder name matches the subject ID used during for your scan session.
+If you are not a part of the Princeton University network, or if you are not permitted to copy this file, email ntblab@princeton.edu to request access to this data. NOTE: *cp* just copies files, and here we've directed it to copy data that was prepared for this tutorial; it doesn't work in general to retrieve data after you've done a scan. On rondo at Princeton, you can use *~/prototype/link/scripts/retrieve-data-from-dicom.sh* (which appears at *~/subjects/SUBJ/scripts/retrieve-data-from-dicom.sh*), or  *~/prototype/link/scripts/retrieve-data-from-sun.sh* (which appears at *~/subjects/SUBJ/scripts/retrieve-data-from-sun.sh*) to get your data, as long as your subject's folder name matches the subject ID used during for your scan session.
 
 **Summary**::
 
