@@ -6,6 +6,7 @@ NeuroPipe Tutorial
 
 :author: Mason Simon
 :edited by: Alexa Tompary
+            Kathryn Graves
 :email: ntblab@princeton.edu
 
 
@@ -27,14 +28,14 @@ Analyzing a subject
 
 We'll start by analyzing a single subject. To prepare for that, you'll need to know the order of the scans that were collected for subjects that took thsi experiment. A *run-order.txt* file is already made for you. Download that file and take a look::
 
-  $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_secondlevel/run-order.txt > prototype/copy/run-order.txt
+  $ curl -k https://raw.githubusercontent.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_secondlevel/run-order.txt > prototype/copy/run-order.txt
   $ less prototype/copy/run-order.txt
   
 Note that ERROR_RUN is listed for each scan that is irrelevant to this tutorial.
 
 **Summary**::
 
-  $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_secondlevel/run-order.txt > prototype/copy/run-order.txt
+  $ curl -k https://raw.githubusercontent.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_secondlevel/run-order.txt > prototype/copy/run-order.txt
   $ less prototype/copy/run-order.txt
 
 Setting up
@@ -204,8 +205,8 @@ We will specify this design using text files in FEAT's 3-column format: we make 
 
 These design files are provided for you. Download the files and put them in the *design* folder, where any design-related information about your analyses can be kept::
 
-  $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_secondlevel/scene.txt > design/scene.txt
-  $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_secondlevel/face.txt > design/face.txt
+  $ curl -k https://raw.githubusercontent.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_secondlevel/scene.txt > design/scene.txt
+  $ curl -k https://raw.githubusercontent.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_secondlevel/face.txt > design/face.txt
 
 Examine each of these files and refer to *protocol.txt* as necessary::
 
@@ -241,8 +242,8 @@ Go to the Registration tab.
 
 **Summary**::
 
-  $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_secondlevel/scene.txt > design/scene.txt
-  $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_secondlevel/face.txt > design/face.txt
+  $ curl -k https://raw.githubusercontent.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_secondlevel/scene.txt > design/scene.txt
+  $ curl -k https://raw.githubusercontent.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_secondlevel/face.txt > design/face.txt
   $ less design/scene.txt
   $ less design/face.txt
 
