@@ -154,7 +154,7 @@ The first instruction in the Getting Started section is to open *protocol.txt* a
 It says to fill it in with details on the data collection protocol. We'll just download a *protocol.txt* file that describes the ppa-hunt data you can analyze in later tutorials. Hit "q" to quit out of *protocol.txt*, then run these commands::
 
   $ rm protocol.txt
-  $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_intro/protocol.txt > protocol.txt
+  $ curl -k https://raw.githubusercontent.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_intro/protocol.txt > protocol.txt
 
 Read that newly downloaded *protocol.txt*::
 
@@ -170,7 +170,7 @@ The next instruction is to open *prototype/copy/run-order.txt*. Hit "q", then re
 
 As with *protocol.txt*, a *run-order.txt* file is already made for you. Download that file, and put it where *README.txt* says::
 
-  $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_intro/run-order.txt > prototype/copy/run-order.txt
+  $ curl -k https://raw.githubusercontent.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_intro/run-order.txt > prototype/copy/run-order.txt
 
 Open this new *run-order.txt* to see what it's like now::
 
@@ -193,10 +193,10 @@ Next, it's time to collect some subject data and run some analyses. From here, y
   $ less README.txt
   $ less protocol.txt
   $ rm protocol.txt
-  $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_intro/protocol.txt > protocol.txt
+  $ curl -k https://raw.githubusercontent.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_intro/protocol.txt > protocol.txt
   $ less protocol.txt
   $ less README.txt
   $ less prototype/copy/run-order.txt
-  $ curl -k https://raw.github.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_intro/run-order.txt > prototype/copy/run-order.txt
+  $ curl -k https://raw.githubusercontent.com/ntblab/neuropipe-support/rc-0.3/doc/tutorial_intro/run-order.txt > prototype/copy/run-order.txt
   $ less prototype/copy/run-order.txt
   $ less README.txt
