@@ -5,6 +5,7 @@ NeuroPipe Tutorial
 
 
 :author: Mason Simon
+:edited by: Kathryn Graves
 :email: ntblab@princeton.edu
 
 
