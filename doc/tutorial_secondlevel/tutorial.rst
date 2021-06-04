@@ -60,11 +60,7 @@ This *README.txt* says your first step is to get some DICOM data and put it in a
 
   $ cp /jukebox/ntb/packages/neuropipe/example_data/0608101_conatt02.raw.tar.gz data/raw.tar.gz
 
-If you're on Milgram at Yale University, you can find the same data in the turk-browne folder.  Navigate to your root directory with the command::
-
-  $ cd
-
-Then copy the data to your ppa-hunt folder::
+If you're on Milgram at Yale University, you can find the same data in the Turk-Browne project folder and copy the data to your ppa-hunt folder::
 
   $ cp /gpfs/milgram/project/turk-browne/packages/neuropipe/examples/0608101_conatt02.raw.tar.gz ppa-hunt/subjects/0608101_conatt02/data/raw.tar.gz
 
@@ -77,9 +73,7 @@ If you are not a part of the Yale or Princeton University networks, or if you ar
   $ cd subjects/0608101_conatt02
   $ less README.txt
   $ cp /jukebox/ntb/packages/neuropipe/example_data/0608101_conatt02.raw.tar.gz data/raw.tar.gz  $$PRINCETON
-  
-  $ cd $$YALE
-  $ cp /gpfs/milgram/project/turk-browne/packages/neuropipe/examples/0608101_conatt02.raw.tar.gz ppa-hunt/subjects/0608101_conatt02/data/raw.tar.gz $$YALE
+  $ cp /gpfs/milgram/project/turk-browne/packages/neuropipe/examples/0608101_conatt02.raw.tar.gz data/raw.tar.gz $$YALE
 
 
 Preparing your data for analysis
@@ -106,13 +100,17 @@ It says that we should proceed by doing various transformations on the data, and
   $ less analyze.sh
 
 .. _FSL: http://www.fmrib.ox.ac.uk/fsl/
-
-Look at the body of the script, and notice it just runs another script: *prep.sh*. Hit "q" to quit *analyze.sh* and read *prep.sh*::
+  
+Notice that this script also calls in global variables with *globals.sh*. By default, this file is set up to work on the Princeton server, but if you are at Yale or elsewhere, you will need to adjust the path for the BXH_DIR and load in the appropriate modules for FSL and BXH_XCEDE_TOOLS in order for the analyze script to run. Contact someone in the lab if you are unsure what changes need to be made to work on your server. Hit "q" to quit *analyze.sh* and then read *globals.sh*. You can then use nano to make the appropriate edits::
+  
+  $ less globals.sh
+  $ nano globals.sh
+  
+Now if you look back at the body of the *analyze.sh* script, you will notice that it just runs another script: *prep.sh*. Read *prep.sh*::
 
   $ less prep.sh
 
 *prep.sh* calls four other scripts: one to do those transformations on the data, one to run the quality assurance tools, one to perform some more transformations on the data, and one called *render-fsf-templates.sh*. Don't worry about that last one for now--we'll cover it later. If you'd like, open those first three scripts to see what they do. Otherwise, press on::
-
 
   $ ./analyze.sh
 
@@ -138,6 +136,8 @@ Use the "(What's this?)" links to figure out what all the diagnostics mean. When
   $ less run-order.txt
   $ less README.txt
   $ less analyze.sh
+  $ less globals.sh
+  $ nano globals.sh
   $ less prep.sh
   $ ./analyze.sh
   $ ls data/nifti
