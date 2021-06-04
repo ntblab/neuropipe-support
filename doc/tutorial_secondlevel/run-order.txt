@@ -24,6 +24,8 @@
 # GOTCHAS:
 # - circle localizers from allegra transfer as 3 separate runs, so for each circle
 #   localizer you ran, you must include 3 lines in this file 
+#   (NOTE that these circle localizers may be split up such that some of the 
+#   files are appended to the end of the run order)
 # - circle localizers (also called scouts) from skyra transfer as 4 separate runs
 # - fieldmaps transfer as 2 separate runs, so include 2 lines in this file for
 #   each fieldmap you ran
@@ -33,16 +35,16 @@
 #   the unnecessary runs (usually the last 5) 
 #
 # EXAMPLE RUN ORDER FOLLOWS. CUSTOMIZE THIS TO YOUR PROJECT
-ERROR_RUN
-ERROR_RUN
-ERROR_RUN
+circle_localizer01
 sagittal_scout01
 t1_flash01
-ERROR_RUN
-ERROR_RUN
-ERROR_RUN
+ERROR_RUN 
+task01 355
+task02 355
 t1_mprage_sag01
-ERROR_RUN
+task03 355
 localizer01 244
 fieldmap01
 fieldmap02
+circle_localizer02
+circle_localizer03 
